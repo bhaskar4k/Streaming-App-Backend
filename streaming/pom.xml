@@ -95,6 +95,12 @@
 			<version>6.6.3.Final</version>
 			<type>pom</type>
 		</dependency>
+
+		<dependency>
+			<groupId>com.app</groupId>
+			<artifactId>common.utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

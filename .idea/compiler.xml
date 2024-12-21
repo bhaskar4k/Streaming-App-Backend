@@ -2,11 +2,6 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-      </profile>
       <profile name="Annotation profile for upload" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -15,23 +10,17 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="streaming" />
+        <module name="common.utils" />
         <module name="upload" />
         <module name="dashboard" />
         <module name="authentication" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="DAL" target="21" />
-      <module name="Service" target="21" />
-      <module name="UIEntity" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DAL" options="-parameters" />
-      <module name="Service" options="-parameters" />
-      <module name="UIEntity" options="-parameters" />
       <module name="authentication" options="-parameters" />
+      <module name="common.utils" options="-parameters" />
       <module name="dashboard" options="-parameters" />
       <module name="streaming" options="-parameters" />
       <module name="upload" options="-parameters" />

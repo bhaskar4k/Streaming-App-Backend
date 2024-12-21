@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/UIEntity/pom.xml" />
         <option value="$PROJECT_DIR$/DAL/pom.xml" />
         <option value="$PROJECT_DIR$/Service/pom.xml" />
+        <option value="$PROJECT_DIR$/common.utils/pom.xml" />
       </list>
     </option>
   </component>
