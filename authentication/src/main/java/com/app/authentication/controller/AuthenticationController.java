@@ -20,8 +20,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authentication/do_signup")
-    public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel t_mst_user_model){
-        TMstUser saved_user = tMstUserService.saveProduct(t_mst_user_model);
+    public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel new_user){
+        TMstUser saved_user = tMstUserService.saveProduct(new_user);
         return CommonApiReturn.success(saved_user);
     }
 }

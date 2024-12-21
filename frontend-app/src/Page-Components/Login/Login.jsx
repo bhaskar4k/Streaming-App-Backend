@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EncryptionDecryption } from '../../Common/EncryptionDecryption';
 import { get_ip_address } from '../../Common/Utils';
 import { AuthenticationService } from '../../Service/AuthenticationService';
 import google from '../../../public/Images/google.svg';
 import './Login.css';
+import AlertModal from '../Common-Components/AlertModal/AlertModal';
 
 
 function Login() {
+  const [showModal, setShowModal] = useState(false);
+
   const encryptionDecryption = new EncryptionDecryption();
   const authenticationService = new AuthenticationService();
 
@@ -38,10 +41,22 @@ function Login() {
     console.log(response);
   }
 
+  function openAlertModal(){
+    setShowModal(true);
+  }
+
+  function closeAlertModal(){
+    setShowModal(false);
+  }
+
 
   return (
     <>
-      <div className='login-container'>
+    <button type="button" className="btn btn-info btn-lg" onClick={openAlertModal}>
+          Open Modal
+        </button>
+        <AlertModal showModal={showModal} handleClose={closeAlertModal} />
+      <div className='login-container'>  
         <div className="container" id="container">
           <div className="form-container sign-up-container">
 
