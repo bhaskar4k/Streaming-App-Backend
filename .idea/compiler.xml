@@ -7,23 +7,23 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
-      <profile name="Annotation profile for upload" enabled="true">
+      <profile name="Annotation profile for authentication" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="streaming" />
-        <module name="upload" />
-        <module name="dashboard" />
         <module name="authentication" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="DAL" target="21" />
+      <module name="dashboard" target="21" />
       <module name="Service" target="21" />
+      <module name="streaming" target="21" />
       <module name="UIEntity" target="21" />
+      <module name="upload" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
