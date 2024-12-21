@@ -6,25 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @Component
 public class TMstUserService {
     @Autowired
     private TMstUserRepository tmstUserRepository;
 
-//    public List<T_Mst_User> getAllProducts() {
-//        return tmstUserRepository.getAll();
-//    }
-//
-//    public Optional<T_Mst_User> getProductById(Long id) {
-//        return tmstUserRepository.getProductById(id);
-//    }
+    public List<TMstUser> getAllUser() {
+        return tmstUserRepository.findAll();
+    }
 
-    public TMstUser saveProduct(TMstUser user) {
+    public Optional<TMstUser> getUserById(Long id) {
+        return tmstUserRepository.findById(id);
+    }
+
+    public TMstUser saveUser(TMstUser user) {
         return tmstUserRepository.save(user);
     }
 
-//    public void deleteProduct(Long id) {
-//        tmstUserRepository.deleteProduct(id);
-//    }
+    public void deleteUser(Long id) {
+        tmstUserRepository.deleteById(id);
+    }
 }

@@ -13,14 +13,9 @@ public class AuthenticationController {
     @Autowired
     private TMstUserService tMstUserService;
 
-    public AuthenticationController() {
-        this.tMstUserService = new TMstUserService();
-    }
-
     @PostMapping("/authentication/do_signup")
     public String do_signup(@RequestBody TMstUser t_mst_user){
-        System.out.println(t_mst_user.toString());
-        tMstUserService.saveProduct(t_mst_user);
+        tMstUserService.saveUser(t_mst_user);
         return "Authentication";
     }
 }
