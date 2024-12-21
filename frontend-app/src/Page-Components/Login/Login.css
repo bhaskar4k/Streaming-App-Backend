@@ -208,7 +208,6 @@ input {
 }
 
 .social-container a {
-	border: 1px solid #DDDDDD;
 	border-radius: 50%;
 	display: inline-flex;
 	justify-content: center;

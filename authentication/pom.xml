@@ -95,24 +95,6 @@
 			<version>6.6.3.Final</version>
 			<type>pom</type>
 		</dependency>
-
-		<dependency>
-			<groupId>com.app</groupId>
-			<artifactId>UIEntity</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.app</groupId>
-			<artifactId>DAL</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.app</groupId>
-			<artifactId>Service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

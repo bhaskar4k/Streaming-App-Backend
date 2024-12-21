@@ -1,14 +1,16 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
-import {EncryptionDecryption} from '../../Common/EncryptionDecryption';
-import { EndpointMicroservice, EndpointAuthentication, EndpointDashboard, EndpointStreaming, EndpointUpload } from '../../Environment/Endpoint';
+import { EncryptionDecryption } from '../../Common/EncryptionDecryption';
 import { get_ip_address } from '../../Common/Utils';
+import { AuthenticationService } from '../../Service/AuthenticationService';
+import google from '../../../public/Images/google.svg';
 import './Login.css';
 
 
 function Login() {
   const encryptionDecryption = new EncryptionDecryption();
+  const authenticationService = new AuthenticationService();
 
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
@@ -31,26 +33,10 @@ function Login() {
       last_name : document.getElementById("signup_lastname").value,
       email : document.getElementById("signup_email").value,
       password : encryptionDecryption.customEncrypt(document.getElementById("signup_password").value),
-      // is_subscribed : 0,
-      // is_active : 1
     }; 
 
-    try {
-      let url=EndpointMicroservice.authentication.concat(EndpointAuthentication.do_signup);
-      let response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(obj)
-      });
-      
-      let res = await response.text();
-      console.log(res)
-    } catch (ex){
-      console.log("Internal server error", ex);
-    }
-
+    let response = await authenticationService.DoSignUpService(obj);
+    console.log(response);
   }
 
 
@@ -63,12 +49,10 @@ function Login() {
             <div className='form-div'>
               <h1>Create Account</h1>
 
-              {/* <div className="social-container">
-                <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-                <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-                <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+              <div className="social-container">
+                <a href="#" className="social"><img src={google}></img></a>
               </div> 
-              <span>or use your email for registration</span>*/}
+              <span>or use your email for registration</span>
 
               <input type="text" placeholder="First Name" id="signup_firstname"/>
               <input type="text" placeholder="Last Name" id="signup_lastname"/>
@@ -83,12 +67,10 @@ function Login() {
             <div className='form-div'>
               <h1>Sign in</h1>
 
-              {/* <div className="social-container">
-                <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-                <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-                <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+              <div className="social-container">
+                <a href="#" className="social"><img src={google}></img></a>
               </div> 
-              <span>or use your account</span>*/}
+              <span>or use your account</span>
 
               <input type="email" placeholder="Email" id="login_email"/>
               <input type="password" placeholder="Password" id="login_password"/>
