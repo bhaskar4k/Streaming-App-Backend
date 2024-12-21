@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Page-Components/Home/Home.jsx';
 import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';

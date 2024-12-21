@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { EndpointMicroservice, EndpointAuthentication } from '../Environment/Endpoint';
 
 export class AuthenticationService {
@@ -20,9 +19,7 @@ export class AuthenticationService {
             let res = await response.json();
             return res;
         } catch (ex){
-            console.log("Internal server error", ex);
+            return {status : 404, message : ex, data : null};
         }
-
-        return null;
     }   
 }

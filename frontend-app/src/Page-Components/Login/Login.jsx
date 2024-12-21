@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 /* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
 import { EncryptionDecryption } from '../../Common/EncryptionDecryption';

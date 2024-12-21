@@ -1,45 +1,22 @@
-package com.app.authentication.entity;
-
-import jakarta.persistence.*;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.data.annotation.Id;
+package com.app.authentication.model;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "t_mst_user")
-public class TMstUser {
-
-    @jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
+public class TMstUserModel {
     private Long id;
     private String first_name;
     private String last_name;
     private String email;
-    @Column(length = 1000)
     private String password;
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private int is_subscribed = 0;
-    @Column(nullable = false, columnDefinition = "int default 1")
-    private int is_active = 1;
-    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime trans_datetime = LocalDateTime.now();
+    private int is_subscribed ;
+    private int is_active;
+    private LocalDateTime trans_datetime;
 
-    public TMstUser() {
+    public TMstUserModel() {
 
     }
 
-    public TMstUser(String first_name, String last_name, String email, String password) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public TMstUser(String first_name, String last_name, String email, String password, int is_subscribed, int is_active, LocalDateTime trans_datetime) {
+    public TMstUserModel(String first_name, String last_name, String email, String password, int is_subscribed, int is_active, LocalDateTime trans_datetime) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
