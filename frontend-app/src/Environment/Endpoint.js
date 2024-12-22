@@ -7,6 +7,7 @@ let EndpointMicroservice = {
 
 let EndpointAuthentication = {
     do_signup : "/authentication/do_signup",
+    do_login : "/authentication/do_login",
 }
 
 let EndpointDashboard = {

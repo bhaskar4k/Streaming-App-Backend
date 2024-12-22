@@ -1,111 +1,97 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { Environment } from "../Environment/Environment";
+
 export class EncryptionDecryption {
-    constructor(name, year) {
-        this.name = name;
-        this.year = year;
-        this.key= Environment.encryptionKey;
+    constructor() {
+        this.privateKey1=Environment.encryptionKey1;
+        this.privateKey2=Environment.encryptionKey2;
+        this.encryptionPadding=Environment.encryptionPadding;
+        this.encryptionNumber=Environment.encryptionNumber;
     }
 
-    // Utility Function: Rotate bits left (8-bit safe)
-    rotateLeft(value, shift) {
-        return ((value << shift) & 0xFF) | (value >>> (8 - shift));
-    }
+    Padding(password,pad_size){
+        let encryptedPassword="";
+        let encryptionPaddingLength=this.encryptionPadding.length, encryptionNumberLength=this.encryptionNumber.length;
+        let XORedCharCode;
 
-    // Utility Function: Rotate bits right (8-bit safe)
-    rotateRight(value, shift) {
-        return ((value >>> shift) | (value << (8 - shift))) & 0xFF;
-    }
+        for(let i=0; i<pad_size; i++){
+            XORedCharCode=(password.charCodeAt(i%password.length) ^ this.encryptionPadding.charCodeAt(i%encryptionPaddingLength));
 
-    // Function to generate random padding
-    generateRandomPadding(length) {
-        const chars = '#4j*Vx8&3H!g7$FQp^w2BzE+Rm$k6GdE9t*Lz';
-        let padding = '';
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * chars.length);
-            padding += chars[randomIndex];
-        }
-        return padding;
+            XORedCharCode*=this.encryptionNumber[i%encryptionNumberLength];
+
+            encryptedPassword+=(`${XORedCharCode}`+'.');
+            
         }
 
-        // Function to embed the original length into the encrypted string
-        embedOriginalLength(data, originalLength) {
-        // Prefix the original length as a fixed 3-digit number
-        const lengthStr = originalLength.toString().padStart(3, '0');
-        return lengthStr + data;
+        return encryptedPassword;
     }
 
-    // Function to extract the original length during decryption
-    extractOriginalLength(data) {
-        const lengthStr = data.slice(0, 3);
-        const originalLength = parseInt(lengthStr, 10);
-        return { originalLength, content: data.slice(3) };
-    }
+    Encrypt(password) {
+        let encryptedPassword="", j=0;
+        let privateKeyLength1=this.privateKey1.length;
+        let privateKeyLength2=this.privateKey2.length;
+        let encryptionNumberLength=this.encryptionNumber.length;
+        let XORedCharCode;
+        
+        for(let i=0; i<password.length; i++){          
+            if(i%2===0) XORedCharCode=(password.charCodeAt(i) ^ this.privateKey1.charCodeAt((j++)%privateKeyLength1));
+            else XORedCharCode=(password.charCodeAt(i) ^ this.privateKey2.charCodeAt((j++)%privateKeyLength2));
 
-    // Custom Encrypt Function
-    customEncrypt(input) {
-        const keyLength = this.key.length;
-        let encrypted = '';
+            XORedCharCode*=this.encryptionNumber[i%encryptionNumberLength];
 
-        for (let i = 0; i < input.length; i++) {
-            let charCode = input.charCodeAt(i);
-            let keyChar = this.key.charCodeAt(i % keyLength);
-
-            // Step 1: XOR with key
-            charCode ^= keyChar;
-
-            // Step 2: Rotate left (8-bit safe)
-            charCode = this.rotateLeft(charCode, 3);
-
-            encrypted += String.fromCharCode(charCode);
+            encryptedPassword+=(`${XORedCharCode}`+'.');
         }
 
-        // Embed the original length
-        encrypted = this.embedOriginalLength(encrypted, input.length);
+        let pad_size=99-(2*password.length);
+        encryptedPassword+=this.Padding(password,pad_size);
 
-        // Pad the encrypted string to at least 50 characters
-        encrypted = this.padString(encrypted, 100);
+        for(let i=0; i<password.length; i++){
+            if(i%2===0) XORedCharCode=(password.charCodeAt(i) ^ this.privateKey2.charCodeAt((j++)%privateKeyLength2));
+            else XORedCharCode=(password.charCodeAt(i) ^ this.privateKey1.charCodeAt((j++)%privateKeyLength1));
 
-        // Return Base64-encoded result
-        return btoa(encrypted);
-    }
+            XORedCharCode*=this.encryptionNumber[i%encryptionNumberLength];
 
-    // Function to pad the encrypted string to minimum length
-    padString(input, minLength) {
-        if (input.length >= minLength) return input;
-
-        const paddingLength = minLength - input.length;
-        const randomPadding = this.generateRandomPadding(paddingLength);
-
-        return input + randomPadding;
-    }
-
-    // Custom Decrypt Function
-    customDecrypt(encryptedInput) {
-        const keyLength = this.key.length;
-
-        // Base64 decode
-        let encrypted = atob(encryptedInput);
-
-        // Extract the original length
-        const { originalLength, content } = this.extractOriginalLength(encrypted);
-
-        let decrypted = '';
-
-        for (let i = 0; i < originalLength; i++) {
-            let charCode = content.charCodeAt(i);
-            let keyChar = this.key.charCodeAt(i % keyLength);
-
-            // Step 1: Reverse rotate left (rotate right)
-            charCode = this.rotateRight(charCode, 3);
-
-            // Step 2: Reverse XOR with key
-            charCode ^= keyChar;
-
-            decrypted += String.fromCharCode(charCode);
+            encryptedPassword+=(`${XORedCharCode}`+'.');
         }
 
-        return decrypted;
+        let fistEncryptedCharVal = "";
+        for(let i=0; i<encryptedPassword.length; i++){
+            if(encryptedPassword[i]==='.') break;
+            fistEncryptedCharVal+=encryptedPassword[i];
+        }
+
+        encryptedPassword+=(`${password.length*this.encryptionNumber[encryptionNumberLength-1]*parseInt(fistEncryptedCharVal)}`+'.');
+
+        console.log(encryptedPassword);
+        console.log(this.Decrypt(encryptedPassword));
+
+        return encryptedPassword;
     }
+
+    Decrypt(encryptedPassword) {
+        let decryptedPassword="";
+        let encryptionNumberLength=this.encryptionNumber.length;
+        let encryptedParts=encryptedPassword.split('.').filter(part => part !== "");
+        let originalPasswordLength=encryptedParts[encryptedParts.length-1]/this.encryptionNumber[encryptionNumberLength-1]/encryptedParts[0];
+        let privateKeyLength1=this.privateKey1.length;
+        let privateKeyLength2=this.privateKey2.length;
+        let j=0;
+
+        for(let i=0; i<originalPasswordLength; i++){
+            let XORedCharCode = parseInt(encryptedParts[i]);
+
+            XORedCharCode/=this.encryptionNumber[i%encryptionNumberLength];
+
+            if(i%2===0){
+                decryptedPassword+=(String.fromCharCode(XORedCharCode ^ this.privateKey1.charCodeAt((j++)%privateKeyLength1)));
+            }else{
+                decryptedPassword+=(String.fromCharCode(XORedCharCode ^ this.privateKey2.charCodeAt((j++)%privateKeyLength2)));
+            }
+        }
+
+        return decryptedPassword;
+    }
+
 }
 

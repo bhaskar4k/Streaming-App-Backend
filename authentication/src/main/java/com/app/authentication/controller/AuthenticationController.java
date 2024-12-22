@@ -22,11 +22,25 @@ public class AuthenticationController {
     @PostMapping("/authentication/do_signup")
     public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel new_user){
         try{
+            if(tMstUserService.alreadyRegistered(new_user.getEmail())){
+                return CommonApiReturn.error(400,"The email address [" + new_user.getEmail() + "] is already registered.");
+            }
+
             TMstUser saved_user = tMstUserService.saveProduct(new_user);
             return CommonApiReturn.success("Sign-Up is successful. Please Login now.",saved_user);
         } catch (Exception e) {
             // Log Exception
             return CommonApiReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @PostMapping("/authentication/do_login")
+    public boolean do_login(@RequestBody TMstUserModel new_user){
+        try{
+            tMstUserService.validateUser(new_user);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

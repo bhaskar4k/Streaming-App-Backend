@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface TMstUserRepository extends JpaRepository<TMstUser, Long> { }
+public interface TMstUserRepository extends JpaRepository<TMstUser, Long> {
+    boolean existsByEmail(String email);
+}

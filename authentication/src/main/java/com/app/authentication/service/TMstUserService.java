@@ -3,6 +3,7 @@ package com.app.authentication.service;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TMstUserRepository;
+import com.app.authentication.security.EncryptionDecryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,11 @@ public class TMstUserService {
     @Autowired
     private TMstUserRepository tmstUserRepository;
     private TMstUser user_entity;
+    private EncryptionDecryption encryptionDecryption;
+
+    public TMstUserService(){
+        this.encryptionDecryption=new EncryptionDecryption();
+    }
 
     public List<TMstUser> getAllProducts() {
         return tmstUserRepository.findAll();
@@ -22,6 +28,10 @@ public class TMstUserService {
 
     public Optional<TMstUser> getProductById(Long id) {
         return tmstUserRepository.findById(id);
+    }
+
+    public boolean alreadyRegistered(String email){
+        return tmstUserRepository.existsByEmail(email);
     }
 
     public TMstUser saveProduct(TMstUserModel new_user) {
@@ -32,5 +42,13 @@ public class TMstUserService {
 
     public void deleteProduct(Long id) {
         tmstUserRepository.deleteById(id);
+    }
+
+    public boolean validateUser(TMstUserModel new_user) throws Exception {
+        String temp = encryptionDecryption.decrypt(new_user.getPassword());
+        String temp1=temp;
+        System.out.println(temp);
+
+        return true;
     }
 }

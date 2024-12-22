@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import { EncryptionDecryption } from '../../Common/EncryptionDecryption';
+import { Environment } from '../../Environment/Environment';
 import { get_ip_address } from '../../Common/Utils';
 import { AuthenticationService } from '../../Service/AuthenticationService';
 import google from '../../../public/Images/google.svg';
@@ -16,8 +17,10 @@ function Login() {
   const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
   const [colorOfAlertModal, setColorOfAlertModal] = useState('green');
 
+
   const encryptionDecryption = new EncryptionDecryption();
   const authenticationService = new AuthenticationService();
+
 
   useEffect(() => {
     const signUpButton = document.getElementById('signUp');
@@ -34,40 +37,104 @@ function Login() {
   },[]);
 
 
+  function ValidateSignUpFormData(first_name, last_name, email, password, confirm_password){
+    let validationStatus = true;
+    let warning_message = "";
+
+    if(first_name==="" || first_name===null){
+      warning_message="Firstname can't be empty.";
+      validationStatus=false;
+    }else if(last_name==="" || last_name===null){
+      warning_message="Lastname can't be empty.";
+      validationStatus=false;
+    }else if(email==="" || email===null){
+      warning_message="Email can't be empty.";
+      validationStatus=false;
+    }else if(password==="" || password===null){
+      warning_message="Password can't be empty.";
+      validationStatus=false;
+    }else if(confirm_password==="" || confirm_password===null){
+      warning_message="Confirm Password can't be empty.";
+      validationStatus=false;
+    }else if(password!==confirm_password){
+      warning_message="Password and Confirm password is not matching.";
+      validationStatus=false;
+    }
+    
+    if(validationStatus===false){
+      setColorOfAlertModal(Environment.colorWarning);
+      openAlertModal(Environment.alert_modal_header_signup, warning_message);
+    }
+    
+
+    return validationStatus;
+  }
+
+
   async function DoSignUp(){
+    api_response_status = null;
+    closeAlertModal();
+
+    let first_name = document.getElementById("signup_firstname").value;
+    let last_name = document.getElementById("signup_lastname").value;
+    let email = document.getElementById("signup_email").value;
+    let password = document.getElementById("signup_password").value;
+    let confirm_password = document.getElementById("signup_confirm_password").value;
+
+    if(ValidateSignUpFormData(first_name, last_name, email, password, confirm_password)===false) return;
+
     let obj = {
-      first_name : document.getElementById("signup_firstname").value,
-      last_name : document.getElementById("signup_lastname").value,
-      email : document.getElementById("signup_email").value,
-      password : encryptionDecryption.customEncrypt(document.getElementById("signup_password").value),
-    }; 
+      first_name : first_name,
+      last_name : last_name,
+      email : email,
+      password : encryptionDecryption.Encrypt(password),
+    };    
+
+    console.log(obj)
 
     let response = await authenticationService.DoSignUpService(obj);
     api_response_status = response.status;
 
     if(api_response_status === 200){
-      setColorOfAlertModal('green');
+      setColorOfAlertModal(Environment.colorSuccess);
       
       document.getElementById("signup_firstname").value = null;
       document.getElementById("signup_lastname").value = null;
       document.getElementById("signup_email").value = null;
       document.getElementById("signup_password").value = null;
+      document.getElementById("signup_confirm_password").value = null;
     }else{
-      setColorOfAlertModal('red');
+      setColorOfAlertModal(Environment.colorError);
     }
 
-    openAlertModal("SIGN UP", response.message);
+    openAlertModal(Environment.alert_modal_header_signup, response.message);
 
     loadAlertModal = setTimeout(() => {
       closeAlertModal();     
     }, 5000);
   }
 
+
+  async function DoLogin(){
+    let email = document.getElementById("login_email").value;
+    let password = document.getElementById("login_password").value;
+
+    let obj = {
+      email : email,
+      password : encryptionDecryption.Encrypt(password),
+    };    
+
+    let response = await authenticationService.DoLoginService(obj);
+    console.log(response)
+  }
+
+
   function openAlertModal(header_text, body_text){
     setHeaderTextOfAlertModal(header_text);
     setBodyTextOfAlertModal(body_text);   
     setShowAlertModal(true);
   }
+
 
   function closeAlertModal(){
     setShowAlertModal(false);
@@ -76,7 +143,11 @@ function Login() {
     
     clearTimeout(loadAlertModal);
     loadAlertModal = null;
-    if(api_response_status === 200) document.getElementById('signIn').click();   
+
+    if(api_response_status === 200){
+      document.getElementById('signIn').click();
+      api_response_status = null;
+    }   
   }
 
 
@@ -99,6 +170,7 @@ function Login() {
               <input type="text" placeholder="Last Name" id="signup_lastname"/>
               <input type="email" placeholder="Email" id="signup_email"/>
               <input type="password" placeholder="Password" id="signup_password"/>
+              <input type="password" placeholder="Confirm Password" id="signup_confirm_password"/>
 
               <button onClick={DoSignUp}>Sign Up</button>
             </div>
@@ -117,7 +189,7 @@ function Login() {
               <input type="password" placeholder="Password" id="login_password"/>
 
               <a href="#">Forgot your password?</a>
-              <button>Sign In</button>
+              <button onClick={DoLogin}>Sign In</button>
             </div>
           </div>
 
