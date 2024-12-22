@@ -1,28 +1,27 @@
-import PropTypes from "prop-types"; 
+import PropTypes from "prop-types";
+import './AlertModal.css';
 
-function AlertModal({ showModal, handleClose }) {
+function AlertModal({ showModal, handleClose, headerText, bodyText, alertColor }) {
   return (
     <>
-      {showModal && (
-        <div className="modal fade in" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }} tabIndex="-1">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" onClick={handleClose}>&times;</button>
-                <h4 className="modal-title">Modal Header</h4>
-              </div>
+      <div className={`modal ${showModal ? 'show' : ''}`} tabIndex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close-alert-modal" onClick={handleClose}>&times;</button>
+              <h4 className="modal-title">{headerText}</h4>
+            </div>
 
-              <div className="modal-body">
-                <p>Some text in the modal.</p>
-              </div>
+            <div className="modal-body">
+              <p style={{color: alertColor}}>{bodyText}</p>
+            </div>
 
-              <div className="modal-footer">
-                <button type="button" className="btn btn-default" onClick={handleClose}>Close</button>
-              </div>
+            <div className="modal-footer">
+              <button type="button" className="btn-alert-modal btn-alert-modal-default" style={{backgroundColor: alertColor}} onClick={handleClose}>Close</button>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
@@ -30,6 +29,9 @@ function AlertModal({ showModal, handleClose }) {
 AlertModal.propTypes = {
   showModal: PropTypes.bool.isRequired, 
   handleClose: PropTypes.func.isRequired,
+  headerText: PropTypes.string.isRequired,
+  bodyText: PropTypes.string.isRequired,
+  alertColor: PropTypes.string.isRequired
 };
 
 export default AlertModal;

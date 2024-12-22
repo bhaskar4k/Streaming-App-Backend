@@ -7,9 +7,13 @@ import google from '../../../public/Images/google.svg';
 import './Login.css';
 import AlertModal from '../Common-Components/AlertModal/AlertModal';
 
+let loadAlertModal = null;
 
 function Login() {
-  const [showModal, setShowModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
+  const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
+  const [colorOfAlertModal, setColorOfAlertModal] = useState('green');
 
   const encryptionDecryption = new EncryptionDecryption();
   const authenticationService = new AuthenticationService();
@@ -38,25 +42,45 @@ function Login() {
     }; 
 
     let response = await authenticationService.DoSignUpService(obj);
-    console.log(response);
+
+    if(response.status === 200){
+      openAlertModal("SIGN UP", response.message);
+
+      document.getElementById("signup_firstname").value = null;
+      document.getElementById("signup_lastname").value = null;
+      document.getElementById("signup_email").value = null;
+      document.getElementById("signup_password").value = null;
+    }else{
+      setColorOfAlertModal('red');
+      openAlertModal("SIGN UP", response.message);
+    }
+
+    loadAlertModal = setTimeout(() => {
+      closeAlertModal();     
+    }, 5000);
   }
 
-  function openAlertModal(){
-    setShowModal(true);
+  function openAlertModal(header_text, body_text){
+    setHeaderTextOfAlertModal(header_text);
+    setBodyTextOfAlertModal(body_text);
+    setShowAlertModal(true);
   }
 
   function closeAlertModal(){
-    setShowModal(false);
+    setShowAlertModal(false);
+    setHeaderTextOfAlertModal(null);
+    setBodyTextOfAlertModal(null);
+    
+    clearTimeout(loadAlertModal);
+    loadAlertModal = null;
+    document.getElementById('signIn').click();
   }
 
 
   return (
-    <>
-    <button type="button" className="btn btn-info btn-lg" onClick={openAlertModal}>
-          Open Modal
-        </button>
-        <AlertModal showModal={showModal} handleClose={closeAlertModal} />
-      <div className='login-container'>  
+    <> 
+      <div className='login-container'>
+        <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal}/>
         <div className="container" id="container">
           <div className="form-container sign-up-container">
 

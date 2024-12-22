@@ -37,8 +37,8 @@ public class CommonApiReturn<T> {
         this.data = data;
     }
 
-    public static <T> CommonApiReturn<T> success(T data) {
-        return new CommonApiReturn<>(200, "Success", data);
+    public static <T> CommonApiReturn<T> success(String message, T data) {
+        return new CommonApiReturn<>(200, message, data);
     }
 
     public static <T> CommonApiReturn<T> error(int status, String message) {

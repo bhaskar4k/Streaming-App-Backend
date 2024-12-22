@@ -21,7 +21,12 @@ public class AuthenticationController {
 
     @PostMapping("/authentication/do_signup")
     public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel new_user){
-        TMstUser saved_user = tMstUserService.saveProduct(new_user);
-        return CommonApiReturn.success(saved_user);
+        try{
+            TMstUser saved_user = tMstUserService.saveProduct(new_user);
+            return CommonApiReturn.success("Sign-Up is successful. Please Login now",saved_user);
+        } catch (Exception e) {
+            // Log Exception
+            return CommonApiReturn.error(400,"Internal server error.");
+        }
     }
 }

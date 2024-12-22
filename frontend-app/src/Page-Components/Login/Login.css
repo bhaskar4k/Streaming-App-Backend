@@ -91,6 +91,7 @@ input {
 	width: 768px;
 	max-width: 100%;
 	min-height: 480px;
+	transition: all 0.15s ease-in-out;
 }
 
 .form-container {
