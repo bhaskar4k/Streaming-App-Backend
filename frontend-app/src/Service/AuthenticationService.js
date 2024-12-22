@@ -19,7 +19,8 @@ export class AuthenticationService {
             let res = await response.json();
             return res;
         } catch (ex){
-            return {status : 404, message : ex, data : null};
+            console.log(ex);
+            return {status : 404, message : 'Internal Server Error.', data : null};
         }
     }   
 }

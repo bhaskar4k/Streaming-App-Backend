@@ -8,6 +8,7 @@ import './Login.css';
 import AlertModal from '../Common-Components/AlertModal/AlertModal';
 
 let loadAlertModal = null;
+let api_response_status = null;
 
 function Login() {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -42,18 +43,20 @@ function Login() {
     }; 
 
     let response = await authenticationService.DoSignUpService(obj);
+    api_response_status = response.status;
 
-    if(response.status === 200){
-      openAlertModal("SIGN UP", response.message);
-
+    if(api_response_status === 200){
+      setColorOfAlertModal('green');
+      
       document.getElementById("signup_firstname").value = null;
       document.getElementById("signup_lastname").value = null;
       document.getElementById("signup_email").value = null;
       document.getElementById("signup_password").value = null;
     }else{
       setColorOfAlertModal('red');
-      openAlertModal("SIGN UP", response.message);
     }
+
+    openAlertModal("SIGN UP", response.message);
 
     loadAlertModal = setTimeout(() => {
       closeAlertModal();     
@@ -62,7 +65,7 @@ function Login() {
 
   function openAlertModal(header_text, body_text){
     setHeaderTextOfAlertModal(header_text);
-    setBodyTextOfAlertModal(body_text);
+    setBodyTextOfAlertModal(body_text);   
     setShowAlertModal(true);
   }
 
@@ -73,7 +76,7 @@ function Login() {
     
     clearTimeout(loadAlertModal);
     loadAlertModal = null;
-    document.getElementById('signIn').click();
+    if(api_response_status === 200) document.getElementById('signIn').click();   
   }
 
 

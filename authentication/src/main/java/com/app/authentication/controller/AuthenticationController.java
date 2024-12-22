@@ -23,10 +23,10 @@ public class AuthenticationController {
     public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel new_user){
         try{
             TMstUser saved_user = tMstUserService.saveProduct(new_user);
-            return CommonApiReturn.success("Sign-Up is successful. Please Login now",saved_user);
+            return CommonApiReturn.success("Sign-Up is successful. Please Login now.",saved_user);
         } catch (Exception e) {
             // Log Exception
-            return CommonApiReturn.error(400,"Internal server error.");
+            return CommonApiReturn.error(400,"Internal Server Error.");
         }
     }
 }
