@@ -35,7 +35,7 @@ export class AuthenticationService {
                 body: JSON.stringify(obj)
             });
       
-            let res = await response.text();
+            let res = await response.json();
             return res;
         } catch (ex){
             console.log(ex);

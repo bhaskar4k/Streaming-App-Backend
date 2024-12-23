@@ -7,11 +7,15 @@ import { AuthenticationService } from '../../Service/AuthenticationService';
 import google from '../../../public/Images/google.svg';
 import './Login.css';
 import AlertModal from '../Common-Components/AlertModal/AlertModal';
+import { useNavigate } from 'react-router-dom';
 
 let loadAlertModal = null;
 let api_response_status = null;
 
 function Login() {
+  const navigate = useNavigate();
+
+
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
   const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
@@ -65,7 +69,6 @@ function Login() {
       setColorOfAlertModal(Environment.colorWarning);
       openAlertModal(Environment.alert_modal_header_signup, warning_message);
     }
-    
 
     return validationStatus;
   }
@@ -90,8 +93,6 @@ function Login() {
       password : encryptionDecryption.Encrypt(password),
     };    
 
-    console.log(obj)
-
     let response = await authenticationService.DoSignUpService(obj);
     api_response_status = response.status;
 
@@ -115,9 +116,35 @@ function Login() {
   }
 
 
+  function ValidateLoginFormData(email, password){
+    let validationStatus = true;
+    let warning_message = "";
+
+    if(email==="" || email===null){
+      warning_message="Email can't be empty.";
+      validationStatus=false;
+    }else if(password==="" || password===null){
+      warning_message="Password can't be empty.";
+      validationStatus=false;
+    }
+    
+    if(validationStatus===false){
+      setColorOfAlertModal(Environment.colorWarning);
+      openAlertModal(Environment.alert_modal_header_login, warning_message);
+    }
+    
+    return validationStatus;
+  }
+
+
   async function DoLogin(){
+    api_response_status = null;
+    closeAlertModal();
+
     let email = document.getElementById("login_email").value;
     let password = document.getElementById("login_password").value;
+
+    if(ValidateLoginFormData(email,password)===false) return;
 
     let obj = {
       email : email,
@@ -125,7 +152,20 @@ function Login() {
     };    
 
     let response = await authenticationService.DoLoginService(obj);
-    console.log(response)
+    api_response_status = response.status;
+    console.log(response,api_response_status)
+
+    if(api_response_status === 401){
+      setColorOfAlertModal(Environment.colorError);
+      
+      openAlertModal(Environment.alert_modal_header_login, response.message);
+    }else{
+      navigate(`/home`);
+    }
+
+    loadAlertModal = setTimeout(() => {
+      closeAlertModal();     
+    }, 5000);
   }
 
 

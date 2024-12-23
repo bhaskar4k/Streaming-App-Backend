@@ -3,6 +3,7 @@ package com.app.authentication.controller;
 import com.app.authentication.common.CommonApiReturn;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
+import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.service.LoginSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private LoginSignUpService loginSignUpService;
+    private EncryptionDecryption encryptionDecryption;
 
     public AuthenticationController() {
-        this.loginSignUpService = new LoginSignUpService();
+        this.loginSignUpService=new LoginSignUpService();
+        this.encryptionDecryption=new EncryptionDecryption();
     }
 
     @PostMapping("/authentication/do_signup")
@@ -35,10 +38,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authentication/do_login")
-    public CommonApiReturn<TMstUser> do_login(@RequestBody TMstUserModel new_user){
+    public CommonApiReturn<TMstUser> do_login(@RequestBody TMstUserModel cur_user){
         try{
-            TMstUser validated_user = loginSignUpService.validateUser(new_user);
-            return CommonApiReturn.success("Login is successful.",validated_user);
+            TMstUser validated_user = loginSignUpService.validateUser(cur_user);
+            if(validated_user!=null){
+                if(encryptionDecryption.Decrypt(cur_user.getPassword()).equals(encryptionDecryption.Decrypt(validated_user.getPassword()))){
+                    return CommonApiReturn.success("Login is successful.",validated_user);
+                }
+            }
+
+            return CommonApiReturn.error(401,"Incorrect Username or Password.");
         } catch (Exception e) {
             // Log Exception
             return CommonApiReturn.error(400,"Internal Server Error.");

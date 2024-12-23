@@ -71,6 +71,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
         try {
             user_entity = new TMstUser(new_user.getFirst_name(),new_user.getLast_name(),new_user.getEmail(),new_user.getPassword());
             tmstUserRepository.save(user_entity);
+
             return user_entity;
         } catch (Exception e) {
             // Log Exception
@@ -82,6 +83,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     public boolean deleteProduct(Long id) {
         try {
             tmstUserRepository.deleteById(id);
+
             return true;
         } catch (Exception e) {
             // Log Exception
@@ -92,7 +94,8 @@ public class LoginSignUpService implements I_LoginSignUpService {
     @Override
     public TMstUser validateUser(TMstUserModel new_user){
         try {
-            TMstUser validated_user = getUserDetailsByEmail(new_user.getEmail());
+            TMstUser validated_user = getUserDetailsByEmail(new_user.getEmail(),new_user.getPassword());
+
             return validated_user;
         } catch (Exception e) {
             // Log Exception
@@ -101,16 +104,17 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public TMstUser getUserDetailsByEmail(String value) {
+    public TMstUser getUserDetailsByEmail(String value, String password) {
         try {
-            String sql = "SELECT * FROM t_mst_user WHERE email = :value";
+            String sql = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             Query query = entityManager.createNativeQuery(sql, TMstUser.class);
-            query.setParameter("value", value);
+            query.setParameter("value1", value);
+            query.setParameter("value2", password);
+
             return (TMstUser) query.getSingleResult();
         } catch (Exception e) {
             // Log Exception
             return null;
         }
-
     }
 }

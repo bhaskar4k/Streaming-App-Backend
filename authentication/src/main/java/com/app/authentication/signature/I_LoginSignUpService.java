@@ -19,5 +19,5 @@ public interface I_LoginSignUpService {
 
     public TMstUser validateUser(TMstUserModel new_user);
 
-    public TMstUser getUserDetailsByEmail(String value);
+    public TMstUser getUserDetailsByEmail(String value, String password);
 }
