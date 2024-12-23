@@ -18,6 +18,4 @@ public interface I_LoginSignUpService {
     public boolean deleteProduct(Long id);
 
     public TMstUser validateUser(TMstUserModel new_user);
-
-    public TMstUser getUserDetailsByEmail(String value, String password);
 }

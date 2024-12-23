@@ -1,9 +1,11 @@
 package com.app.authentication.security;
 
+import org.springframework.context.annotation.Bean;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
-
 
 public class EncryptionDecryption {
     private final String privateKey1;
@@ -68,13 +70,12 @@ public class EncryptionDecryption {
         int firstEncryptedCharVal = Integer.parseInt(parts[0]);
         encryptedPassword.append(password.length() * encryptionNumber.get(encryptionNumberLength - 1) * firstEncryptedCharVal).append(".");
 
-        System.out.println(encryptedPassword);
-        System.out.println(Decrypt(encryptedPassword.toString()));
-
-        return encryptedPassword.toString();
+        return Base64.getEncoder().encodeToString(encryptedPassword.toString().getBytes());
     }
 
     public String Decrypt(String encryptedPassword) {
+        encryptedPassword = new String(Base64.getDecoder().decode(encryptedPassword));
+
         StringBuilder decryptedPassword = new StringBuilder();
         String[] encryptedParts = encryptedPassword.split("\\.");
         List<Integer> parsedParts = new ArrayList<>();

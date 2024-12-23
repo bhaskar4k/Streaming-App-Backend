@@ -94,22 +94,10 @@ public class LoginSignUpService implements I_LoginSignUpService {
     @Override
     public TMstUser validateUser(TMstUserModel new_user){
         try {
-            TMstUser validated_user = getUserDetailsByEmail(new_user.getEmail(),new_user.getPassword());
-
-            return validated_user;
-        } catch (Exception e) {
-            // Log Exception
-            return null;
-        }
-    }
-
-    @Override
-    public TMstUser getUserDetailsByEmail(String value, String password) {
-        try {
             String sql = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             Query query = entityManager.createNativeQuery(sql, TMstUser.class);
-            query.setParameter("value1", value);
-            query.setParameter("value2", password);
+            query.setParameter("value1", new_user.getEmail());
+            query.setParameter("value2", new_user.getPassword());
 
             return (TMstUser) query.getSingleResult();
         } catch (Exception e) {

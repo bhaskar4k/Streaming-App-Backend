@@ -18,7 +18,6 @@ public class AuthenticationController {
     private EncryptionDecryption encryptionDecryption;
 
     public AuthenticationController() {
-        this.loginSignUpService=new LoginSignUpService();
         this.encryptionDecryption=new EncryptionDecryption();
     }
 

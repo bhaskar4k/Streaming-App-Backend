@@ -153,7 +153,6 @@ function Login() {
 
     let response = await authenticationService.DoLoginService(obj);
     api_response_status = response.status;
-    console.log(response,api_response_status)
 
     if(api_response_status === 401){
       setColorOfAlertModal(Environment.colorError);

@@ -63,13 +63,12 @@ export class EncryptionDecryption {
 
         encryptedPassword+=(`${password.length*this.encryptionNumber[encryptionNumberLength-1]*parseInt(fistEncryptedCharVal)}`+'.');
 
-        console.log(encryptedPassword);
-        console.log(this.Decrypt(encryptedPassword));
-
-        return encryptedPassword;
+        return btoa(encryptedPassword);
     }
 
     Decrypt(encryptedPassword) {
+        encryptedPassword=atob(encryptedPassword);
+        
         let decryptedPassword="";
         let encryptionNumberLength=this.encryptionNumber.length;
         let encryptedParts=encryptedPassword.split('.').filter(part => part !== "");
