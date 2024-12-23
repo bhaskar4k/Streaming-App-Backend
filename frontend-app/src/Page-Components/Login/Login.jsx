@@ -212,7 +212,7 @@ function Login() {
               <input type="password" placeholder="Password" id="signup_password"/>
               <input type="password" placeholder="Confirm Password" id="signup_confirm_password"/>
 
-              <button onClick={DoSignUp}>Sign Up</button>
+              <button className="signup_btn" onClick={DoSignUp}>Sign Up</button>
             </div>
           </div>
 

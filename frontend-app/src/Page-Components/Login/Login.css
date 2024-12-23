@@ -90,7 +90,7 @@ input {
 	overflow: hidden;
 	width: 768px;
 	max-width: 100%;
-	min-height: 480px;
+	min-height: 580px;
 	transition: all 0.15s ease-in-out;
 }
 
@@ -216,6 +216,10 @@ input {
 	margin: 0 5px;
 	height: 40px;
 	width: 40px;
+}
+
+.signup_btn{
+	margin-top: 30px;
 }
 
 footer {
