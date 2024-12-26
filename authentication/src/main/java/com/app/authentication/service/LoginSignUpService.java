@@ -1,5 +1,6 @@
 package com.app.authentication.service;
 
+import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TMstUserRepository;
@@ -12,6 +13,8 @@ import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +25,15 @@ public class LoginSignUpService implements I_LoginSignUpService {
     private TMstUserRepository tmstUserRepository;
     private TMstUser user_entity;
     private EncryptionDecryption encryptionDecryption;
+    private DbWorker dbWorker;
+    private String sql_string;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public LoginSignUpService(){
         this.encryptionDecryption=new EncryptionDecryption();
+        this.dbWorker=new DbWorker();
     }
 
     @Override
@@ -53,11 +59,10 @@ public class LoginSignUpService implements I_LoginSignUpService {
     @Override
     public boolean alreadyRegistered(String email) {
         try {
-            String sql = "SELECT * FROM t_mst_user WHERE email = :value";
-            Query query = entityManager.createNativeQuery(sql, TMstUser.class);
-            query.setParameter("value", email);
+            sql_string = "SELECT * FROM t_mst_user WHERE email = :value1";
+            List<Object> params = List.of(email);
 
-            return ((TMstUser) query.getSingleResult() != null);
+            return ((TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult() != null);
         } catch (NoResultException e) {
             return false;
         } catch (Exception e) {
@@ -94,12 +99,10 @@ public class LoginSignUpService implements I_LoginSignUpService {
     @Override
     public TMstUser validateUser(TMstUserModel new_user){
         try {
-            String sql = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
-            Query query = entityManager.createNativeQuery(sql, TMstUser.class);
-            query.setParameter("value1", new_user.getEmail());
-            query.setParameter("value2", new_user.getPassword());
+            sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
+            List<Object> params = List.of(new_user.getEmail(), new_user.getPassword());
 
-            return (TMstUser) query.getSingleResult();
+            return (TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult();
         } catch (Exception e) {
             // Log Exception
             return null;

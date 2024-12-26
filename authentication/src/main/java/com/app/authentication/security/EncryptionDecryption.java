@@ -1,23 +1,27 @@
 package com.app.authentication.security;
 
-import org.springframework.context.annotation.Bean;
+import com.app.authentication.environment.Environment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class EncryptionDecryption {
-    private final String privateKey1;
-    private final String privateKey2;
-    private final String encryptionPadding;
-    private final List<Integer> encryptionNumber;
+    private String privateKey1;
+    private String privateKey2;
+    private String encryptionPadding;
+    private List<Integer> encryptionNumber;
+    private Environment environment;
 
     public EncryptionDecryption() {
-        this.privateKey1 = "AHeavyEncryptionKeyThatIsWrittenByBhaskar";
-        this.privateKey2 = "ValorantIsAStressfullGameButEnjoyableAsWell";
-        this.encryptionPadding = "SoftwareDevelopmentIsVeryInterestingAreaIfyouLoveILoveMyExGF";
-        this.encryptionNumber = Arrays.asList(23,56,75,86,45,12,43,65,24,86,37,24,2,456,346,746,347,246,343,6676,6546,9656,456463,34353,43543,733434);
+        this.environment = new Environment();
+        this.privateKey1 = environment.getPrivateKey1();
+        this.privateKey2 = environment.getPrivateKey2();
+        this.encryptionPadding = environment.getEncryptionPadding();
+        this.encryptionNumber = environment.getEncryptionNumber();
     }
 
     private String Padding(String password, int padSize) {

@@ -26,6 +26,17 @@ public class TMstUserModel {
         this.trans_datetime = trans_datetime;
     }
 
+    public TMstUserModel(Long id, String first_name, String last_name, String email, String password, int is_subscribed, int is_active, LocalDateTime trans_datetime) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.password = password;
+        this.is_subscribed = is_subscribed;
+        this.is_active = is_active;
+        this.trans_datetime = trans_datetime;
+    }
+
     public Long getId() {
         return id;
     }
