@@ -4,17 +4,10 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/upload/pom.xml" />
         <option value="$PROJECT_DIR$/dashboard/pom.xml" />
         <option value="$PROJECT_DIR$/streaming/pom.xml" />
-        <option value="$PROJECT_DIR$/upload/pom.xml" />
-        <option value="$PROJECT_DIR$/Authentication/authentication/pom.xml" />
-        <option value="$PROJECT_DIR$/Dashboard/dashboard/pom.xml" />
-        <option value="$PROJECT_DIR$/Streaming/streaming/pom.xml" />
-        <option value="$PROJECT_DIR$/Upload/upload/pom.xml" />
-        <option value="$PROJECT_DIR$/UIEntity/pom.xml" />
-        <option value="$PROJECT_DIR$/DAL/pom.xml" />
-        <option value="$PROJECT_DIR$/Service/pom.xml" />
+        <option value="$PROJECT_DIR$/authentication/pom.xml" />
       </list>
     </option>
   </component>
