@@ -37,7 +37,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public List<TMstUser> getAllProducts() {
+    public List<TMstUser> getAllUsers() {
         try {
             return tmstUserRepository.findAll();
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public Optional<TMstUser> getProductById(Long id) {
+    public Optional<TMstUser> getUserById(Long id) {
         try {
             return tmstUserRepository.findById(id);
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public TMstUser saveProduct(TMstUserModel new_user) {
+    public TMstUser saveUser(TMstUserModel new_user) {
         try {
             user_entity = new TMstUser(new_user.getFirst_name(),new_user.getLast_name(),new_user.getEmail(),new_user.getPassword());
             tmstUserRepository.save(user_entity);
@@ -85,7 +85,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public boolean deleteProduct(Long id) {
+    public boolean deleteUser(Long id) {
         try {
             tmstUserRepository.deleteById(id);
 

@@ -28,7 +28,7 @@ public class AuthenticationController {
                 return CommonApiReturn.error(400,"The email address [" + new_user.getEmail() + "] is already registered.");
             }
 
-            TMstUser saved_user = loginSignUpService.saveProduct(new_user);
+            TMstUser saved_user = loginSignUpService.saveUser(new_user);
             return CommonApiReturn.success("Sign-Up is successful. Please Login now.",saved_user);
         } catch (Exception e) {
             // Log Exception

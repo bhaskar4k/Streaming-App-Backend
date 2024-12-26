@@ -7,15 +7,15 @@ import java.util.Optional;
 
 public interface I_LoginSignUpService {
 
-    public List<TMstUser> getAllProducts();
+    public List<TMstUser> getAllUsers();
 
-    public Optional<TMstUser> getProductById(Long id);
+    public Optional<TMstUser> getUserById(Long id);
 
     public boolean alreadyRegistered(String email);
 
-    public TMstUser saveProduct(TMstUserModel new_user);
+    public TMstUser saveUser(TMstUserModel new_user);
 
-    public boolean deleteProduct(Long id);
+    public boolean deleteUser(Long id);
 
     public TMstUser validateUser(TMstUserModel new_user);
 }
