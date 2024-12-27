@@ -3,6 +3,7 @@ package com.app.authentication.service;
 import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
+import com.app.authentication.jwtauth.JwtUtil;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
@@ -11,6 +12,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ public class LoginSignUpService implements I_LoginSignUpService {
     private TMstUserRepository tmstUserRepository;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    @Autowired
+    private JwtUtil jwtUtil;
     private TMstUser user_entity;
     private EncryptionDecryption encryptionDecryption;
     private DbWorker dbWorker;
@@ -91,6 +96,8 @@ public class LoginSignUpService implements I_LoginSignUpService {
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             List<Object> params = List.of(new_user.getEmail(), new_user.getPassword());
+
+            String token = jwtUtil.generateToken(new_user.getEmail());
 
             return (TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult();
         } catch (Exception e) {
