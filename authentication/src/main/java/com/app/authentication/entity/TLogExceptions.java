@@ -12,8 +12,6 @@ public class TLogExceptions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @Column(nullable = false, columnDefinition = "varchar(255) default 'Authentication'")
-    private String microservice_name;
     private String package_name;
     private String class_name;
     private String function_name;
@@ -39,14 +37,6 @@ public class TLogExceptions {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getMicroservice_name() {
-        return microservice_name;
-    }
-
-    public void setMicroservice_name(String microservice_name) {
-        this.microservice_name = microservice_name;
     }
 
     public String getPackage_name() {
@@ -93,7 +83,6 @@ public class TLogExceptions {
     public String toString() {
         return "TLogExceptions{" +
                 "id=" + id +
-                ", microservice_name='" + microservice_name + '\'' +
                 ", package_name='" + package_name + '\'' +
                 ", class_name='" + class_name + '\'' +
                 ", function_name='" + function_name + '\'' +

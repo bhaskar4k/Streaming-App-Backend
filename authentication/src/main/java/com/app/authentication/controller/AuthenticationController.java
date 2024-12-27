@@ -1,9 +1,11 @@
 package com.app.authentication.controller;
 
 import com.app.authentication.common.CommonApiReturn;
+import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.security.EncryptionDecryption;
+import com.app.authentication.service.LogExceptionsService;
 import com.app.authentication.service.LoginSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private LoginSignUpService loginSignUpService;
+    @Autowired
+    private LogExceptionsService logExceptionsService;
     private EncryptionDecryption encryptionDecryption;
 
     public AuthenticationController() {
@@ -31,7 +35,7 @@ public class AuthenticationController {
             TMstUser saved_user = loginSignUpService.saveUser(new_user);
             return CommonApiReturn.success("Sign-Up is successful. Please Login now.",saved_user);
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("controller","AuthenticationController","do_signup()",e.getMessage()));
             return CommonApiReturn.error(400,"Internal Server Error.");
         }
     }
@@ -48,7 +52,7 @@ public class AuthenticationController {
 
             return CommonApiReturn.error(401,"Incorrect Username or Password.");
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("controller","AuthenticationController","do_login()",e.getMessage()));
             return CommonApiReturn.error(400,"Internal Server Error.");
         }
     }

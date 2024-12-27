@@ -22,11 +22,12 @@ import java.util.Optional;
 public class LoginSignUpService implements I_LoginSignUpService {
     @Autowired
     private TMstUserRepository tmstUserRepository;
+    @Autowired
+    private LogExceptionsService logExceptionsService;
     private TMstUser user_entity;
     private EncryptionDecryption encryptionDecryption;
     private DbWorker dbWorker;
     private String sql_string;
-    private LogExceptionsService logExceptionsService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -34,7 +35,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
     public LoginSignUpService(){
         this.encryptionDecryption=new EncryptionDecryption();
         this.dbWorker=new DbWorker();
-        this.logExceptionsService=new LogExceptionsService();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
         try {
             return tmstUserRepository.findAll();
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","getAllUsers",e.getMessage()));
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","getAllUsers()",e.getMessage()));
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
         try {
             return tmstUserRepository.findById(id);
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","getUserById()",e.getMessage()));
             return Optional.empty();
         }
     }
@@ -65,10 +65,10 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
             return ((TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult() != null);
         } catch (NoResultException e) {
-            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","getAllUsers",e.getMessage()));
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","alreadyRegistered()",e.getMessage()));
             return false;
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","alreadyRegistered()",e.getMessage()));
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
             return user_entity;
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","saveUser()",e.getMessage()));
             return null;
         }
     }
@@ -94,7 +94,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
             return (TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult();
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","validateUser()",e.getMessage()));
             return null;
         }
     }
@@ -106,7 +106,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
             return true;
         } catch (Exception e) {
-            // Log Exception
+            logExceptionsService.saveLogException(new TLogExceptions("service","LoginSignUpService","deleteUser()",e.getMessage()));
             return false;
         }
     }
