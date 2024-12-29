@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthenticationController {
     @Autowired
     private LoginSignUpService loginSignUpService;
