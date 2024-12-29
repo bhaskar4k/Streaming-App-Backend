@@ -10,10 +10,20 @@ public class TMstUserModel {
     private String password;
     private int is_subscribed ;
     private int is_active;
+    private String jwt_token;
     private LocalDateTime trans_datetime;
 
     public TMstUserModel() {
 
+    }
+
+    public TMstUserModel(String first_name, String last_name, int is_subscribed, int is_active, String jwt_token, LocalDateTime trans_datetime) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.is_subscribed = is_subscribed;
+        this.is_active = is_active;
+        this.jwt_token = jwt_token;
+        this.trans_datetime = trans_datetime;
     }
 
     public TMstUserModel(String first_name, String last_name, String email, String password, int is_subscribed, int is_active, LocalDateTime trans_datetime) {
@@ -34,6 +44,18 @@ public class TMstUserModel {
         this.password = password;
         this.is_subscribed = is_subscribed;
         this.is_active = is_active;
+        this.trans_datetime = trans_datetime;
+    }
+
+    public TMstUserModel(Long id, String first_name, String last_name, String email, String password, int is_subscribed, int is_active, String jwt_token, LocalDateTime trans_datetime) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.password = password;
+        this.is_subscribed = is_subscribed;
+        this.is_active = is_active;
+        this.jwt_token = jwt_token;
         this.trans_datetime = trans_datetime;
     }
 
@@ -101,9 +123,17 @@ public class TMstUserModel {
         this.trans_datetime = trans_datetime;
     }
 
+    public String getJwt_token() {
+        return jwt_token;
+    }
+
+    public void setJwt_token(String jwt_token) {
+        this.jwt_token = jwt_token;
+    }
+
     @Override
     public String toString() {
-        return "T_mst_user{" +
+        return "TMstUserModel{" +
                 "id=" + id +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
@@ -111,6 +141,7 @@ public class TMstUserModel {
                 ", password='" + password + '\'' +
                 ", is_subscribed=" + is_subscribed +
                 ", is_active=" + is_active +
+                ", jwt_token='" + jwt_token + '\'' +
                 ", trans_datetime=" + trans_datetime +
                 '}';
     }

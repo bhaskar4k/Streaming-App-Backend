@@ -1,6 +1,6 @@
 package com.app.authentication.controller;
 
-import com.app.authentication.common.CommonApiReturn;
+import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
@@ -25,34 +25,35 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authentication/do_signup")
-    public CommonApiReturn<TMstUser> do_signup(@RequestBody TMstUserModel new_user){
+    public CommonReturn<Boolean> do_signup(@RequestBody TMstUserModel new_user){
         try{
-            if(loginSignUpService.alreadyRegistered(new_user.getEmail())){
-                return CommonApiReturn.error(400,"The email address [" + new_user.getEmail() + "] is already registered.");
-            }
-
-            TMstUser saved_user = loginSignUpService.saveUser(new_user);
-            return CommonApiReturn.success("Sign-Up is successful. Please Login now.",saved_user);
+            return loginSignUpService.saveUser(new_user);
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("controller","AuthenticationController","do_signup()",e.getMessage()));
-            return CommonApiReturn.error(400,"Internal Server Error.");
+            log("do_signup()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 
     @PostMapping("/authentication/do_login")
-    public CommonApiReturn<TMstUser> do_login(@RequestBody TMstUserModel cur_user){
+    public CommonReturn<TMstUserModel> do_login(@RequestBody TMstUserModel cur_user){
         try{
-            TMstUser validated_user = loginSignUpService.validateUser(cur_user);
-            if(validated_user!=null){
-                if(encryptionDecryption.Decrypt(cur_user.getPassword()).equals(encryptionDecryption.Decrypt(validated_user.getPassword()))){
-                    return CommonApiReturn.success("Login is successful.",validated_user);
-                }
-            }
-
-            return CommonApiReturn.error(401,"Incorrect Username or Password.");
+            return loginSignUpService.validateUser(cur_user);
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("controller","AuthenticationController","do_login()",e.getMessage()));
-            return CommonApiReturn.error(400,"Internal Server Error.");
+            log("do_login()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
         }
+    }
+
+
+    private void log(String function_name, String exception_msg){
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+
+        String full_class_path = stackTraceElements[2].getClassName();
+        String class_name = full_class_path.substring(full_class_path.lastIndexOf(".") + 1);
+
+        String full_package_path = full_class_path.substring(0, full_class_path.lastIndexOf("."));
+        String package_name = full_package_path.substring(full_package_path.lastIndexOf(".") + 1);
+
+        logExceptionsService.saveLogException(new TLogExceptions(package_name,class_name,function_name,exception_msg));
     }
 }

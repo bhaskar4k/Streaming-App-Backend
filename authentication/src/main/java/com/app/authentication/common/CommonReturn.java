@@ -1,13 +1,13 @@
 package com.app.authentication.common;
 
-public class CommonApiReturn<T> {
+public class CommonReturn<T> {
     private int status;
     private String message;
     private T data;
 
-    public CommonApiReturn() {}
+    public CommonReturn() {}
 
-    public CommonApiReturn(int status, String message, T data) {
+    public CommonReturn(int status, String message, T data) {
         this.status = status;
         this.message = message;
         this.data = data;
@@ -37,12 +37,12 @@ public class CommonApiReturn<T> {
         this.data = data;
     }
 
-    public static <T> CommonApiReturn<T> success(String message, T data) {
-        return new CommonApiReturn<>(200, message, data);
+    public static <T> CommonReturn<T> success(String message, T data) {
+        return new CommonReturn<>(200, message, data);
     }
 
-    public static <T> CommonApiReturn<T> error(int status, String message) {
-        return new CommonApiReturn<>(status, message, null);
+    public static <T> CommonReturn<T> error(int status, String message) {
+        return new CommonReturn<>(status, message, null);
     }
 }
 

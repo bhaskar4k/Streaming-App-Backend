@@ -1,4 +1,5 @@
 package com.app.authentication.signature;
+import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
 
@@ -11,11 +12,11 @@ public interface I_LoginSignUpService {
 
     public Optional<TMstUser> getUserById(Long id);
 
-    public boolean alreadyRegistered(String email);
+    public int alreadyRegistered(String email);
 
-    public TMstUser saveUser(TMstUserModel new_user);
+    public CommonReturn<Boolean> saveUser(TMstUserModel new_user);
 
     public boolean deleteUser(Long id);
 
-    public TMstUser validateUser(TMstUserModel new_user);
+    public CommonReturn<TMstUserModel> validateUser(TMstUserModel new_user);
 }

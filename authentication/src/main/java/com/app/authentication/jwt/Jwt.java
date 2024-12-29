@@ -2,6 +2,7 @@ package com.app.authentication.jwt;
 
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.service.LogExceptionsService;
+import com.fasterxml.jackson.databind.ObjectMapper;  // Jackson library for serialization
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,39 +21,52 @@ public class Jwt {
     private LogExceptionsService logExceptionsService;
 
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long expirationMillis = 1000 * 60 * 60 * 10;
+    private final long expirationMillis = 1000 * 60 * 60 * 10; // 10 hours
 
-    public String generateToken(String userName) {
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    public String generateToken(Object userObject) {
         try {
             Map<String, Object> claims = new HashMap<>();
-            return createToken(claims, userName);
+            String userJson = objectMapper.writeValueAsString(userObject);
+            return createToken(claims, userJson);
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "generateToken()", e.getMessage()));
+            log("generateToken()", e.getMessage());
             return null;
         }
     }
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(Map<String, Object> claims, String userJson) {
         try {
             return Jwts.builder()
                     .setClaims(claims)
-                    .setSubject(userName)
+                    .setSubject(userJson)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                     .signWith(SECRET_KEY)
                     .compact();
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "createToken()", e.getMessage()));
+            log("createToken()", e.getMessage());
             return null;
         }
     }
 
     public String extractEmail(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (JwtException e) {
+            log("extractEmail()", e.getMessage());
+            return null;
+        }
     }
 
     public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        try {
+            return extractClaim(token, Claims::getExpiration);
+        } catch (JwtException e) {
+            log("extractExpiration()", e.getMessage());
+            return null;
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -60,7 +74,7 @@ public class Jwt {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
         } catch (JwtException e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "extractClaim()", e.getMessage()));
+            log("extractClaim()", e.getMessage());
             return null;
         }
     }
@@ -68,12 +82,12 @@ public class Jwt {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY) // Use the securely generated key
+                    .setSigningKey(SECRET_KEY)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "extractAllClaims()", e.getMessage()));
+            log("extractAllClaims()", e.getMessage());
             return null;
         }
     }
@@ -82,18 +96,32 @@ public class Jwt {
         try {
             return extractExpiration(token).before(new Date());
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "isTokenExpired()", e.getMessage()));
-            return true; // Treat as expired if there's an issue
+            log("isTokenExpired()", e.getMessage());
+            return false;
         }
     }
 
-    public Boolean validateToken(String token, String user_email) {
+    public Boolean validateToken(String token, Object userObject) {
         try {
-            final String token_email = extractEmail(token);
-            return user_email.equals(token_email) && !isTokenExpired(token);
+            String userJson = extractEmail(token);
+            Object extractedUserObject = objectMapper.readValue(userJson, userObject.getClass());
+            return userObject.equals(extractedUserObject) && !isTokenExpired(token);
         } catch (Exception e) {
-            logExceptionsService.saveLogException(new TLogExceptions("jwt", "Jwt", "validateToken()", e.getMessage()));
+            log("validateToken()", e.getMessage());
             return false;
         }
+    }
+
+
+    private void log(String function_name, String exception_msg){
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+
+        String full_class_path = stackTraceElements[2].getClassName();
+        String class_name = full_class_path.substring(full_class_path.lastIndexOf(".") + 1);
+
+        String full_package_path = full_class_path.substring(0, full_class_path.lastIndexOf("."));
+        String package_name = full_package_path.substring(full_package_path.lastIndexOf(".") + 1);
+
+        logExceptionsService.saveLogException(new TLogExceptions(package_name,class_name,function_name,exception_msg));
     }
 }
