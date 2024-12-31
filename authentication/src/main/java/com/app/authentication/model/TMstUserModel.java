@@ -11,6 +11,7 @@ public class TMstUserModel {
     private int is_subscribed ;
     private int is_active;
     private String jwt_token;
+    private String ip_address;
     private LocalDateTime trans_datetime;
 
     public TMstUserModel() {
@@ -131,6 +132,14 @@ public class TMstUserModel {
         this.jwt_token = jwt_token;
     }
 
+    public String getIp_address() {
+        return ip_address;
+    }
+
+    public void setIp_address(String ip_address) {
+        this.ip_address = ip_address;
+    }
+
     @Override
     public String toString() {
         return "TMstUserModel{" +
@@ -142,6 +151,7 @@ public class TMstUserModel {
                 ", is_subscribed=" + is_subscribed +
                 ", is_active=" + is_active +
                 ", jwt_token='" + jwt_token + '\'' +
+                ", ip_address='" + ip_address + '\'' +
                 ", trans_datetime=" + trans_datetime +
                 '}';
     }

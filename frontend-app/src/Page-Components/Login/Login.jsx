@@ -149,6 +149,7 @@ function Login() {
     let obj = {
       email : email,
       password : encryptionDecryption.Encrypt(password),
+      ip_address : await get_ip_address()
     };    
 
     let response = await authenticationService.DoLoginService(obj);

@@ -28,6 +28,8 @@ public class LoginSignUpService implements I_LoginSignUpService {
     @Autowired
     private LogExceptionsService logExceptionsService;
     @Autowired
+    private AuthService authService;
+    @Autowired
     private Jwt jwt;
 
     private EncryptionDecryption encryptionDecryption;
@@ -108,19 +110,21 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
             if(validated_user!=null){
                 if(new_user.getPassword().equals(validated_user.getPassword()) && encryptionDecryption.Decrypt(new_user.getPassword()).equals(encryptionDecryption.Decrypt(validated_user.getPassword()))){
-                    JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),validated_user.getIs_active());
-                    String jwt_token = jwt.generateToken(jwt_user_details);
-
-                    TMstUserModel returned_user = new TMstUserModel(validated_user.getFirst_name(),validated_user.getLast_name(),validated_user.getIs_subscribed(),validated_user.getIs_active(),jwt_token,validated_user.getTrans_datetime());
-                    return CommonReturn.success("Login is successful.",returned_user);
+                    String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
+                    if(jwt_token!=null){
+                        TMstUserModel returned_user = new TMstUserModel(validated_user.getFirst_name(),validated_user.getLast_name(),validated_user.getIs_subscribed(),validated_user.getIs_active(),jwt_token,validated_user.getTrans_datetime());
+                        return CommonReturn.success("Login is successful.",returned_user);
+                    }else{
+                        return CommonReturn.error(401,"Auth token generation failed.");
+                    }
                 }else{
-                    return CommonReturn.error(401,"Incorrect Username or Password.");
+                    return CommonReturn.error(401,"Incorrect Username or Password/User doesn't exist.");
                 }
             }else{
-                return CommonReturn.error(401,"Incorrect Username or Password.");
+                return CommonReturn.error(401,"Incorrect Username or Password/User doesn't exist.");
             }
         } catch (NoResultException e) {
-            return CommonReturn.error(401,"Incorrect Username or Password.");
+            return CommonReturn.error(401,"Incorrect Username or Password/User doesn't exist.");
         } catch (Exception e) {
             log("validateUser()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
