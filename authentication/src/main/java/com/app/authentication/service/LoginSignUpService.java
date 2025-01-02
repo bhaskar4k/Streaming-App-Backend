@@ -5,7 +5,6 @@ import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.jwt.Jwt;
-import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
@@ -35,6 +34,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     private EncryptionDecryption encryptionDecryption;
     private DbWorker dbWorker;
     private String sql_string;
+    List<Object> params;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -68,9 +68,9 @@ public class LoginSignUpService implements I_LoginSignUpService {
     public int alreadyRegistered(String email) {
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1";
-            List<Object> params = List.of(email);
+            params = List.of(email);
 
-            return ((TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult() != null) ? 1 : 0;
+            return ((TMstUser)dbWorker.getQuery(sql_string, entityManager, params, TMstUser.class).getSingleResult() != null) ? 1 : 0;
         } catch (NoResultException e) {
             return 0;
         } catch (Exception e) {
@@ -104,13 +104,14 @@ public class LoginSignUpService implements I_LoginSignUpService {
     public CommonReturn<TMstUserModel> validateUser(TMstUserModel new_user){
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
-            List<Object> params = List.of(new_user.getEmail(), new_user.getPassword());
+            params = List.of(new_user.getEmail(), new_user.getPassword());
 
-            TMstUser validated_user = (TMstUser)dbWorker.getDataset(sql_string, entityManager, params, TMstUser.class).getSingleResult();
+            TMstUser validated_user = (TMstUser)dbWorker.getQuery(sql_string, entityManager, params, TMstUser.class).getSingleResult();
 
             if(validated_user!=null){
                 if(new_user.getPassword().equals(validated_user.getPassword()) && encryptionDecryption.Decrypt(new_user.getPassword()).equals(encryptionDecryption.Decrypt(validated_user.getPassword()))){
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
+
                     if(jwt_token!=null){
                         TMstUserModel returned_user = new TMstUserModel(validated_user.getFirst_name(),validated_user.getLast_name(),validated_user.getIs_subscribed(),validated_user.getIs_active(),jwt_token,validated_user.getTrans_datetime());
                         return CommonReturn.success("Login is successful.",returned_user);

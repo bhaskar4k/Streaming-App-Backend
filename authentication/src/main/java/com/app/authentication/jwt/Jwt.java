@@ -51,7 +51,7 @@ public class Jwt {
         }
     }
 
-    public String extractEmail(String token) {
+    public String extractSubject(String token) {
         try {
             return extractClaim(token, Claims::getSubject);
         } catch (JwtException e) {
@@ -103,7 +103,7 @@ public class Jwt {
 
     public Boolean validateToken(String token, Object userObject) {
         try {
-            String userJson = extractEmail(token);
+            String userJson = extractSubject(token);
             Object extractedUserObject = objectMapper.readValue(userJson, userObject.getClass());
             return userObject.equals(extractedUserObject) && !isTokenExpired(token);
         } catch (Exception e) {

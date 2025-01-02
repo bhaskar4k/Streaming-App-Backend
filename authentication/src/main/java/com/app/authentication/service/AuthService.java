@@ -1,25 +1,26 @@
 package com.app.authentication.service;
 
-import com.app.authentication.common.CommonReturn;
 import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TLogin;
 import com.app.authentication.entity.TMstUser;
+import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
-import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.signature.I_AuthService;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Component
@@ -32,22 +33,47 @@ public class AuthService implements I_AuthService {
     private Jwt jwt;
 
     private EncryptionDecryption encryptionDecryption;
+    private Environment environment;
     private DbWorker dbWorker;
     private String sql_string;
+    List<Object> params;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    public AuthService(){
+        this.encryptionDecryption=new EncryptionDecryption();
+        this.environment=new Environment();
+        this.dbWorker=new DbWorker();
+    }
+
     @Override
+    @Transactional
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user){
         try {
-            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),validated_user.getIs_active());
+            sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1";
+            params = List.of(validated_user.getId());
+            Long loggedin_device_number = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult() + 1;
+
+            if(loggedin_device_number>environment.getMaximum_login_device()){
+                Random random = new Random();
+                Long removed_device_number = (long) (random.nextInt(4) + 1);
+
+                sql_string = "DELETE FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
+                params = List.of(validated_user.getId(),removed_device_number);
+
+                int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+
+                if(deleted==0)return null;
+
+                loggedin_device_number = removed_device_number;
+            }
+
+            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),new_user.getIp_address(),loggedin_device_number);
             String jwt_token = jwt.generateToken(jwt_user_details);
 
             if(jwt_token!=null){
-                //handle same jwt_token not present checking in DB
-                //handle max 4 device allowance checking
-                TLogin login_entity = new TLogin(validated_user.getId(),jwt_token,new_user.getIp_address());
+                TLogin login_entity = new TLogin(validated_user.getId(),jwt_token,new_user.getIp_address(),loggedin_device_number);
                 tLoginRepository.save(login_entity);
             }
 

@@ -14,8 +14,10 @@ public class TLogin {
     @Id
     private Long id;
     private Long t_mst_user_id;
+    @Column(length = 1000)
     private String jwt_token;
     private String ip_address;
+    private Long device_count;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
@@ -23,10 +25,11 @@ public class TLogin {
 
     }
 
-    public TLogin(Long t_mst_user_id, String jwt_token, String ip_address) {
+    public TLogin(Long t_mst_user_id, String jwt_token, String ip_address, Long device_count) {
         this.t_mst_user_id = t_mst_user_id;
         this.jwt_token = jwt_token;
         this.ip_address = ip_address;
+        this.device_count = device_count;
     }
 
     public Long getId() {
@@ -61,6 +64,14 @@ public class TLogin {
         this.ip_address = ip_address;
     }
 
+    public Long getDevice_count() {
+        return device_count;
+    }
+
+    public void setDevice_count(Long device_count) {
+        this.device_count = device_count;
+    }
+
     public LocalDateTime getTrans_datetime() {
         return trans_datetime;
     }
@@ -76,6 +87,7 @@ public class TLogin {
                 ", t_mst_user_id=" + t_mst_user_id +
                 ", jwt_token='" + jwt_token + '\'' +
                 ", ip_address='" + ip_address + '\'' +
+                ", device_count=" + device_count +
                 ", trans_datetime=" + trans_datetime +
                 '}';
     }
