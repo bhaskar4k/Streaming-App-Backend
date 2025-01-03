@@ -11,16 +11,25 @@ import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.signature.I_AuthService;
+import com.app.authentication.websocket.WebSocketController;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Component
@@ -31,6 +40,8 @@ public class AuthService implements I_AuthService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private Jwt jwt;
+    @Autowired
+    private WebSocketController webSocketController;
 
     private EncryptionDecryption encryptionDecryption;
     private Environment environment;
@@ -45,6 +56,36 @@ public class AuthService implements I_AuthService {
         this.encryptionDecryption=new EncryptionDecryption();
         this.environment=new Environment();
         this.dbWorker=new DbWorker();
+    }
+
+    public void sendMsg(String messageToSend) {
+        String websocketUrl = "ws://localhost:8090/app/chat"; // Use ws:// for WebSocket
+
+        // Create WebSocket client
+        WebSocketClient webSocketClient = new StandardWebSocketClient();
+        WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
+
+        // Configure message converter
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        // Use CompletableFuture to connect
+        CompletableFuture<StompSession> futureSession = stompClient.connectAsync(
+                websocketUrl,
+                new StompSessionHandlerAdapter() {}
+        );
+
+        try {
+            // Wait for the connection to be established
+            StompSession stompSession = futureSession.get();
+
+            // Send message to the server
+            String destination = "/app/chat"; // Application destination
+            stompSession.send(destination, messageToSend);
+
+            System.out.println("Message sent: " + messageToSend);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -67,6 +108,8 @@ public class AuthService implements I_AuthService {
                 if(deleted==0)return null;
 
                 loggedin_device_number = removed_device_number;
+
+                sendMsg("Removed user - " + loggedin_device_number);
             }
 
             JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),new_user.getIp_address(),loggedin_device_number);
