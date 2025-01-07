@@ -11,10 +11,8 @@ import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.signature.I_AuthService;
-import com.app.authentication.websocket.WebSocketController;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -40,8 +38,6 @@ public class AuthService implements I_AuthService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private Jwt jwt;
-    @Autowired
-    private WebSocketController webSocketController;
 
     private EncryptionDecryption encryptionDecryption;
     private Environment environment;

@@ -8,7 +8,10 @@ import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.service.LogExceptionsService;
 import com.app.authentication.service.LoginSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 
 @RestController
@@ -42,6 +45,12 @@ public class AuthenticationController {
             log("do_login()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
+    }
+
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public String greeting(Object message) throws Exception {
+        return "From WS HELLOOOOO!";
     }
 
 
