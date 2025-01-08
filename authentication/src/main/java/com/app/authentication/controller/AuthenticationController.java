@@ -2,7 +2,6 @@ package com.app.authentication.controller;
 
 import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
-import com.app.authentication.entity.TMstUser;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.service.LogExceptionsService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 
 
 @RestController
@@ -47,10 +45,16 @@ public class AuthenticationController {
         }
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public String greeting(Object message) throws Exception {
-        return "From WS HELLOOOOO!";
+    @MessageMapping("/send-message")
+    @SendTo("/topic/logout")
+    public CommonReturn<String> get_mesagge_into_web_socket(String message) throws Exception {
+        try{
+            return CommonReturn.success("Message into websocket from frontend.", message);
+        } catch (Exception e) {
+            log("get_mesagge_into_web_socket()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+
     }
 
 

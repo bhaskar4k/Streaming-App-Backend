@@ -18,12 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket")
-                .setAllowedOrigins("*")  // In production, replace with specific origin
-                .withSockJS();
-
-        // Add this new endpoint for native WebSocket support
-        registry.addEndpoint("/gs-guide-websocket")
-                .setAllowedOrigins("*"); // In production, replace with specific origin
+        registry.addEndpoint("/authentication-websocket")
+                .setAllowedOrigins("*");
     }
 }
