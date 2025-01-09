@@ -6,5 +6,5 @@ import com.app.authentication.model.TMstUserModel;
 
 public interface I_AuthService {
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user);
-    public void emitLogoutMessageIntoWebsocket(LogoutInfoWebSocket logoutMessageWebSocket);
+    public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number);
 }

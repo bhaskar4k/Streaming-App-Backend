@@ -18,5 +18,5 @@ public interface I_LoginSignUpService {
 
     public boolean deleteUser(Long id);
 
-    public CommonReturn<TMstUserModel> validateUser(TMstUserModel new_user);
+    public CommonReturn<String> validateUser(TMstUserModel new_user);
 }

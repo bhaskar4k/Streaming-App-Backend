@@ -72,7 +72,7 @@ export class EncryptionDecryption {
         let decryptedPassword="";
         let encryptionNumberLength=this.encryptionNumber.length;
         let encryptedParts=encryptedPassword.split('.').filter(part => part !== "");
-        let originalPasswordLength=encryptedParts[encryptedParts.length-1]/this.encryptionNumber[encryptionNumberLength-1]/encryptedParts[0];
+        let originalPasswordLength=parseInt(encryptedParts[encryptedParts.length-1])/this.encryptionNumber[encryptionNumberLength-1]/parseInt(encryptedParts[0]);
         let privateKeyLength1=this.privateKey1.length;
         let privateKeyLength2=this.privateKey2.length;
         let j=0;
@@ -93,4 +93,3 @@ export class EncryptionDecryption {
     }
 
 }
-

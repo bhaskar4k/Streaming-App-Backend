@@ -101,7 +101,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public CommonReturn<TMstUserModel> validateUser(TMstUserModel new_user){
+    public CommonReturn<String> validateUser(TMstUserModel new_user){
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             params = List.of(new_user.getEmail(), new_user.getPassword());
@@ -113,8 +113,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        TMstUserModel returned_user = new TMstUserModel(validated_user.getFirst_name(),validated_user.getLast_name(),validated_user.getIs_subscribed(),validated_user.getIs_active(),jwt_token,validated_user.getTrans_datetime());
-                        return CommonReturn.success("Login is successful.",returned_user);
+                        return CommonReturn.success("Login is successful.",jwt_token);
                     }else{
                         return CommonReturn.error(401,"Auth token generation failed.");
                     }
@@ -141,6 +140,17 @@ public class LoginSignUpService implements I_LoginSignUpService {
         } catch (Exception e) {
             log("deleteUser()",e.getMessage());
             return false;
+        }
+    }
+
+    public CommonReturn<String> getEmailFromJwt(String JWT){
+        try {
+            String jwtSubject = authService.getSubject(JWT);
+
+            return CommonReturn.success("Extracted email from JWT", jwtSubject);
+        } catch (Exception e) {
+            log("getEmailFromJwt()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 

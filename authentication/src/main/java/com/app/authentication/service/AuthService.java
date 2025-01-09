@@ -52,9 +52,9 @@ public class AuthService implements I_AuthService {
     }
 
     @Override
-    public void emitLogoutMessageIntoWebsocket(LogoutInfoWebSocket logoutInfoWebSocket) {
+    public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
         try {
-            messagingTemplate.convertAndSend("/topic/logout", CommonReturn.success("logout_for_maximum_device_reached", logoutInfoWebSocket));
+            messagingTemplate.convertAndSend("/topic/logout/u"+t_mst_user_id+"/d"+device_number, CommonReturn.success("logout_for_maximum_device_reached", "true"));
         } catch (Exception e) {
             log("emitLogoutMessageIntoWebsocket()",e.getMessage());
             e.printStackTrace();
@@ -70,19 +70,22 @@ public class AuthService implements I_AuthService {
             Long loggedin_device_number = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult() + 1;
 
             if(loggedin_device_number>environment.getMaximum_login_device()){
-                Random random = new Random();
-                Long removed_device_number = (long) (random.nextInt(4) + 1);
+                // Generate random integers in range 1 to environment.getMaximum_login_device()
+                Random rand = new Random();
+                Long removed_device_number = rand.nextLong(environment.getMaximum_login_device())+1;
+
+                params = List.of(validated_user.getId(),removed_device_number);
+                sql_string = "select jwt_token FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
+                String jwt_token_of_removed_user = (String)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult();
 
                 sql_string = "DELETE FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
-                params = List.of(validated_user.getId(),removed_device_number);
-
                 int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
 
-                if(deleted==0)return null;
+                if(deleted==0) return null;
 
                 loggedin_device_number = removed_device_number;
 
-                emitLogoutMessageIntoWebsocket(new LogoutInfoWebSocket(validated_user.getId(),validated_user.getEmail(),loggedin_device_number));
+                emitLogoutMessageIntoWebsocket(validated_user.getId(),removed_device_number);
             }
 
             JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),new_user.getIp_address(),loggedin_device_number);
@@ -93,11 +96,16 @@ public class AuthService implements I_AuthService {
                 tLoginRepository.save(login_entity);
             }
 
-            return encryptionDecryption.Encrypt(jwt_token);
+            return jwt_token;
         } catch (Exception e) {
             log("generateTokenAndUpdateDB()",e.getMessage());
             return null;
         }
+    }
+
+
+    public String getSubject(String token){
+        return jwt.extractSubject(token);
     }
 
 

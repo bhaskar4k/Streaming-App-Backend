@@ -22,4 +22,14 @@ let EndpointUpload = {
     upload : "/upload/temp",
 }
 
-export {EndpointMicroservice, EndpointAuthentication, EndpointDashboard, EndpointStreaming, EndpointUpload};
+let EndpointWebsocket = {
+    authentication_websocket: "ws://localhost:8090",
+    get_websocket_emit : "/authentication-websocket",
+
+    get_logout_emit : "/topic/logout",
+    get_broadcast_emit : "/topic/broadcast",
+    
+    emit_data : "/app/send-message",
+}
+
+export {EndpointMicroservice, EndpointAuthentication, EndpointDashboard, EndpointStreaming, EndpointUpload, EndpointWebsocket};

@@ -15,6 +15,7 @@ let api_response_status = null;
 function Login() {
   const navigate = useNavigate();
 
+  const JWT = localStorage.getItem("JWT");
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
@@ -27,6 +28,10 @@ function Login() {
 
 
   useEffect(() => {
+    if (JWT !== undefined && JWT !== null) {
+      navigate(`/home`);
+    }
+
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
     const container = document.getElementById('container');
@@ -38,34 +43,34 @@ function Login() {
     signInButton.addEventListener('click', () => {
       container.classList.remove("right-panel-active");
     });
-  },[]);
+  }, []);
 
 
-  function ValidateSignUpFormData(first_name, last_name, email, password, confirm_password){
+  function ValidateSignUpFormData(first_name, last_name, email, password, confirm_password) {
     let validationStatus = true;
     let warning_message = "";
 
-    if(first_name==="" || first_name===null){
-      warning_message="Firstname can't be empty.";
-      validationStatus=false;
-    }else if(last_name==="" || last_name===null){
-      warning_message="Lastname can't be empty.";
-      validationStatus=false;
-    }else if(email==="" || email===null){
-      warning_message="Email can't be empty.";
-      validationStatus=false;
-    }else if(password==="" || password===null){
-      warning_message="Password can't be empty.";
-      validationStatus=false;
-    }else if(confirm_password==="" || confirm_password===null){
-      warning_message="Confirm Password can't be empty.";
-      validationStatus=false;
-    }else if(password!==confirm_password){
-      warning_message="Password and Confirm password is not matching.";
-      validationStatus=false;
+    if (first_name === "" || first_name === null) {
+      warning_message = "Firstname can't be empty.";
+      validationStatus = false;
+    } else if (last_name === "" || last_name === null) {
+      warning_message = "Lastname can't be empty.";
+      validationStatus = false;
+    } else if (email === "" || email === null) {
+      warning_message = "Email can't be empty.";
+      validationStatus = false;
+    } else if (password === "" || password === null) {
+      warning_message = "Password can't be empty.";
+      validationStatus = false;
+    } else if (confirm_password === "" || confirm_password === null) {
+      warning_message = "Confirm Password can't be empty.";
+      validationStatus = false;
+    } else if (password !== confirm_password) {
+      warning_message = "Password and Confirm password is not matching.";
+      validationStatus = false;
     }
-    
-    if(validationStatus===false){
+
+    if (validationStatus === false) {
       setColorOfAlertModal(Environment.colorWarning);
       openAlertModal(Environment.alert_modal_header_signup, warning_message);
     }
@@ -74,7 +79,7 @@ function Login() {
   }
 
 
-  async function DoSignUp(){
+  async function DoSignUp() {
     api_response_status = null;
     closeAlertModal();
 
@@ -84,117 +89,119 @@ function Login() {
     let password = document.getElementById("signup_password").value;
     let confirm_password = document.getElementById("signup_confirm_password").value;
 
-    if(ValidateSignUpFormData(first_name, last_name, email, password, confirm_password)===false) return;
+    if (ValidateSignUpFormData(first_name, last_name, email, password, confirm_password) === false) return;
 
     let obj = {
-      first_name : first_name,
-      last_name : last_name,
-      email : email,
-      password : encryptionDecryption.Encrypt(password),
-    };    
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: encryptionDecryption.Encrypt(password),
+    };
 
     let response = await authenticationService.DoSignUpService(obj);
     api_response_status = response.status;
 
-    if(api_response_status === 200){
+    if (api_response_status === 200) {
       setColorOfAlertModal(Environment.colorSuccess);
-      
+
       document.getElementById("signup_firstname").value = null;
       document.getElementById("signup_lastname").value = null;
       document.getElementById("signup_email").value = null;
       document.getElementById("signup_password").value = null;
       document.getElementById("signup_confirm_password").value = null;
-    }else{
+    } else {
       setColorOfAlertModal(Environment.colorError);
     }
 
     openAlertModal(Environment.alert_modal_header_signup, response.message);
 
     loadAlertModal = setTimeout(() => {
-      closeAlertModal();     
+      closeAlertModal();
     }, 5000);
   }
 
 
-  function ValidateLoginFormData(email, password){
+  function ValidateLoginFormData(email, password) {
     let validationStatus = true;
     let warning_message = "";
 
-    if(email==="" || email===null){
-      warning_message="Email can't be empty.";
-      validationStatus=false;
-    }else if(password==="" || password===null){
-      warning_message="Password can't be empty.";
-      validationStatus=false;
+    if (email === "" || email === null) {
+      warning_message = "Email can't be empty.";
+      validationStatus = false;
+    } else if (password === "" || password === null) {
+      warning_message = "Password can't be empty.";
+      validationStatus = false;
     }
-    
-    if(validationStatus===false){
+
+    if (validationStatus === false) {
       setColorOfAlertModal(Environment.colorWarning);
       openAlertModal(Environment.alert_modal_header_login, warning_message);
     }
-    
+
     return validationStatus;
   }
 
 
-  async function DoLogin(){
+  async function DoLogin() {
     api_response_status = null;
     closeAlertModal();
 
     let email = document.getElementById("login_email").value;
     let password = document.getElementById("login_password").value;
 
-    if(ValidateLoginFormData(email,password)===false) return;
+    if (ValidateLoginFormData(email, password) === false) return;
 
     let obj = {
-      email : email,
-      password : encryptionDecryption.Encrypt(password),
-      ip_address : await get_ip_address()
-    };    
+      email: email,
+      password: encryptionDecryption.Encrypt(password),
+      ip_address: await get_ip_address()
+    };
 
     let response = await authenticationService.DoLoginService(obj);
     api_response_status = response.status;
 
-    if(api_response_status !== 200){
+    if (api_response_status !== 200) {
       setColorOfAlertModal(Environment.colorError);
-      
+
       openAlertModal(Environment.alert_modal_header_login, response.message);
-    }else{
+    } else {
+      localStorage.removeItem("JWT");
+      localStorage.setItem("JWT", JSON.stringify(response.data));
       navigate(`/home`);
     }
 
     loadAlertModal = setTimeout(() => {
-      closeAlertModal();     
+      closeAlertModal();
     }, 5000);
   }
 
 
-  function openAlertModal(header_text, body_text){
+  function openAlertModal(header_text, body_text) {
     setHeaderTextOfAlertModal(header_text);
-    setBodyTextOfAlertModal(body_text);   
+    setBodyTextOfAlertModal(body_text);
     setShowAlertModal(true);
   }
 
 
-  function closeAlertModal(){
+  function closeAlertModal() {
     setShowAlertModal(false);
     setHeaderTextOfAlertModal(null);
     setBodyTextOfAlertModal(null);
-    
+
     clearTimeout(loadAlertModal);
     loadAlertModal = null;
 
-    if(api_response_status === 200){
+    if (api_response_status === 200) {
       document.getElementById('signIn').click();
       api_response_status = null;
-    }   
+    }
   }
 
 
   return (
-    <> 
+    <>
       <div className='login-container'>
-        <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal}/>
+        <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal} />
         <div className="container" id="container">
           <div className="form-container sign-up-container">
 
@@ -203,14 +210,14 @@ function Login() {
 
               <div className="social-container">
                 <a href="#" className="social"><img src={google}></img></a>
-              </div> 
+              </div>
               <span>or use your email for registration</span>
 
-              <input type="text" placeholder="First Name" id="signup_firstname"/>
-              <input type="text" placeholder="Last Name" id="signup_lastname"/>
-              <input type="email" placeholder="Email" id="signup_email"/>
-              <input type="password" placeholder="Password" id="signup_password"/>
-              <input type="password" placeholder="Confirm Password" id="signup_confirm_password"/>
+              <input type="text" placeholder="First Name" id="signup_firstname" />
+              <input type="text" placeholder="Last Name" id="signup_lastname" />
+              <input type="email" placeholder="Email" id="signup_email" />
+              <input type="password" placeholder="Password" id="signup_password" />
+              <input type="password" placeholder="Confirm Password" id="signup_confirm_password" />
 
               <button className="signup_btn" onClick={DoSignUp}>Sign Up</button>
             </div>
@@ -222,11 +229,11 @@ function Login() {
 
               <div className="social-container">
                 <a href="#" className="social"><img src={google}></img></a>
-              </div> 
+              </div>
               <span>or use your account</span>
 
-              <input type="email" placeholder="Email" id="login_email"/>
-              <input type="password" placeholder="Password" id="login_password"/>
+              <input type="email" placeholder="Email" id="login_email" />
+              <input type="password" placeholder="Password" id="login_password" />
 
               <a href="#">Forgot your password?</a>
               <button onClick={DoLogin}>Sign In</button>
@@ -249,7 +256,7 @@ function Login() {
 
           </div>
         </div>
-      </div> 
+      </div>
     </>
   )
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/authentication")
 public class AuthenticationController {
     @Autowired
     private LoginSignUpService loginSignUpService;
@@ -25,7 +25,7 @@ public class AuthenticationController {
         this.encryptionDecryption=new EncryptionDecryption();
     }
 
-    @PostMapping("/authentication/do_signup")
+    @PostMapping("/do_signup")
     public CommonReturn<Boolean> do_signup(@RequestBody TMstUserModel new_user){
         try{
             return loginSignUpService.saveUser(new_user);
@@ -35,8 +35,8 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/authentication/do_login")
-    public CommonReturn<TMstUserModel> do_login(@RequestBody TMstUserModel cur_user){
+    @PostMapping("/do_login")
+    public CommonReturn<String> do_login(@RequestBody TMstUserModel cur_user){
         try{
             return loginSignUpService.validateUser(cur_user);
         } catch (Exception e) {
@@ -45,8 +45,24 @@ public class AuthenticationController {
         }
     }
 
+    @GetMapping("/get_email_from_jwt")
+    public CommonReturn<String> get_email_from_jwt(@RequestHeader(value = "Authorization", required = true) String authorizationHeader){
+        try{
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String jwtToken = authorizationHeader.substring(7);
+
+                return loginSignUpService.getEmailFromJwt(jwtToken);
+            } else {
+                return CommonReturn.error(401, "Authorization header is missing or invalid.");
+            }
+        } catch (Exception e) {
+            log("get_email_from_jwt()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
     @MessageMapping("/send-message")
-    @SendTo("/topic/logout")
+    @SendTo("/topic/broadcast")
     public CommonReturn<String> get_mesagge_into_web_socket(String message) throws Exception {
         try{
             return CommonReturn.success("Message into websocket from frontend.", message);
@@ -54,7 +70,6 @@ public class AuthenticationController {
             log("get_mesagge_into_web_socket()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
-
     }
 
 

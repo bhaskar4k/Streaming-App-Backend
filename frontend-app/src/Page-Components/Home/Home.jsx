@@ -1,75 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { Client } from '@stomp/stompjs';
+import { EncryptionDecryption } from '../../Common/EncryptionDecryption';
 
 function Home() {
-    const [stompClient, setStompClient] = useState(null);
-    const [connected, setConnected] = useState(false);
-    const [name, setName] = useState('');
-
-    if (stompClient) {
+    const encryptionDecryption = new EncryptionDecryption();
+    const JWT = JSON.parse(localStorage.getItem("JWT"));
+    console.log("Decrypt",encryptionDecryption.Decrypt("ODI4LjEzNDQuMzUyNS42MDIuOTAwLjQ1Ni4xNjM0LjE4ODUuMTA1Ni4yMjM2LjE4ODcuNjI0LjY2LjM2NDguMjAwNjguODIwNi4yMDgyLjM2OTAuMTc0OTMuNTY3NDYwLjQ1ODIyMC4zMjgzMDQuNTkzNDAxOS4xMzM5NzY3LjM5MTg4Ny4yNzg3MDQ5Mi44NTEuMzQxNi4yMTc1LjI4MzguNTQwLjQ0NC41MDMxLjM3MDUuMjQuMzI2OC4yOTk3LjYwMC4xNzguNDY1MTIuMjc2OC41OTY4LjQ4NTguMjczMDYuMjc0NDAuMTAwMTQwLjQ5MDk1MC4zNDc2MTYuMTA0OTg2NDkuMTg1NTA2Mi4yNzg2NzUyLjI3MTM3MDU4LjYyMS4xNDAwLjMxNTAuNTI0Ni4zOTYwLjQ4MC4yMzIyLjcxNS4xMzIwLjUxNjAuNDQ0LjEzOTIuMTIyLjI1NTM2LjAuNjcxNC45MDIyLjExMDcwLjE4ODY1LjgwMTEyLjU3NjA0OC40ODI4MDAuMjY0NzQ4NTQuMTc1MjAwMy4wLjQzMjcyNjA2LjgyOC4xOTYwLjE1MC40OTg4LjE4MDAuMzQ4LjI1OC4yNDA1LjY0OC4xMTE4LjIzMzEuMTMyMC4xNjAuMjE0MzIuMjQ5MTIuMzM1NzAuOTAyMi4xNTAwNi4xNzE1LjMyMDQ0OC4yNDg3NDguMjg5NjgwLjczMDM0MDguMTQwODQ3My4yNzQzMjA5LjM4MTM4NTY4LjUyOS4yMDcyLjE4NzUuMzQ0MC4yMjUuMzk2LjIxNTAuMzQ0NS4yODguMTgwNi45NjIuMTA1Ni43Mi4yNDYyNC4xODY4NC4zODA0Ni4wLjM2OTAuMTA2MzMuMTUzNTQ4LjMyNzMwMC41MDIxMTIuMzY1MTcwNDAuOTI3NTMxLjY5NjY4OC4xODMzNTg1MC40Ni4xNTEyLjIwMjUuNTQxOC4xNjIwLjU2NC44MTcuMzI1Ljk2LjE3MjAuMjk2MC4xMzQ0LjEyNC4yNzM2LjkzNDIuNDY5OTguMTIxNDUuMTE4MDguMTU0MzUuMjIwMzA4LjMyNzMwLjIxMjQzMi4xMzIzNzQyNy4xNDA4NDczLjE3NDE3MjAuMTQ2Njg2OC4zNjguMTczNi4zNTI1LjUxNjAuMjkyNS4yODguMjMyMi4yODYwLjEwODAuNTI0Ni4zMjE5LjE0NjQuMC40NTYuNjIyOC42NjM5NC4yODgwMS4xNDAyMi4xOTg5NC4yNTM2ODguNDMyMDM2LjQyNDg2NC4yNTEwNTQ2NS4yMzM2MDA0LjE0ODA0NjIuNDYyMDYzNDIuMTMzNC4xNDAwLjE4MDAuMzY5OC4xOTgwLjQwOC4xMTE4LjI2NjUuNTc2LjM1MjYuMjYyNy4yNDAuNjIuMjM3MTIuMzk0NDQuODk1Mi43NjM0LjE1MDA2LjI3NzgzLjIxMzYzMi40MTIzOTguMzg2MjQuNDU2NDYzLjEzNzQxMjAuMTYxMTA5MS40MjUzOTE3Mi4xOTU1LjE5MDQuNDM1MC4yNTgwLjM5NjAuMzk2LjE2MzQuMzQ0NS4yNDAuMjkyNC4xMTEuODQwLjE4MC4xNTA0OC4xMTQxOC4xNzkwNC4zNTA0Ny4zNDQ0LjE5NTUxLjQ1Mzk2OC42NzQyMzguNDM0NTIwLjI2NDc0ODU0Ljk2MTg4NC4yNjEyNTgwLjIwNTM2MTUyLjE1NDEuMjI5Ni4zMTUwLjM1MjYuMTkzNS45Ni4xMjkwLjE3NTUuNzQ0LjI5MjQuMTUxNy4xMzY4LjguMjgyNzIuMTg2ODQuOTY5OC40ODU4LjE1MDA2LjEzNzIwLjYyNzU0NC4zOTI3Ni41MzEwODAuMTgyNTg1MjAuMTg1NTA2Mi4yNjEyNTgwLjM2NjcxNzAuMTMzNC4zMzYuOTQ1MC40NTU4LjYzMC4xNjguMTExOC4xMTcwLjE0NjQuMTcyMC4yNTkuMTE3Ni42OC4yODI3Mi4xNTkxNi4yMzEyNi4xNzY5Ny4yMzEyNC40MDgxNy4zNjA1MDQuNzk4NjEyLjEzNTE4NC40MTA4MTY3LjQ0NjU4OS4xMDg4NTc1LjE1NDAyMTE0LjgwNS4yMTI4LjE4MDAuMjMyMi4zODcwLjAuMjAyMS4yNjAwLjgxNi41MTYuNzc3LjEyOTYuMTA4LjI4MjcyLjMyNTI0LjczODU0Ljk3MTYuMTI1NDYuMTMzNzcuMzIwNDQ4LjM2NjU3Ni4zNzY1ODQuNjg0Njk0NS4yMTI5ODg2LjE2OTgxNzcuMzMwMDQ1MzAuNjIxLjI1NzYuNDIwMC4wLjcyOC40Mjc1LjUxNi4xMDM1Ljc0NC42NDUuNjUuMTEwNC4yMjM2LjE3MzkuOTYwLjY0LjI2OTA0LjU1MzYuMjE2MzQuMTM1MzMuNzYyNi4xNzQ5My44Mjc4MjQuNDk3NDk2LjU3OTM2LjEyNzgwOTY0LjE3NTIwMDMuMzkxODg3LjExNzM0OTQ0LjExNTAuMjEyOC4zNzUuMzQ0LjM2MC42MTIuMzc4NC4zMTIwLjgxNi41MzMyLjI1MTYuMTAzMi4xMzAuMzA1NTIuMTQxODYuMTE5MzYuMTgwNDQuMjI2MzIuMjI2MzguMjIwMzA4LjU0OTg2NC4xOTMxMjAuOTU4NTcyMy4xOTU4MTIxLjUwOTQ1MzEuNTEzNDAzOC4xMzguMjM1Mi43NS44Ni4yOTcwLjUyOC4yNjIzLjY1LjI4OC4zMzU0LjQ0NC44NjQuNDguMTg2OTYuNzYxMi4zNzMwLjEyNDkyLjEzMjg0LjE2MTIxLjI5Mzc0NC42Mjg0MTYuMTE1ODcyLjIxNDUzNzYxLjE0NzcxNzkuMTEzMjExOC4xMTczNDk0NC4xMzExLjk1Mi4zMTUwLjI3NTIuMTgwMC4xNDQuOTg5LjI1MzUuMTkyLjE4MDYuMzMzLjExNTIuMTQwLjI3ODE2LjMyMTc4LjQxNzc2LjUyMDUuMzY5MC41MTQ1LjQwMDU2LjE1NzEwNC4yNTEwNTYuMjAwODQzNzIuMTA2NDk0My4yNjU2MTIzLjM1OTM4MjY2LjU5OC4yNjg4LjYwMC4yMzIyLjgxMC40MjAuMjI3OS4zOTAwLjI4OC4yMDY0LjE5MjQuMTAwOC4xNC4yMDUyMC4xOTM3Ni4yNDYxOC4zNDcwLjQxODIuODU3NS4yMjY5ODQuNTg5MTQuNTc5MzYuNDQ3MzMzNzQuMTgyMDcwOS4xMTc1NjYxLjk1MzQ2NDIuNzEzLjEyMzIuMTEyNS4zMjY4LjI1MjAuNjEyLjI2MjMuMjYwLjE2OC40NDcyLjQ0MDMuMTI3Mi42MC41OTI4LjY5MjAuNDYyNTIuMTczNS4xMzAzOC45MjYxLjI0MDMzNi4wLjI0MTQwMC4xODI1ODUyMC4xNDA4NDczLjc0MDIzMS4yNTY3MDE5MC4xMTUuMzMwNC4xMjc1LjI2NjYuNDIzMC42NDguMTU5MS4yNTM1LjQ4LjM3ODQuNDU1MS43NjguMTEwLjEzMjI0LjEyMTEwLjY5Mzc4LjI5NDk1LjEwNTc4LjE2NDY0LjI2NzA0MC40Mzg1ODIuMTE1ODcyLjIzNzM2MDc2LjI5MjAwMDUuMzQ4MzQ0LjQyNTM5MTcyLjg3NC44NDAuMzc1LjQ5ODguMTMwNS40ODAuMTI5LjM4MzUuNDU2LjM2MTIuMjk5Ny4xNDQuNjIuMTQ1OTIuMjMxODIuMjgzNDguMTcwMDMuMTUwMDYuMzE1NTYuNDA3MjM2LjM0NjkzOC4yNDE0MDAuMTI3ODA5NjQuMjA5NTUzMy41MjI1MTYuMzc0MDUxMzQuMTQ3Mi4xODQ4LjM2MDAuOTQ2LjQ1NDUuNTI4LjE2MzQuNTIwLjIxNi41MTYwLjQ0NC42MDAuMTc2LjIwOTc2LjEwMzguMjk4NDAuMzE5MjQuODExOC44OTE4LjQ0MDYxNi41ODkxNDAuNTQwNzM2LjEzNjkzODkuMjA2MTE4LjI1MjU0OTQuNTEzNDAzOC4xOTc4LjE3OTIuMzAwMC4yNDA4Ljg1NS4xNDQuMTQxOS4yNTM1LjAuNDEyOC4xMTEwLjEzOTIuODIuMjMyNTYuMTE0MTguNzQ2Ljc2MzQuODExOC4xMjM0OC40NjA2NDQuMjM1NjU2LjMxODY0OC4xNjg4OTEzMS4yMDI2ODI3LjE5NTk0MzUuMjcxMzcwNTguODc0LjY3Mi40ODAwLjI5MjQuMTIxNS43NTYuODE3LjEzMC4xMDU2LjUzMzIuMzcuMTMyMC40Mi4xNTUwNC4xNjYwOC4zNzMwMC4xNjMwOS4xODQ1MC4yOTg0MS4xNjY5MDAuNjA4Nzc4LjIyMjA4OC4xMjMyNDUwMS4yMDYxMTgwLjEwMDE0ODkuMTM5MzUyNDYuMTQwMy4zMzYwLjM2NzUuMTQ2Mi4zOTYwLjQyMC4yMzY1LjM5MC4xMzQ0LjMyNjguNzQwLjI0MC40Mi4xNDU5Mi4yMzg3NC45MzI1MC4zNDcuMTUyNTIuMTIzNDguMzkzODg0LjAuMzc2NTg0LjE4NzE0OTgzLjE3MTc2NS4xMzA2MjkuMjA1MzYxNTIuMzIyLjI4NTYuMjc3NS4tMTk3OTI3MjQ0MC4="));
+    const fetchEmailFromJwt = async (jwtToken) => {
         try {
-            stompClient.activate();
+            console.log(JWT)
+            const response = await fetch('http://localhost:8090/authentication/get_email_from_jwt', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`, // Include JWT token in Authorization header
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Email fetched successfully:', data);
+            return data; // Contains the extracted email and message
         } catch (error) {
-            console.error('Connection error:', error);
+            console.error('Error fetching email from JWT:', error.message);
+            return null;
         }
-    }
+    };
 
     useEffect(() => {
-        const client = new Client({
-            brokerURL: 'ws://localhost:8090/authentication-websocket',
-            reconnectDelay: 5000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
-            onConnect: (frame) => {
-                setConnected(true);
-                console.log('Connected: ' + frame);
-                client.subscribe('/topic/logout', (response) => {
-                    const deserializedObject = JSON.parse(response.body);
-                    console.log(deserializedObject)
-                });
-            },
-            onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
-            },
-            onWebSocketError: (error) => {
-                console.error('Error with websocket', error);
-                setConnected(false);
-            },
-            onDisconnect: () => {
-                setConnected(false);
-            }
-        });
-
-        setStompClient(client);
-
-        return () => {
-            if (client.active) {
-                client.deactivate();
-            }
-        };
-    }, []);
-
-    // const disconnect = () => {
-    //     if (stompClient) {
-    //         stompClient.deactivate();
-    //     }
-    //     setConnected(false);
-    // };
-
-    // Call this function to send message to websocket
-    // const sendName = () => {
-    //     if (stompClient && stompClient.active) {
-    //         stompClient.publish({
-    //             destination: '/app/send-message',
-    //             body: name,
-    //         });
-    //     }
-    // };
-
+        fetchEmailFromJwt(JWT);
+    },[JWT]);
     return (
         <div>
             <h1>HOME</h1>
+            <p>JWT Token - {JWT}</p>
         </div>
     );
 }
