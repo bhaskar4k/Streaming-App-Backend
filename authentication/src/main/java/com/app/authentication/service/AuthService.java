@@ -8,7 +8,6 @@ import com.app.authentication.entity.TMstUser;
 import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
-import com.app.authentication.model.LogoutInfoWebSocket;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
@@ -69,10 +68,10 @@ public class AuthService implements I_AuthService {
             params = List.of(validated_user.getId());
             Long loggedin_device_number = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult() + 1;
 
-            if(loggedin_device_number>environment.getMaximum_login_device()){
+            if(loggedin_device_number>environment.getMaximumLoginDevice()){
                 // Generate random integers in range 1 to environment.getMaximum_login_device()
                 Random rand = new Random();
-                Long removed_device_number = rand.nextLong(environment.getMaximum_login_device())+1;
+                Long removed_device_number = rand.nextLong(environment.getMaximumLoginDevice())+1;
 
                 params = List.of(validated_user.getId(),removed_device_number);
                 sql_string = "select jwt_token FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";

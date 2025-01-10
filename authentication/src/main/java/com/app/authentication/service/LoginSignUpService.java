@@ -5,10 +5,12 @@ import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
 import com.app.authentication.jwt.Jwt;
+import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.signature.I_LoginSignUpService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +42,8 @@ public class LoginSignUpService implements I_LoginSignUpService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public LoginSignUpService(){
         this.encryptionDecryption=new EncryptionDecryption();
@@ -143,13 +149,28 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    public CommonReturn<String> getEmailFromJwt(String JWT){
+    public static SecretKey createSecretKey(String keyString) {
+        return new SecretKeySpec(keyString.getBytes(), "HmacSHA512"); // Create a SecretKey using HS512
+    }
+
+    public CommonReturn<String> getSubjectFromJwt(String JWT){
         try {
             String jwtSubject = authService.getSubject(JWT);
 
             return CommonReturn.success("Extracted email from JWT", jwtSubject);
         } catch (Exception e) {
             log("getEmailFromJwt()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    public CommonReturn<Long> getMstUserIdFromJWT(String JWT){
+        try {
+            CommonReturn<String> jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject.getData(), JwtUserDetails.class);
+            return CommonReturn.success("Extracted t_mst_user_id from JWT",extractedUserObject.getT_mst_user_id());
+        } catch (Exception e) {
+            log("getMstUserIdFromJWT()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

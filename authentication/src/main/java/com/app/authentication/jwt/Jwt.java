@@ -1,6 +1,7 @@
 package com.app.authentication.jwt;
 
 import com.app.authentication.entity.TLogExceptions;
+import com.app.authentication.environment.Environment;
 import com.app.authentication.service.LogExceptionsService;
 import com.fasterxml.jackson.databind.ObjectMapper;  // Jackson library for serialization
 import io.jsonwebtoken.*;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,14 +18,14 @@ import java.util.function.Function;
 
 @Component
 public class Jwt {
-
     @Autowired
     private LogExceptionsService logExceptionsService;
+    private static Environment environment = new Environment();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private static final SecretKey SECRET_KEY = new SecretKeySpec(environment.getSecretKey().getBytes(), "HmacSHA512");
     private final long expirationMillis = 1000 * 60 * 60 * 10; // 10 hours
 
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     public String generateToken(Object userObject) {
         try {
