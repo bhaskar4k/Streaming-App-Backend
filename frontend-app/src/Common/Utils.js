@@ -22,7 +22,7 @@ export function logout(navigate) {
 export function redirect_to_login(navigate){
     setTimeout(() => {
         navigate(`/login`);
-    }, 1000);
+    }, 500);
 }
 
 export function redirect_to_home(navigate){
