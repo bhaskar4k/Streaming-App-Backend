@@ -8,20 +8,29 @@ import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';
 import Login from './Page-Components/Login/Login.jsx';
 import Profile from './Page-Components/Profile/Profile.jsx';
 import Error from './Error.jsx';
+import AlertModal from './Page-Components/Common-Components/AlertModal/AlertModal.jsx';
 
 import { EndpointWebsocket } from '../src/Environment/Endpoint.js';
+import { Environment } from '../src/Environment/Environment.js';
+import { logout, redirect_to_login } from './Common/Utils.js';
 
 import './App.css';
+
+let loadAlertModal = null;
 
 function App() {
   const navigate = useNavigate();
   const [connected, setConnected] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
+  const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
+
 
   const setupWebSocket = useCallback(() => {
     const JWT = JSON.parse(localStorage.getItem("JWT"));
     
     if (!JWT) {
-      navigate(`/login`);
+      redirect_to_login(navigate);
       return null;
     }
 
@@ -37,10 +46,13 @@ function App() {
         client.subscribe(EndpointWebsocket.get_logout_emit + JWT.logout_ws_endpoint, (response) => {
           const deserializedObject = JSON.parse(response.body);
 
-          if (deserializedObject.message === "logout_for_maximum_device_reached" && deserializedObject.data === JWT.logout_ws_endpoint) {        
-            window.alert("Logged in from another device. Logging out....")
-            localStorage.removeItem("JWT");
-            navigate(`/login`);
+          if (deserializedObject.data === JWT.logout_ws_endpoint) {      
+            openAlertModal(Environment.alert_modal_header_logout, deserializedObject.message);
+
+            loadAlertModal = setTimeout(() => {
+              closeAlertModal();
+              logout(navigate);
+            }, 5000);       
           }
         });
       },
@@ -71,8 +83,25 @@ function App() {
     };
   }, [setupWebSocket]);
 
+  function openAlertModal(header_text, body_text) {
+    setHeaderTextOfAlertModal(header_text);
+    setBodyTextOfAlertModal(body_text);
+    setShowAlertModal(true);
+  }
+
+  function closeAlertModal() {
+    setShowAlertModal(false);
+    setHeaderTextOfAlertModal(null);
+    setBodyTextOfAlertModal(null);
+
+    clearTimeout(loadAlertModal);
+    loadAlertModal = null;
+    logout(navigate);
+  }
+
   return (
     <>
+      <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={Environment.colorError} />
       <Routes>
         <Route index element={<Home />} />
         <Route path="/home" element={<Home />} />

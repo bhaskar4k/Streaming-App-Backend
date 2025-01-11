@@ -8,8 +8,9 @@ let Environment = {
     colorError : 'red',
     colorWarning : '#ff7f36',
 
-    alert_modal_header_signup : 'SIGNUP',
-    alert_modal_header_login : 'LOGIN'
+    alert_modal_header_signup : 'SIGN-UP',
+    alert_modal_header_login : 'LOGIN',
+    alert_modal_header_logout : 'LOGOUT',
 }
 
 export {Environment};

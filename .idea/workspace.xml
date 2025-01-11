@@ -7,9 +7,10 @@
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/LoginSignUpService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/LoginSignUpService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/signature/I_AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/signature/I_LoginSignUpService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Common/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Common/Utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Environment/Environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Environment/Environment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Login/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Login/Login.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
