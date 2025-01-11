@@ -10,7 +10,6 @@ import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
-import com.app.authentication.signature.I_LoginSignUpService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -26,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @Component
-public class LoginSignUpService implements I_LoginSignUpService {
+public class LoginSignUpService {
     @Autowired
     private TMstUserRepository tmstUserRepository;
     @Autowired
@@ -49,7 +48,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         this.dbWorker=new DbWorker();
     }
 
-    @Override
     public List<TMstUser> getAllUsers() {
         try {
             return tmstUserRepository.findAll();
@@ -59,7 +57,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public Optional<TMstUser> getUserById(Long id) {
         try {
             return tmstUserRepository.findById(id);
@@ -69,7 +66,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public int alreadyRegistered(String email) {
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1";
@@ -84,7 +80,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<Boolean> saveUser(TMstUserModel new_user) {
         try {
             int is_already_registered = alreadyRegistered(new_user.getEmail());
@@ -105,7 +100,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<ValidatedUserDetails> validateUser(TMstUserModel new_user){
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
@@ -140,7 +134,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public boolean deleteUser(Long id) {
         try {
             tmstUserRepository.deleteById(id);
@@ -161,7 +154,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<Long> getMstUserIdFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
@@ -173,7 +165,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<String> getEmailFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
@@ -185,7 +176,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<Integer> getIsSubscribedFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
@@ -197,7 +187,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<String> getIpAddressFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
@@ -209,7 +198,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    @Override
     public CommonReturn<Long> getDeviceCountFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);

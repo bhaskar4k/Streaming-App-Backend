@@ -11,7 +11,6 @@ import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
-import com.app.authentication.signature.I_AuthService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import java.util.Random;
 
 @Service
 @Component
-public class AuthService implements I_AuthService {
+public class AuthService {
     @Autowired
     private TLoginRepository tLoginRepository;
     @Autowired
@@ -50,7 +49,6 @@ public class AuthService implements I_AuthService {
         this.dbWorker=new DbWorker();
     }
 
-    @Override
     public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
         try {
             String device_logout_endpoint = "/u"+t_mst_user_id+"/d"+device_number;
@@ -61,7 +59,6 @@ public class AuthService implements I_AuthService {
         }
     }
 
-    @Override
     @Transactional
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user){
         try {
@@ -103,7 +100,6 @@ public class AuthService implements I_AuthService {
         }
     }
 
-    @Override
     public String getSubject(String token){
         return jwt.extractSubject(token);
     }
