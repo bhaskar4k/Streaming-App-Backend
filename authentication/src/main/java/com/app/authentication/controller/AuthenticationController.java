@@ -2,7 +2,10 @@ package com.app.authentication.controller;
 
 import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
+import com.app.authentication.jwt.Jwt;
+import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
+import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.service.LogExceptionsService;
 import com.app.authentication.service.LoginSignUpService;
@@ -36,7 +39,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/do_login")
-    public CommonReturn<String> do_login(@RequestBody TMstUserModel cur_user){
+    public CommonReturn<ValidatedUserDetails> do_login(@RequestBody TMstUserModel cur_user){
         try{
             return loginSignUpService.validateUser(cur_user);
         } catch (Exception e) {
@@ -56,7 +59,7 @@ public class AuthenticationController {
                 return CommonReturn.error(401, "Authorization header is missing or invalid.");
             }
         } catch (Exception e) {
-            log("get_email_from_jwt()",e.getMessage());
+            log("get_userid_from_jwt()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

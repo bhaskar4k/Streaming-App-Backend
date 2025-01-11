@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Client } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,24 +15,14 @@ import './App.css';
 
 function App() {
   const navigate = useNavigate();
-
-  const [stompClient, setStompClient] = useState(null);
   const [connected, setConnected] = useState(false);
-  const [name, setName] = useState('');
 
-  const JWT = JSON.parse(localStorage.getItem("JWT"));
-
-  if (stompClient) {
-    try {
-      stompClient.activate();
-    } catch (error) {
-      console.error('Connection error:', error);
-    }
-  }
-
-  useEffect(() => {
-    if (JWT === undefined || JWT === null) {
+  const setupWebSocket = useCallback(() => {
+    const JWT = JSON.parse(localStorage.getItem("JWT"));
+    
+    if (!JWT) {
       navigate(`/login`);
+      return null;
     }
 
     const client = new Client({
@@ -44,12 +34,14 @@ function App() {
         setConnected(true);
         console.log('Connected: ' + frame);
 
-        client.subscribe(EndpointWebsocket.get_logout_emit+"/u1/d1", (response) => {
+        client.subscribe(EndpointWebsocket.get_logout_emit + JWT.logout_ws_endpoint, (response) => {
           const deserializedObject = JSON.parse(response.body);
-          console.log("removed user - ", deserializedObject);
-          localStorage.removeItem("JWT");
-          window.alert("New login detected from another device.")
-          navigate(`/login`);
+
+          if (deserializedObject.message === "logout_for_maximum_device_reached" && deserializedObject.data === JWT.logout_ws_endpoint) {        
+            window.alert("Logged in from another device. Logging out....")
+            localStorage.removeItem("JWT");
+            navigate(`/login`);
+          }
         });
       },
       onStompError: (frame) => {
@@ -65,45 +57,33 @@ function App() {
       }
     });
 
-    setStompClient(client);
+    client.activate();
+    return client;
+  }, [navigate]);
+
+  React.useEffect(() => {
+    const client = setupWebSocket();
 
     return () => {
-      if (client.active) {
+      if (client && client.active) {
         client.deactivate();
       }
     };
-  }, []);
-
-  // const disconnect = () => {
-  //     if (stompClient) {
-  //         stompClient.deactivate();
-  //     }
-  //     setConnected(false);
-  // };
-
-  // Call this function to send message to websocket
-  // const sendName = () => {
-  //     if (stompClient && stompClient.active) {
-  //         stompClient.publish({
-  //             destination: EndpointWebsocket.emit_data,
-  //             body: name,
-  //         });
-  //     }
-  // };
+  }, [setupWebSocket]);
 
   return (
     <>
       <Routes>
-          <Route index element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Error />} />
-          <Route path="/error" element={<Error />} />
-        </Routes>
+        <Route index element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Error />} />
+        <Route path="/error" element={<Error />} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App;

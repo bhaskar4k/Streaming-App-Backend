@@ -53,7 +53,8 @@ public class AuthService implements I_AuthService {
     @Override
     public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
         try {
-            messagingTemplate.convertAndSend("/topic/logout/u"+t_mst_user_id+"/d"+device_number, CommonReturn.success("logout_for_maximum_device_reached", "true"));
+            String device_logout_endpoint = "/u"+t_mst_user_id+"/d"+device_number;
+            messagingTemplate.convertAndSend("/topic/logout"+device_logout_endpoint, CommonReturn.success("logout_for_maximum_device_reached", device_logout_endpoint));
         } catch (Exception e) {
             log("emitLogoutMessageIntoWebsocket()",e.getMessage());
             e.printStackTrace();
@@ -102,7 +103,7 @@ public class AuthService implements I_AuthService {
         }
     }
 
-
+    @Override
     public String getSubject(String token){
         return jwt.extractSubject(token);
     }

@@ -7,6 +7,7 @@ import com.app.authentication.entity.TMstUser;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
+import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.repository.TMstUserRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.app.authentication.signature.I_LoginSignUpService;
@@ -32,8 +33,6 @@ public class LoginSignUpService implements I_LoginSignUpService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private AuthService authService;
-    @Autowired
-    private Jwt jwt;
 
     private EncryptionDecryption encryptionDecryption;
     private DbWorker dbWorker;
@@ -107,7 +106,7 @@ public class LoginSignUpService implements I_LoginSignUpService {
     }
 
     @Override
-    public CommonReturn<String> validateUser(TMstUserModel new_user){
+    public CommonReturn<ValidatedUserDetails> validateUser(TMstUserModel new_user){
         try {
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             params = List.of(new_user.getEmail(), new_user.getPassword());
@@ -119,7 +118,11 @@ public class LoginSignUpService implements I_LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        return CommonReturn.success("Login is successful.",jwt_token);
+                        Long t_mst_user_id = getMstUserIdFromJWT(jwt_token).getData();
+                        Long device_count = getDeviceCountFromJWT(jwt_token).getData();
+                        String logout_ws_endpoint = "/u"+t_mst_user_id.toString()+"/d"+device_count.toString();
+
+                        return CommonReturn.success("Login is successful.",new ValidatedUserDetails(logout_ws_endpoint,jwt_token));
                     }else{
                         return CommonReturn.error(401,"Auth token generation failed.");
                     }
@@ -149,28 +152,71 @@ public class LoginSignUpService implements I_LoginSignUpService {
         }
     }
 
-    public static SecretKey createSecretKey(String keyString) {
-        return new SecretKeySpec(keyString.getBytes(), "HmacSHA512"); // Create a SecretKey using HS512
-    }
-
-    public CommonReturn<String> getSubjectFromJwt(String JWT){
+    public String getSubjectFromJwt(String JWT){
         try {
-            String jwtSubject = authService.getSubject(JWT);
-
-            return CommonReturn.success("Extracted email from JWT", jwtSubject);
+            return authService.getSubject(JWT);
         } catch (Exception e) {
             log("getEmailFromJwt()",e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public CommonReturn<Long> getMstUserIdFromJWT(String JWT){
+        try {
+            String jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+            return CommonReturn.success("Extracted t_mst_user_id from JWT",extractedUserObject.getT_mst_user_id());
+        } catch (Exception e) {
+            log("getMstUserIdFromJWT()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 
-    public CommonReturn<Long> getMstUserIdFromJWT(String JWT){
+    @Override
+    public CommonReturn<String> getEmailFromJWT(String JWT){
         try {
-            CommonReturn<String> jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject.getData(), JwtUserDetails.class);
-            return CommonReturn.success("Extracted t_mst_user_id from JWT",extractedUserObject.getT_mst_user_id());
+            String jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+            return CommonReturn.success("Extracted email from JWT",extractedUserObject.getEmail());
         } catch (Exception e) {
-            log("getMstUserIdFromJWT()",e.getMessage());
+            log("getEmailFromJWT()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @Override
+    public CommonReturn<Integer> getIsSubscribedFromJWT(String JWT){
+        try {
+            String jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+            return CommonReturn.success("Extracted is_subscribed from JWT",extractedUserObject.getIs_subscribed());
+        } catch (Exception e) {
+            log("getIsSubscribedFromJWT()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @Override
+    public CommonReturn<String> getIpAddressFromJWT(String JWT){
+        try {
+            String jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+            return CommonReturn.success("Extracted ip_address from JWT",extractedUserObject.getIp_address());
+        } catch (Exception e) {
+            log("getIpAddressFromJWT()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @Override
+    public CommonReturn<Long> getDeviceCountFromJWT(String JWT){
+        try {
+            String jwtSubject = getSubjectFromJwt(JWT);
+            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+            return CommonReturn.success("Extracted device_count from JWT",extractedUserObject.getDevice_count());
+        } catch (Exception e) {
+            log("getDeviceCountFromJWT()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }
