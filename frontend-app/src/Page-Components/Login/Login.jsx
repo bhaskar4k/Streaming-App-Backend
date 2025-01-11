@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { EncryptionDecryption } from '../../Common/EncryptionDecryption';
 import { Environment } from '../../Environment/Environment';
-import { get_ip_address } from '../../Common/Utils';
+import { get_ip_address, redirect_to_home } from '../../Common/Utils';
 import { AuthenticationService } from '../../Service/AuthenticationService';
 import google from '../../../public/Images/google.svg';
 import './Login.css';
@@ -29,7 +29,7 @@ function Login() {
 
   useEffect(() => {
     if (JWT !== undefined && JWT !== null) {
-      navigate(`/home`);
+      redirect_to_home(navigate);
     }
 
     const signUpButton = document.getElementById('signUp');
@@ -167,7 +167,7 @@ function Login() {
     } else {
       localStorage.removeItem("JWT");
       localStorage.setItem("JWT", JSON.stringify(response.data));
-      navigate(`/home`);
+      redirect_to_home(navigate);
     }
 
     loadAlertModal = setTimeout(() => {

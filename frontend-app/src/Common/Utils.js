@@ -24,3 +24,7 @@ export function redirect_to_login(navigate){
         navigate(`/login`);
     }, 1000);
 }
+
+export function redirect_to_home(navigate){
+    navigate(`/home`);
+}
