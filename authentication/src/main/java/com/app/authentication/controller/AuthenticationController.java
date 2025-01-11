@@ -49,7 +49,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/get_userid_from_jwt")
-    public CommonReturn<Long> get_userid_from_jwt(@RequestHeader(value = "Authorization", required = true) String authorizationHeader){
+    public CommonReturn<Long> get_userid_from_jwt(@RequestHeader(value = "Authorization") String authorizationHeader){
         try{
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String jwtToken = authorizationHeader.substring(7);

@@ -1,10 +1,12 @@
 package com.app.authentication.security;
 
 import com.app.authentication.environment.Environment;
+import com.app.authentication.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -13,18 +15,25 @@ import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
-    Environment environment;
 
-    public SecurityConfig(){
+    private final Environment environment;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.environment = new Environment();
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF if not needed
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Adjust authorization as needed
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Use CORS configuration
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/authentication/do_signup", "/authentication/do_login", "/authentication-websocket").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web.context.SecurityContextPersistenceFilter.class);
         return http.build();
     }
 
