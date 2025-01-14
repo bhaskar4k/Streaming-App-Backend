@@ -15,6 +15,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -112,8 +114,8 @@ public class LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        Long t_mst_user_id = getMstUserIdFromJWT(jwt_token).getData();
-                        Long device_count = getDeviceCountFromJWT(jwt_token).getData();
+                        Long t_mst_user_id = getMstUserIdFromJWT(jwt_token);
+                        Long device_count = getDeviceCountFromJWT(jwt_token);
                         String logout_ws_endpoint = "/u"+t_mst_user_id.toString()+"/d"+device_count.toString();
 
                         return CommonReturn.success("Login is successful.",new ValidatedUserDetails(logout_ws_endpoint,jwt_token));
@@ -145,67 +147,87 @@ public class LoginSignUpService {
         }
     }
 
-    public String getSubjectFromJwt(String JWT){
+    public JwtUserDetails getAuthenticatedUser() {
         try {
-            return authService.getSubject(JWT);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()) {
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof JwtUserDetails) {
+                    return (JwtUserDetails) principal;
+                }else{
+                    return null;
+                }
+            }else{
+                return null;
+            }
         } catch (Exception e) {
-            log("getEmailFromJwt()",e.getMessage());
+            log("getAuthenticatedUser()",e.getMessage());
             return null;
         }
     }
 
-    public CommonReturn<Long> getMstUserIdFromJWT(String JWT){
+    public String getSubjectFromJwt(String JWT){
+        try {
+            return authService.getSubject(JWT);
+        } catch (Exception e) {
+            log("getSubjectFromJwt()",e.getMessage());
+            return null;
+        }
+    }
+
+    public Long getMstUserIdFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
             JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return CommonReturn.success("Extracted t_mst_user_id from JWT",extractedUserObject.getT_mst_user_id());
+            return extractedUserObject.getT_mst_user_id();
         } catch (Exception e) {
             log("getMstUserIdFromJWT()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            return null;
         }
     }
 
-    public CommonReturn<String> getEmailFromJWT(String JWT){
+    public String getEmailFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
             JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return CommonReturn.success("Extracted email from JWT",extractedUserObject.getEmail());
+            return extractedUserObject.getEmail();
         } catch (Exception e) {
             log("getEmailFromJWT()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            return null;
         }
     }
 
-    public CommonReturn<Integer> getIsSubscribedFromJWT(String JWT){
+    public Integer getIsSubscribedFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
             JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return CommonReturn.success("Extracted is_subscribed from JWT",extractedUserObject.getIs_subscribed());
+            return extractedUserObject.getIs_subscribed();
         } catch (Exception e) {
             log("getIsSubscribedFromJWT()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            return null;
         }
     }
 
-    public CommonReturn<String> getIpAddressFromJWT(String JWT){
+    public String getIpAddressFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
             JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return CommonReturn.success("Extracted ip_address from JWT",extractedUserObject.getIp_address());
+            return extractedUserObject.getIp_address();
         } catch (Exception e) {
             log("getIpAddressFromJWT()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            return null;
         }
     }
 
-    public CommonReturn<Long> getDeviceCountFromJWT(String JWT){
+    public Long getDeviceCountFromJWT(String JWT){
         try {
             String jwtSubject = getSubjectFromJwt(JWT);
             JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return CommonReturn.success("Extracted device_count from JWT",extractedUserObject.getDevice_count());
+            return extractedUserObject.getDevice_count();
         } catch (Exception e) {
             log("getDeviceCountFromJWT()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            return null;
         }
     }
 

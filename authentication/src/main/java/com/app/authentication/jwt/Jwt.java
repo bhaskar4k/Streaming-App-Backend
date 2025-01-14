@@ -24,7 +24,7 @@ public class Jwt {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private static final SecretKey SECRET_KEY = new SecretKeySpec(environment.getSecretKey().getBytes(), "HmacSHA512");
-    private final long expirationMillis = 1000 * 60 * 60 * 10; // 10 hours
+    private final Long expirationMillis = environment.getJwtExpireTime();
 
 
     public String generateToken(Object userObject) {
@@ -103,11 +103,10 @@ public class Jwt {
         }
     }
 
-    public Boolean validateToken(String token, Object userObject) {
+    public Boolean validateToken(String token) {
         try {
-            String userJson = extractSubject(token);
-            Object extractedUserObject = objectMapper.readValue(userJson, userObject.getClass());
-            return userObject.equals(extractedUserObject) && !isTokenExpired(token);
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return !isTokenExpired(token);
         } catch (Exception e) {
             log("validateToken()", e.getMessage());
             return false;

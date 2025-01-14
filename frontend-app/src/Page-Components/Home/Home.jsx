@@ -3,7 +3,16 @@ import { AuthenticationService } from '../../Service/AuthenticationService';
 
 function Home() {
     const authenticationService = new AuthenticationService();
-    const JWT = JSON.parse(localStorage.getItem("JWT"));
+    const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
+
+    useEffect(() => {
+        temp();
+    },[]);
+
+    async function temp(){
+        let ans = await authenticationService.GetTMstUserIdFromJWTSubject(JWT_TOKEN_INFO.jwt);
+        console.log("principal",ans)
+    }
     
     return (
         <div>

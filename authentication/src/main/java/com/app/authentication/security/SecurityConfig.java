@@ -1,6 +1,7 @@
 package com.app.authentication.security;
 
 import com.app.authentication.environment.Environment;
+import com.app.authentication.environment.ApiEndpointInfo;
 import com.app.authentication.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,14 @@ import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
-
     private final Environment environment;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ApiEndpointInfo apiEndpointInfo;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.environment = new Environment();
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.apiEndpointInfo = new ApiEndpointInfo();
     }
 
     @Bean
@@ -30,12 +32,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/authentication/do_signup", "/authentication/do_login", "/authentication-websocket").permitAll()
+                        .requestMatchers(apiEndpointInfo.getUnauthenticatedEndpoints().toArray(new String[0])).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web.context.SecurityContextPersistenceFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -15,6 +15,11 @@ export class AuthenticationService {
                 },
                 body: JSON.stringify(obj)
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error Message:', errorData.message);
+            }
       
             let res = await response.json();
             return res;
@@ -23,6 +28,7 @@ export class AuthenticationService {
             return {status : 404, message : 'Internal Server Error.', data : null};
         }
     }   
+
 
     async DoLoginService(obj){
         try {
@@ -34,6 +40,11 @@ export class AuthenticationService {
                 },
                 body: JSON.stringify(obj)
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error Message:', errorData.message);
+            }
       
             let res = await response.json();
             return res;
@@ -43,7 +54,8 @@ export class AuthenticationService {
         }
     }   
 
-    async GetJwtSubject(JWT){
+
+    async GetTMstUserIdFromJWTSubject(JWT){
         try {
             const response = await fetch('http://localhost:8090/authentication/get_userid_from_jwt', {
                 method: 'GET',
@@ -52,18 +64,17 @@ export class AuthenticationService {
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                console.error('Error Message:', errorData.message);
             }
     
             const res = await response.json();
-            const JWT_subject = JSON.parse(res.data);
-            console.log('Subject:', JWT_subject);
-            return JWT_subject; 
-        } catch (error) {
-            console.error('Error fetching email from JWT:', error.message);
-            return null;
+            return res; 
+        } catch (ex) {
+            console.error(ex);
+            return {status : 404, message : 'Internal Server Error.', data : null};
         }
     }
 }

@@ -49,15 +49,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("/get_userid_from_jwt")
-    public CommonReturn<Long> get_userid_from_jwt(@RequestHeader(value = "Authorization") String authorizationHeader){
+    public CommonReturn<Long> get_userid_from_jwt(){
         try{
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                String jwtToken = authorizationHeader.substring(7);
-
-                return loginSignUpService.getMstUserIdFromJWT(jwtToken);
-            } else {
-                return CommonReturn.error(401, "Authorization header is missing or invalid.");
-            }
+            JwtUserDetails jwtSubject = loginSignUpService.getAuthenticatedUser();
+            return CommonReturn.success("Extracted t_mst_user_id from JWT",jwtSubject.getT_mst_user_id());
         } catch (Exception e) {
             log("get_userid_from_jwt()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
