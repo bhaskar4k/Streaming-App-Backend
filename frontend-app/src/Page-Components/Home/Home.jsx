@@ -10,6 +10,7 @@ function Home() {
     },[]);
 
     async function temp(){
+        console.log("JWT Info", JWT_TOKEN_INFO);
         let ans = await authenticationService.GetTMstUserIdFromJWTSubject(JWT_TOKEN_INFO.jwt);
         console.log("principal",ans)
     }

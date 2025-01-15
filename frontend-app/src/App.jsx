@@ -28,7 +28,7 @@ function App() {
 
   const setupWebSocket = useCallback(() => {
     const JWT = JSON.parse(localStorage.getItem("JWT"));
-    
+
     if (!JWT) {
       redirect_to_login(navigate);
       return null;
@@ -43,16 +43,16 @@ function App() {
         setConnected(true);
         console.log('Connected: ' + frame);
 
-        client.subscribe(EndpointWebsocket.get_logout_emit + JWT.logout_ws_endpoint, (response) => {
+        client.subscribe(EndpointWebsocket.get_logout_emit + JWT.device_endpoint, (response) => {
           const deserializedObject = JSON.parse(response.body);
 
-          if (deserializedObject.data === JWT.logout_ws_endpoint) {      
+          if (deserializedObject.data === "logout_" + JWT.device_endpoint) {
             openAlertModal(Environment.alert_modal_header_logout, deserializedObject.message);
 
             loadAlertModal = setTimeout(() => {
               closeAlertModal();
               logout(navigate);
-            }, 5000);       
+            }, 5000);
           }
         });
       },

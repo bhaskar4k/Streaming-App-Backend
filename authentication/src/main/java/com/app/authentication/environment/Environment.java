@@ -44,4 +44,12 @@ public class Environment {
     public Long getJwtExpireTime() {
         return jwtExpireTime;
     }
+
+
+
+    //#region Custom environment
+    public String getDeviceEndpoint(Long t_mst_user_id, Long device_count){
+        return "/u"+t_mst_user_id.toString()+"/d"+device_count.toString();
+    }
+    //#endregion
 }

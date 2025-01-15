@@ -4,6 +4,7 @@ import com.app.authentication.common.CommonReturn;
 import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TMstUser;
+import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
@@ -36,6 +37,7 @@ public class LoginSignUpService {
     private AuthService authService;
 
     private EncryptionDecryption encryptionDecryption;
+    private Environment environment;
     private DbWorker dbWorker;
     private String sql_string;
     List<Object> params;
@@ -47,6 +49,7 @@ public class LoginSignUpService {
 
     public LoginSignUpService(){
         this.encryptionDecryption=new EncryptionDecryption();
+        this.environment=new Environment();
         this.dbWorker=new DbWorker();
     }
 
@@ -114,11 +117,8 @@ public class LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        Long t_mst_user_id = getMstUserIdFromJWT(jwt_token);
-                        Long device_count = getDeviceCountFromJWT(jwt_token);
-                        String logout_ws_endpoint = "/u"+t_mst_user_id.toString()+"/d"+device_count.toString();
-
-                        return CommonReturn.success("Login is successful.",new ValidatedUserDetails(logout_ws_endpoint,jwt_token));
+                        String device_endpoint = environment.getDeviceEndpoint(getMstUserIdFromJWT(jwt_token),getDeviceCountFromJWT(jwt_token));
+                        return CommonReturn.success("Login is successful.",new ValidatedUserDetails(device_endpoint,jwt_token));
                     }else{
                         return CommonReturn.error(401,"Auth token generation failed.");
                     }

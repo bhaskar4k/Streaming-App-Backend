@@ -51,8 +51,8 @@ public class AuthService {
 
     public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
         try {
-            String device_logout_endpoint = "/u"+t_mst_user_id+"/d"+device_number;
-            messagingTemplate.convertAndSend("/topic/logout"+device_logout_endpoint, CommonReturn.success("Your account has been logged-in from another device. Logging out....", device_logout_endpoint));
+            String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_number);
+            messagingTemplate.convertAndSend("/topic/logout"+device_endpoint, CommonReturn.success("Your account has been logged-in from another device. Logging out....", "logout_"+device_endpoint));
         } catch (Exception e) {
             log("emitLogoutMessageIntoWebsocket()",e.getMessage());
             e.printStackTrace();
@@ -72,9 +72,6 @@ public class AuthService {
                 Long removed_device_number = rand.nextLong(environment.getMaximumLoginDevice())+1;
 
                 params = List.of(validated_user.getId(),removed_device_number);
-                sql_string = "select jwt_token FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
-                String jwt_token_of_removed_user = (String)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult();
-
                 sql_string = "DELETE FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
                 int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
 

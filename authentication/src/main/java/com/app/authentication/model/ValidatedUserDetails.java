@@ -1,20 +1,20 @@
 package com.app.authentication.model;
 
 public class ValidatedUserDetails {
-    String logout_ws_endpoint;
+    String device_endpoint;
     String jwt;
 
     public ValidatedUserDetails(String logout_ws_endpoint, String JWT) {
-        this.logout_ws_endpoint = logout_ws_endpoint;
+        this.device_endpoint = logout_ws_endpoint;
         this.jwt = JWT;
     }
 
-    public String getLogout_ws_endpoint() {
-        return logout_ws_endpoint;
+    public String getDevice_endpoint() {
+        return device_endpoint;
     }
 
-    public void setLogout_ws_endpoint(String logout_ws_endpoint) {
-        this.logout_ws_endpoint = logout_ws_endpoint;
+    public void setDevice_endpoint(String device_endpoint) {
+        this.device_endpoint = device_endpoint;
     }
 
     public String getJwt() {
