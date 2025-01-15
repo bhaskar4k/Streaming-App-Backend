@@ -29,8 +29,8 @@ function AlertModal({ showModal, handleClose, headerText, bodyText, alertColor }
 AlertModal.propTypes = {
   showModal: PropTypes.bool.isRequired, 
   handleClose: PropTypes.func.isRequired,
-  headerText: PropTypes.string.isRequired,
-  bodyText: PropTypes.string.isRequired,
+  headerText: PropTypes.string,
+  bodyText: PropTypes.string,
   alertColor: PropTypes.string.isRequired
 };
 

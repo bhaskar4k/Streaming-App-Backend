@@ -192,7 +192,9 @@ function Login() {
     loadAlertModal = null;
 
     if (api_response_status === 200) {
-      document.getElementById('signIn').click();
+      if(document.getElementById('signIn')){
+        document.getElementById('signIn').click();
+      }
       api_response_status = null;
     }
   }
