@@ -7,6 +7,7 @@ import com.app.authentication.model.TokenRequest;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.security.EncryptionDecryption;
+import com.app.authentication.service.AuthService;
 import com.app.authentication.service.LogExceptionsService;
 import com.app.authentication.service.LoginSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private LoginSignUpService loginSignUpService;
+    @Autowired
+    private AuthService authService;
     @Autowired
     private LogExceptionsService logExceptionsService;
     private EncryptionDecryption encryptionDecryption;
@@ -52,10 +55,10 @@ public class AuthenticationController {
     public CommonReturn<JwtUserDetails> verify_request(@RequestBody TokenRequest tokenRequest) {
         try {
             String JWT = tokenRequest.getToken();
-            Boolean statusOk = loginSignUpService.isJwtTokenAuthenticated(JWT);
+            Boolean statusOk = authService.isJwtAuthenticated(JWT);
 
             if(statusOk){
-                return CommonReturn.success("Authentication is successful.", loginSignUpService.getAuthenticatedUserFromJwt(JWT));
+                return CommonReturn.success("Authentication is successful.", authService.getAuthenticatedUserFromJwt(JWT));
             }
 
             return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");

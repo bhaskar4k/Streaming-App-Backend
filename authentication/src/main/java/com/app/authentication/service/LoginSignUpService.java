@@ -117,8 +117,8 @@ public class LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        Long t_mst_user_id = getAuthenticatedUserFromJwt(jwt_token).getT_mst_user_id();
-                        Long device_count = getAuthenticatedUserFromJwt(jwt_token).getDevice_count();
+                        Long t_mst_user_id = authService.getAuthenticatedUserFromJwt(jwt_token).getT_mst_user_id();
+                        Long device_count = authService.getAuthenticatedUserFromJwt(jwt_token).getDevice_count();
                         String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_count);
 
                         return CommonReturn.success("Login is successful.",new ValidatedUserDetails(device_endpoint,jwt_token));
@@ -168,29 +168,6 @@ public class LoginSignUpService {
             log("getAuthenticatedUser()",e.getMessage());
             return null;
         }
-    }
-
-    public JwtUserDetails getAuthenticatedUserFromJwt(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            return (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-        } catch (Exception e) {
-            log("getMstUserIdFromJWT()",e.getMessage());
-            return null;
-        }
-    }
-
-    public String getSubjectFromJwt(String JWT){
-        try {
-            return authService.getSubject(JWT);
-        } catch (Exception e) {
-            log("getSubjectFromJwt()",e.getMessage());
-            return null;
-        }
-    }
-
-    public Boolean isJwtTokenAuthenticated(String JWT){
-        return authService.isJwtAuthenticated(JWT);
     }
 
 

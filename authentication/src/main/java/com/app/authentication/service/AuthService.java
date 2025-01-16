@@ -11,6 +11,7 @@ import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class AuthService {
     private Jwt jwt;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private EncryptionDecryption encryptionDecryption;
     private Environment environment;
@@ -97,8 +100,14 @@ public class AuthService {
         }
     }
 
-    public String getSubject(String token){
-        return jwt.extractSubject(token);
+    public JwtUserDetails getAuthenticatedUserFromJwt(String JWT){
+        try {
+            String jwtSubject = jwt.extractSubject(JWT);
+            return (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+        } catch (Exception e) {
+            log("getMstUserIdFromJWT()",e.getMessage());
+            return null;
+        }
     }
 
     public Boolean isJwtAuthenticated(String token){
