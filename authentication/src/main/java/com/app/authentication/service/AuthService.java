@@ -119,7 +119,6 @@ public class AuthService {
             log("isJwtAuthenticated()",e.getMessage());
             return null;
         }
-
     }
 
     public JwtUserDetails getAuthenticatedUserFromContext() {
