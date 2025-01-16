@@ -13,11 +13,11 @@ function AlertModal({ showModal, handleClose, headerText, bodyText, alertColor }
             </div>
 
             <div className="modal-body">
-              <p style={{color: alertColor}}>{bodyText}</p>
+              <p style={{ color: alertColor }}>{bodyText}</p>
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn-alert-modal btn-alert-modal-default" style={{backgroundColor: alertColor}} onClick={handleClose}>Close</button>
+              <button type="button" className="btn-alert-modal btn-alert-modal-default" style={{ backgroundColor: alertColor }} onClick={handleClose}>Close</button>
             </div>
           </div>
         </div>
@@ -27,7 +27,7 @@ function AlertModal({ showModal, handleClose, headerText, bodyText, alertColor }
 };
 
 AlertModal.propTypes = {
-  showModal: PropTypes.bool.isRequired, 
+  showModal: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   headerText: PropTypes.string,
   bodyText: PropTypes.string,

@@ -5,10 +5,10 @@ function Upload() {
     const authenticationService = new AuthenticationService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
 
-    
+
     return (
         <>
-            <h1>Upload</h1>      
+            <h1>Upload</h1>
         </>
     );
 }

@@ -5,9 +5,9 @@ export class AuthenticationService {
         this.BASE_URL = EndpointMicroservice.authentication;
     }
 
-    async DoSignUpService(obj){
+    async DoSignUpService(obj) {
         try {
-            let url=this.BASE_URL.concat(EndpointAuthentication.do_signup);
+            let url = this.BASE_URL.concat(EndpointAuthentication.do_signup);
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -20,19 +20,19 @@ export class AuthenticationService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-      
+
             let res = await response.json();
             return res;
-        } catch (ex){
+        } catch (ex) {
             console.log(ex);
-            return {status : 404, message : 'Internal Server Error.', data : null};
+            return { status: 404, message: 'Internal Server Error.', data: null };
         }
-    }   
+    }
 
 
-    async DoLoginService(obj){
+    async DoLoginService(obj) {
         try {
-            let url=this.BASE_URL.concat(EndpointAuthentication.do_login);
+            let url = this.BASE_URL.concat(EndpointAuthentication.do_login);
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -45,17 +45,17 @@ export class AuthenticationService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-      
+
             let res = await response.json();
             return res;
-        } catch (ex){
+        } catch (ex) {
             console.log(ex);
-            return {status : 404, message : 'Internal Server Error.', data : null};
+            return { status: 404, message: 'Internal Server Error.', data: null };
         }
-    }   
+    }
 
 
-    async GetTMstUserIdFromJWTSubject(JWT){
+    async GetTMstUserIdFromJWTSubject(JWT) {
         try {
             const response = await fetch('http://localhost:8090/authentication/get_userid_from_jwt', {
                 method: 'GET',
@@ -69,12 +69,12 @@ export class AuthenticationService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-    
+
             const res = await response.json();
-            return res; 
+            return res;
         } catch (ex) {
             console.error(ex);
-            return {status : 404, message : 'Internal Server Error.', data : null};
+            return { status: 404, message: 'Internal Server Error.', data: null };
         }
     }
 }

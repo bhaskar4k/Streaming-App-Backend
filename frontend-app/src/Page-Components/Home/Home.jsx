@@ -6,11 +6,11 @@ function Home() {
     const authenticationService = new AuthenticationService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
     console.log(JWT_TOKEN_INFO);
-    
+
     return (
         <>
             <h1>HOME</h1>
-            <Upload/>          
+            <Upload />
         </>
     );
 }
