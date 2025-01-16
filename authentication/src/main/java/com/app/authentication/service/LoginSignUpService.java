@@ -117,7 +117,10 @@ public class LoginSignUpService {
                     String jwt_token = authService.generateTokenAndUpdateDB(new_user,validated_user);
 
                     if(jwt_token!=null){
-                        String device_endpoint = environment.getDeviceEndpoint(getMstUserIdFromJWT(jwt_token),getDeviceCountFromJWT(jwt_token));
+                        Long t_mst_user_id = getAuthenticatedUserFromJwt(jwt_token).getT_mst_user_id();
+                        Long device_count = getAuthenticatedUserFromJwt(jwt_token).getDevice_count();
+                        String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_count);
+
                         return CommonReturn.success("Login is successful.",new ValidatedUserDetails(device_endpoint,jwt_token));
                     }else{
                         return CommonReturn.error(401,"Auth token generation failed.");
@@ -147,7 +150,7 @@ public class LoginSignUpService {
         }
     }
 
-    public JwtUserDetails getAuthenticatedUser() {
+    public JwtUserDetails getAuthenticatedUserFromContext() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -167,6 +170,16 @@ public class LoginSignUpService {
         }
     }
 
+    public JwtUserDetails getAuthenticatedUserFromJwt(String JWT){
+        try {
+            String jwtSubject = getSubjectFromJwt(JWT);
+            return (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
+        } catch (Exception e) {
+            log("getMstUserIdFromJWT()",e.getMessage());
+            return null;
+        }
+    }
+
     public String getSubjectFromJwt(String JWT){
         try {
             return authService.getSubject(JWT);
@@ -176,59 +189,8 @@ public class LoginSignUpService {
         }
     }
 
-    public Long getMstUserIdFromJWT(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return extractedUserObject.getT_mst_user_id();
-        } catch (Exception e) {
-            log("getMstUserIdFromJWT()",e.getMessage());
-            return null;
-        }
-    }
-
-    public String getEmailFromJWT(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return extractedUserObject.getEmail();
-        } catch (Exception e) {
-            log("getEmailFromJWT()",e.getMessage());
-            return null;
-        }
-    }
-
-    public Integer getIsSubscribedFromJWT(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return extractedUserObject.getIs_subscribed();
-        } catch (Exception e) {
-            log("getIsSubscribedFromJWT()",e.getMessage());
-            return null;
-        }
-    }
-
-    public String getIpAddressFromJWT(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return extractedUserObject.getIp_address();
-        } catch (Exception e) {
-            log("getIpAddressFromJWT()",e.getMessage());
-            return null;
-        }
-    }
-
-    public Long getDeviceCountFromJWT(String JWT){
-        try {
-            String jwtSubject = getSubjectFromJwt(JWT);
-            JwtUserDetails extractedUserObject = (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
-            return extractedUserObject.getDevice_count();
-        } catch (Exception e) {
-            log("getDeviceCountFromJWT()",e.getMessage());
-            return null;
-        }
+    public Boolean isJwtTokenAuthenticated(String JWT){
+        return authService.isJwtAuthenticated(JWT);
     }
 
 

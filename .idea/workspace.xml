@@ -5,11 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/CommonReturn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/DbWorker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/AlertModal/AlertModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/AlertModal/AlertModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/ApiEndpointInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/ApiEndpointInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/jwt/Jwt.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/jwt/Jwt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/LoginSignUpService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/LoginSignUpService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Home/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Login/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Login/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/upload/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/UploadApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/UploadApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,12 +51,21 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Project/Streaming-App&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Project/Streaming-App/upload/src/main/java/com/app/upload/common&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Project\Streaming-App\upload\src\main\java\com\app\upload\common" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.app.upload.environment" />
+      <recent name="com.app.upload.entity" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>

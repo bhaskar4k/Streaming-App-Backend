@@ -5,6 +5,7 @@ import Upload from '../Upload/Upload';
 function Home() {
     const authenticationService = new AuthenticationService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
+    console.log(JWT_TOKEN_INFO);
     
     return (
         <>

@@ -2,8 +2,8 @@ package com.app.authentication.controller;
 
 import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
-import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
+import com.app.authentication.model.TokenRequest;
 import com.app.authentication.model.TMstUserModel;
 import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.security.EncryptionDecryption;
@@ -48,13 +48,18 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/get_userid_from_jwt")
-    public CommonReturn<Long> get_userid_from_jwt(){
-        try{
-            JwtUserDetails jwtSubject = loginSignUpService.getAuthenticatedUser();
-            return CommonReturn.success("Extracted t_mst_user_id from JWT",jwtSubject.getT_mst_user_id());
+    @PostMapping("/verify_request")
+    public CommonReturn<JwtUserDetails> verify_request(@RequestBody TokenRequest tokenRequest) {
+        try {
+            String JWT = tokenRequest.getToken();
+            Boolean statusOk = loginSignUpService.isJwtTokenAuthenticated(JWT);
+
+            if(statusOk){
+                return CommonReturn.success("Authentication is successful.", loginSignUpService.getAuthenticatedUserFromJwt(JWT));
+            }
+
+            return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");
         } catch (Exception e) {
-            log("get_userid_from_jwt()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

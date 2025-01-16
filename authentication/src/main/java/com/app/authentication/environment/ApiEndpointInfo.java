@@ -7,6 +7,7 @@ public class ApiEndpointInfo {
     private List<String> unauthenticatedEndpoints = Arrays.asList(
             "/authentication/do_signup",
             "/authentication/do_login",
+            "/authentication/verify_request",
             "/authentication-websocket"
     );
 

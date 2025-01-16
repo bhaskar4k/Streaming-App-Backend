@@ -101,6 +101,10 @@ public class AuthService {
         return jwt.extractSubject(token);
     }
 
+    public Boolean isJwtAuthenticated(String token){
+        return jwt.isAuthenticated(token);
+    }
+
 
     private void log(String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
