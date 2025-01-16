@@ -55,9 +55,8 @@ public class AuthenticationController {
     public CommonReturn<JwtUserDetails> verify_request(@RequestBody TokenRequest tokenRequest) {
         try {
             String JWT = tokenRequest.getToken();
-            Boolean statusOk = authService.isJwtAuthenticated(JWT);
 
-            if(statusOk){
+            if(authService.isJwtAuthenticated(JWT)){
                 return CommonReturn.success("Authentication is successful.", authService.getAuthenticatedUserFromJwt(JWT));
             }
 

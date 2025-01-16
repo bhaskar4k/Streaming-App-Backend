@@ -16,6 +16,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,13 +107,39 @@ public class AuthService {
             String jwtSubject = jwt.extractSubject(JWT);
             return (JwtUserDetails)objectMapper.readValue(jwtSubject, JwtUserDetails.class);
         } catch (Exception e) {
-            log("getMstUserIdFromJWT()",e.getMessage());
+            log("getAuthenticatedUserFromJwt()",e.getMessage());
             return null;
         }
     }
 
     public Boolean isJwtAuthenticated(String token){
-        return jwt.isAuthenticated(token);
+        try {
+            return jwt.isAuthenticated(token);
+        } catch (Exception e) {
+            log("isJwtAuthenticated()",e.getMessage());
+            return null;
+        }
+
+    }
+
+    public JwtUserDetails getAuthenticatedUserFromContext() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()) {
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof JwtUserDetails) {
+                    return (JwtUserDetails) principal;
+                }else{
+                    return null;
+                }
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            log("getAuthenticatedUserFromContext()",e.getMessage());
+            return null;
+        }
     }
 
 

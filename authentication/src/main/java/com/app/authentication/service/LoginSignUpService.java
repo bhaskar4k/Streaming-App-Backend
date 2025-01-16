@@ -150,26 +150,6 @@ public class LoginSignUpService {
         }
     }
 
-    public JwtUserDetails getAuthenticatedUserFromContext() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            if (authentication != null && authentication.isAuthenticated()) {
-                Object principal = authentication.getPrincipal();
-                if (principal instanceof JwtUserDetails) {
-                    return (JwtUserDetails) principal;
-                }else{
-                    return null;
-                }
-            }else{
-                return null;
-            }
-        } catch (Exception e) {
-            log("getAuthenticatedUser()",e.getMessage());
-            return null;
-        }
-    }
-
 
     private void log(String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
