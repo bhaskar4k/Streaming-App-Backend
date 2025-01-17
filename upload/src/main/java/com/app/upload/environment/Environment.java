@@ -14,7 +14,7 @@ public class Environment {
     private Long jwtExpireTime = (1000L * 60L * 60L * 10L);
 
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
-    private String videoFilePath = "E:/Project/Streaming-App-Video-File";
+    private String videoFilePath = "E:/Project/Streaming-App-Video-File/";
 
     public String getPrivateKey1() {
         return this.privateKey1;
