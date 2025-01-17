@@ -13,6 +13,9 @@ public class Environment {
     private String secretKey = "yg45eg-g56yw4r-hj45g-fy6awe-g54fw";
     private Long jwtExpireTime = (1000L * 60L * 60L * 10L);
 
+    private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
+    private String videoFilePath = "E:/Project/Streaming-App/video-file/";
+
     public String getPrivateKey1() {
         return this.privateKey1;
     }
@@ -45,7 +48,13 @@ public class Environment {
         return jwtExpireTime;
     }
 
+    public String getAuthServiceUrl() {
+        return authServiceUrl;
+    }
 
+    public String getVideoFilePath() {
+        return videoFilePath;
+    }
 
     //#region Custom environment
     public String getDeviceEndpoint(Long t_mst_user_id, Long device_count){

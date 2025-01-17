@@ -1,8 +1,10 @@
 package com.app.upload.service;
 
 import com.app.upload.common.CommonReturn;
+import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.TokenRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -13,8 +15,14 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Component
 public class AuthService {
+    private Environment environment;
+
+    public AuthService(){
+        this.environment = new Environment();
+    }
+
     public CommonReturn<JwtUserDetails> validateToken(String token) {
-        String AUTH_SERVICE_URL = "http://localhost:8090/authentication/verify_request";
+        String AUTH_SERVICE_URL = environment.getAuthServiceUrl();
 
         RestTemplate restTemplate = new RestTemplate();
         try {
