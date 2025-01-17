@@ -62,6 +62,7 @@ public class AuthenticationController {
 
             return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");
         } catch (Exception e) {
+            log("verify_request()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }
