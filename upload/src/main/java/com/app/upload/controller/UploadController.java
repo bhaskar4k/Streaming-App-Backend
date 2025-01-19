@@ -38,9 +38,9 @@ public class UploadController {
     public CommonReturn<JwtUserDetails> upload(@RequestHeader("Authorization") String authorization, @RequestPart("video") MultipartFile file) {
         String token = authorization.replace("Bearer ", "");
 
-        CommonReturn<JwtUserDetails> validated_request = authService.validateToken(token);
-        if(validated_request.getStatus()!=200){
-            return validated_request;
+        CommonReturn<JwtUserDetails> post_validated_request = authService.validateToken(token);
+        if(post_validated_request.getStatus()!=200){
+            return post_validated_request;
         }
 
         try {
@@ -52,6 +52,8 @@ public class UploadController {
 
             File savedFile = new File(uploadDir + file.getOriginalFilename());
             file.transferTo(savedFile);
+
+            authService.uploadAndProcessVideo(file);
 
             return CommonReturn.success("Ok",null);
         } catch (IOException e) {

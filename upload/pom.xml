@@ -95,7 +95,13 @@
 			<version>6.6.3.Final</version>
 			<type>pom</type>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>4.1.3-1.5</version>
+		</dependency>
+
+		<dependency>
             <groupId>com.app</groupId>
             <artifactId>authentication</artifactId>
             <version>0.0.1-SNAPSHOT</version>

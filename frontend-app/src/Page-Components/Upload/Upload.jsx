@@ -29,9 +29,9 @@ function Upload() {
                 },
                 body: formData,
             });
-    
-            if (response.ok) {
-                const result = await response.json();
+
+            const result = await response.json();
+            if (result.status===200) {
                 console.log('File uploaded successfully:', result);
             } else {
                 console.error('Error uploading file:', response.status, response.statusText);
