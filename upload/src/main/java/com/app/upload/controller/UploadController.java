@@ -38,6 +38,11 @@ public class UploadController {
     public CommonReturn<JwtUserDetails> upload(@RequestHeader("Authorization") String authorization, @RequestPart("video") MultipartFile file) {
         String token = authorization.replace("Bearer ", "");
 
+        CommonReturn<JwtUserDetails> validated_request = authService.validateToken(token);
+        if(validated_request.getStatus()!=200){
+            return validated_request;
+        }
+
         try {
             String uploadDir = environment.getVideoFilePath();
             File directory = new File(uploadDir);
