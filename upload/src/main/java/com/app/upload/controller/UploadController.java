@@ -44,19 +44,10 @@ public class UploadController {
         }
 
         try {
-            String uploadDir = environment.getVideoFilePath();
-            File directory = new File(uploadDir);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            File savedFile = new File(uploadDir + file.getOriginalFilename());
-            file.transferTo(savedFile);
-
             authService.uploadAndProcessVideo(file);
 
             return CommonReturn.success("Ok",null);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return CommonReturn.error(401,"GG");
         }
     }

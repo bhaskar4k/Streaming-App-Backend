@@ -83,17 +83,15 @@ public class AuthService {
             Path tempFile = Paths.get(TEMP_DIR, "uploaded_" + file.getOriginalFilename());
             Files.write(tempFile, file.getBytes());
 
-            // Extract original resolution
-//            String sourceResolution = getVideoResolution(tempFile.toString());
-            String sourceResolution = "1920x1080";
+            String sourceResolution = getVideoResolution(tempFile.toString());
 
             // Define the desired resolutions
-            List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "2k", "4k");
+            List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
             List<String> validResolutions = getValidResolutions(sourceResolution, resolutions);
 
             // Generate copies in the output directory
             for (String resolution : validResolutions) {
-                createResolutionCopy(tempFile.toString(), resolution, OUTPUT_DIR);
+                createResolutionCopy(tempFile.toString(), sourceResolution, resolution, OUTPUT_DIR);
             }
 
             return "Copies created successfully in " + OUTPUT_DIR;
@@ -103,7 +101,7 @@ public class AuthService {
     }
 
     private String getVideoResolution(String filePath) throws Exception {
-        String ffprobePath = "C:/ffmpeg/bin"; // Use the absolute path to ffprobe
+        String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe"; // Use the absolute path to ffprobe
         ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",
                 "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
         Process process = processBuilder.start();
@@ -117,7 +115,7 @@ public class AuthService {
         Map<String, Integer> resolutionHeightMap = Map.of(
                 "144p", 144, "240p", 240, "360p", 360,
                 "480p", 480, "720p", 720, "1080p", 1080,
-                "2k", 1440, "4k", 2160
+                "1440p", 1440, "2160p", 2160, "4320p", 4320
         );
 
         return resolutions.stream()
@@ -125,7 +123,7 @@ public class AuthService {
                 .collect(Collectors.toList());
     }
 
-    private void createResolutionCopy(String filePath, String resolution, String outputDir) throws IOException, InterruptedException {
+    private void createResolutionCopy(String filePath, String sourceResolution, String resolution, String outputDir) throws IOException, InterruptedException {
         try {
             // Define output file path
             String outputFileName = "output_" + resolution + ".mp4";
@@ -134,21 +132,36 @@ public class AuthService {
             // Ensure the output directory exists
             Files.createDirectories(Paths.get(outputDir));
 
-            int height = Integer.parseInt(resolution.replace("p", ""));
-            String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe"; // Use ffmpeg here, not ffprobe
+            // Parse target height from resolution (e.g., "720p" -> 720)
+            int targetHeight = Integer.parseInt(resolution.replace("p", ""));
 
-            // Use FFmpeg to resize and save in the output directory
+            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
+            int sourceWidth = Integer.parseInt(sourceResolution.split("x")[0]);
+
+            // Estimate source bitrate using a typical formula (e.g., 0.07 Mbps per pixel)
+            long sourceBitrate = Math.max(sourceHeight * sourceWidth * 70L / 1000, 1000L); // Minimum 1000 Kbps
+
+            // Scale bitrate proportionally to target resolution
+            long targetBitrate = Math.max(sourceBitrate * targetHeight / sourceHeight, 500L); // Minimum 500 Kbps
+
+            String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe"; // Use ffmpeg here
+
+            // Use FFmpeg to resize and set the bitrate explicitly
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    ffmpegPath, "-i", filePath, "-vf", "scale=-1:" + height, "-c:v", "libx264", "-crf", "23", "-preset", "fast", outputFilePath.toString()
+                    ffmpegPath, "-i", filePath,
+                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p", // Use -2 for width to be divisible by 2
+                    "-c:v", "libx264", "-b:v", targetBitrate + "k", "-maxrate", targetBitrate + "k", "-bufsize", (targetBitrate * 2) + "k",
+                    "-preset", "fast", "-crf", "23",
+                    outputFilePath.toString()
             );
 
-            // Redirect error stream to help with debugging
+            // Redirect error stream for debugging
             processBuilder.redirectErrorStream(true);
 
             // Start the process
             Process process = processBuilder.start();
 
-            // Log the output for debugging
+            // Log output for debugging
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -166,5 +179,6 @@ public class AuthService {
             throw new RuntimeException("Error creating resolution copy for: " + resolution, e);
         }
     }
+
 
 }
