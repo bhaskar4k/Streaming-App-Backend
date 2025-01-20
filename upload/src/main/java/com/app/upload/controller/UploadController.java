@@ -6,6 +6,7 @@ import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.TokenRequest;
 import com.app.upload.service.AuthService;
+import com.app.upload.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -22,33 +23,34 @@ import java.io.IOException;
 public class UploadController {
     @Autowired
     public AuthService authService;
+    @Autowired
+    private UploadService uploadService;
     public Environment environment;
 
     public UploadController(){
         this.environment = new Environment();
     }
 
-
-    @GetMapping("/temp1")
-    public String temp(){
-        return "Upload";
-    }
-
     @PostMapping("/upload")
-    public CommonReturn<JwtUserDetails> upload(@RequestHeader("Authorization") String authorization, @RequestPart("video") MultipartFile file) {
+    public CommonReturn<Boolean> upload(@RequestHeader("Authorization") String authorization, @RequestPart("video") MultipartFile file) {
         String token = authorization.replace("Bearer ", "");
 
         CommonReturn<JwtUserDetails> post_validated_request = authService.validateToken(token);
         if(post_validated_request.getStatus()!=200){
-            return post_validated_request;
+            return CommonReturn.error(post_validated_request.getStatus(),post_validated_request.getMessage());
         }
 
         try {
-            authService.uploadAndProcessVideo(file);
+            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,post_validated_request.getData());
 
-            return CommonReturn.success("Ok",null);
+            if(isVideoUploadDoneAndSuccessful){
+                // Emit websocket push notification
+                return CommonReturn.success("Video has been uploaded successfully", true);
+            }
+
+            return CommonReturn.error(400,"Video upload failed.");
         } catch (Exception e) {
-            return CommonReturn.error(401,"GG");
+            return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 }

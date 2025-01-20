@@ -1,6 +1,7 @@
 package com.app.upload.service;
 
 import com.app.upload.common.CommonReturn;
+import com.app.upload.entity.TLogExceptions;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.TokenRequest;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 @Component
 public class AuthService {
     private Environment environment;
+    @Autowired
+    private LogExceptionsService logExceptionsService;
 
     public AuthService(){
         this.environment = new Environment();
@@ -59,110 +62,21 @@ public class AuthService {
 
             return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");
         } catch (Exception e) {
-            e.printStackTrace();
-            return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");
+            log(null,"validateToken()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 
 
-    public String uploadAndProcessVideo(MultipartFile file) {
-        if (file.isEmpty()) {
-            return "File is empty";
-        }
+    private void log(Long t_mst_user_id, String function_name, String exception_msg){
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 
-        try {
-            String TEMP_DIR = "E:/Project/Streaming-App-Source-Video";
-            String OUTPUT_DIR = "E:/Project/Streaming-App-Resized-Videos";
+        String full_class_path = stackTraceElements[2].getClassName();
+        String class_name = full_class_path.substring(full_class_path.lastIndexOf(".") + 1);
 
-            Files.createDirectories(Paths.get(TEMP_DIR));
-            Files.createDirectories(Paths.get(OUTPUT_DIR));
+        String full_package_path = full_class_path.substring(0, full_class_path.lastIndexOf("."));
+        String package_name = full_package_path.substring(full_package_path.lastIndexOf(".") + 1);
 
-            Path tempFile = Paths.get(TEMP_DIR, "uploaded_" + file.getOriginalFilename());
-            Files.write(tempFile, file.getBytes());
-
-            String sourceResolution = getVideoResolution(tempFile.toString());
-
-            List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
-            List<String> validResolutions = getValidResolutions(sourceResolution, resolutions);
-
-            for (String resolution : validResolutions) {
-                createResolutionCopy(tempFile.toString(), sourceResolution, resolution, OUTPUT_DIR);
-            }
-
-            return "Copies created successfully in " + OUTPUT_DIR;
-        } catch (Exception e) {
-            return "Error processing video: " + e.getMessage();
-        }
+        logExceptionsService.saveLogException(new TLogExceptions(package_name,class_name,function_name,exception_msg,t_mst_user_id));
     }
-
-    private String getVideoResolution(String filePath) throws Exception {
-        String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
-        ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",
-                "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
-        Process process = processBuilder.start();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            return reader.readLine();
-        }
-    }
-
-    private List<String> getValidResolutions(String sourceResolution, List<String> resolutions) {
-        int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
-        Map<String, Integer> resolutionHeightMap = Map.of(
-                "144p", 144, "240p", 240, "360p", 360,
-                "480p", 480, "720p", 720, "1080p", 1080,
-                "1440p", 1440, "2160p", 2160, "4320p", 4320
-        );
-
-        return resolutions.stream()
-                .filter(res -> resolutionHeightMap.get(res) <= sourceHeight)
-                .collect(Collectors.toList());
-    }
-
-    private void createResolutionCopy(String filePath, String sourceResolution, String resolution, String outputDir) throws IOException, InterruptedException {
-        try {
-            String outputFileName = "output_" + resolution + ".mp4";
-            Path outputFilePath = Paths.get(outputDir, outputFileName);
-
-            Files.createDirectories(Paths.get(outputDir));
-
-            int targetHeight = Integer.parseInt(resolution.replace("p", ""));
-
-            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
-            int sourceWidth = Integer.parseInt(sourceResolution.split("x")[0]);
-
-            long sourceBitrate = Math.max(sourceHeight * sourceWidth * 70L / 1000, 1000L);
-
-            long targetBitrate = Math.max(sourceBitrate * targetHeight / sourceHeight, 500L);
-
-            String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
-
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    ffmpegPath, "-i", filePath,
-                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p",
-                    "-c:v", "libx264", "-b:v", targetBitrate + "k", "-maxrate", targetBitrate + "k", "-bufsize", (targetBitrate * 2) + "k",
-                    "-preset", "fast", "-crf", "23",
-                    outputFilePath.toString()
-            );
-
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                throw new RuntimeException("FFmpeg failed with exit code: " + exitCode);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error creating resolution copy for: " + resolution, e);
-        }
-    }
-
-
 }
