@@ -71,25 +71,20 @@ public class AuthService {
         }
 
         try {
-            // Define temporary input directory and output directory
             String TEMP_DIR = "E:/Project/Streaming-App-Source-Video";
             String OUTPUT_DIR = "E:/Project/Streaming-App-Resized-Videos";
 
-            // Ensure both directories exist
             Files.createDirectories(Paths.get(TEMP_DIR));
             Files.createDirectories(Paths.get(OUTPUT_DIR));
 
-            // Save the uploaded file temporarily
             Path tempFile = Paths.get(TEMP_DIR, "uploaded_" + file.getOriginalFilename());
             Files.write(tempFile, file.getBytes());
 
             String sourceResolution = getVideoResolution(tempFile.toString());
 
-            // Define the desired resolutions
             List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
             List<String> validResolutions = getValidResolutions(sourceResolution, resolutions);
 
-            // Generate copies in the output directory
             for (String resolution : validResolutions) {
                 createResolutionCopy(tempFile.toString(), sourceResolution, resolution, OUTPUT_DIR);
             }
@@ -101,12 +96,12 @@ public class AuthService {
     }
 
     private String getVideoResolution(String filePath) throws Exception {
-        String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe"; // Use the absolute path to ffprobe
+        String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
         ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",
                 "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
         Process process = processBuilder.start();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            return reader.readLine(); // Example: "1920x1080"
+            return reader.readLine();
         }
     }
 
@@ -125,43 +120,33 @@ public class AuthService {
 
     private void createResolutionCopy(String filePath, String sourceResolution, String resolution, String outputDir) throws IOException, InterruptedException {
         try {
-            // Define output file path
             String outputFileName = "output_" + resolution + ".mp4";
             Path outputFilePath = Paths.get(outputDir, outputFileName);
 
-            // Ensure the output directory exists
             Files.createDirectories(Paths.get(outputDir));
 
-            // Parse target height from resolution (e.g., "720p" -> 720)
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
 
             int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
             int sourceWidth = Integer.parseInt(sourceResolution.split("x")[0]);
 
-            // Estimate source bitrate using a typical formula (e.g., 0.07 Mbps per pixel)
-            long sourceBitrate = Math.max(sourceHeight * sourceWidth * 70L / 1000, 1000L); // Minimum 1000 Kbps
+            long sourceBitrate = Math.max(sourceHeight * sourceWidth * 70L / 1000, 1000L);
 
-            // Scale bitrate proportionally to target resolution
-            long targetBitrate = Math.max(sourceBitrate * targetHeight / sourceHeight, 500L); // Minimum 500 Kbps
+            long targetBitrate = Math.max(sourceBitrate * targetHeight / sourceHeight, 500L);
 
-            String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe"; // Use ffmpeg here
+            String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
 
-            // Use FFmpeg to resize and set the bitrate explicitly
             ProcessBuilder processBuilder = new ProcessBuilder(
                     ffmpegPath, "-i", filePath,
-                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p", // Use -2 for width to be divisible by 2
+                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p",
                     "-c:v", "libx264", "-b:v", targetBitrate + "k", "-maxrate", targetBitrate + "k", "-bufsize", (targetBitrate * 2) + "k",
                     "-preset", "fast", "-crf", "23",
                     outputFilePath.toString()
             );
 
-            // Redirect error stream for debugging
             processBuilder.redirectErrorStream(true);
-
-            // Start the process
             Process process = processBuilder.start();
 
-            // Log output for debugging
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -169,7 +154,6 @@ public class AuthService {
                 }
             }
 
-            // Wait for the process to finish
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new RuntimeException("FFmpeg failed with exit code: " + exitCode);
