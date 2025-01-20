@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

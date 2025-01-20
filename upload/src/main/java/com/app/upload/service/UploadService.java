@@ -35,8 +35,8 @@ public class UploadService {
         }
 
         try {
-            String ORIGINAL_FILE = environment.getOriginalVideoPath();
-            String OUTPUT_DIR = environment.getEncodedVideoPath();
+            String ORIGINAL_FILE = environment.getOriginalVideoPath()+getUserSpecifiedFolder(userDetails);
+            String OUTPUT_DIR = environment.getEncodedVideoPath()+getUserSpecifiedFolder(userDetails);
 
             Files.createDirectories(Paths.get(ORIGINAL_FILE));
             Files.createDirectories(Paths.get(OUTPUT_DIR));
@@ -59,6 +59,15 @@ public class UploadService {
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"uploadAndProcessVideo()",e.getMessage());
             return false;
+        }
+    }
+
+    private String getUserSpecifiedFolder(JwtUserDetails userDetails){
+        try {
+            return "/"+userDetails.getT_mst_user_id()+"/2";
+        } catch (Exception e) {
+            log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
+            return null;
         }
     }
 
@@ -91,7 +100,8 @@ public class UploadService {
 
     private boolean createResolutionCopy(String filePath, String sourceResolution, String resolution, String outputDir, JwtUserDetails userDetails) throws IOException, InterruptedException {
         try {
-            String outputFileName = "output_" + resolution + ".mp4";
+            String outputFileName = "Output_" + resolution + ".mp4";
+            outputDir += "/"+resolution;
             Path outputFilePath = Paths.get(outputDir, outputFileName);
 
             Files.createDirectories(Paths.get(outputDir));
