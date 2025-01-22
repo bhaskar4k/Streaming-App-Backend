@@ -5,9 +5,9 @@ function Upload() {
     const [file, setFile] = useState(null);
     const authenticationService = new AuthenticationService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
+    const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 
-
-    function handleFileChange(event){
+    function handleFileChange(event) {
         setFile(event.target.files[0]);
     }
 
@@ -18,30 +18,51 @@ function Upload() {
             return;
         }
     
-        const formData = new FormData();
-        formData.append('video', file);
+        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+        const fileId = `${file.name}-${Date.now()}`;
+        let uploadedChunks = 0;
     
-        try {
-            const response = await fetch('http://localhost:8093/upload/upload', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`
-                },
-                body: formData,
-            });
-
-            const result = await response.json();
-            
-            if (result.status===200) {
-                console.log('File uploaded successfully:', result);
-            } else {
-                console.error('Error uploading file:', result.status, result.message);
+        // for (let start = 0; start < file.size; start += CHUNK_SIZE) {
+        //     const end = Math.min(start + CHUNK_SIZE, file.size);
+        //     const chunk = file.slice(start, end);
+        //     const chunkIndex = Math.floor(start / CHUNK_SIZE);
+    
+            const formData = new FormData();
+            formData.append("chunk", file);
+            formData.append("fileId", "abc");
+            formData.append("chunkIndex", 1);
+            formData.append("totalChunks", 1);
+    
+            try {
+                const response = await fetch('http://localhost:8093/upload/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`,
+                    },
+                    body: formData,
+                });
+    
+                const result = await response.json();
+    
+                if (result.status === 200) {
+                    alert("Video uploaded successfully!", result.message);
+                } else {
+                    console.error('Error uploading chunk:', result.status, result.message);
+                }
+            } catch (error) {
+                console.error('Error uploading chunk:', error);
             }
-        } catch (error) {
-            console.error('Error uploading file:', error);
+        // }
+    
+        if (uploadedChunks === totalChunks) {
+            alert("Video uploaded successfully!");
+        } else {
+            alert("Video upload failed. Please try again.");
         }
     }
     
+
 
     return (
         <>

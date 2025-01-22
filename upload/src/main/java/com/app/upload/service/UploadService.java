@@ -29,7 +29,7 @@ public class UploadService {
         this.environment = new Environment();
     }
 
-    public boolean uploadAndProcessVideo(MultipartFile file, JwtUserDetails userDetails) {
+    public boolean uploadAndProcessVideo(MultipartFile file, String fileId, Long chunkIndex, Long totalChunks, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return false;
         }
@@ -49,8 +49,9 @@ public class UploadService {
             List<String> resolutions = environment.getResolutions();
             List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
 
+            String originalFilename = getFileNameWithoutExtension(file);
             for (String resolution : validResolutions) {
-                if(!createResolutionCopy(tempFile.toString(), sourceResolution, resolution, OUTPUT_DIR, userDetails)){
+                if(!createResolutionCopy(tempFile.toString(), originalFilename, chunkIndex, sourceResolution, resolution, OUTPUT_DIR, userDetails)){
                     // Have to do something if any chunk fails to encode.
                 }
             }
@@ -62,9 +63,17 @@ public class UploadService {
         }
     }
 
+    public String getFileNameWithoutExtension(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.contains(".")) {
+            return originalFilename;
+        }
+        return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
+    }
+
     private String getUserSpecifiedFolder(JwtUserDetails userDetails){
         try {
-            return "/"+userDetails.getT_mst_user_id()+"/2";
+            return "/UserId-"+userDetails.getT_mst_user_id()+"/VideoId-2";
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
             return null;
@@ -98,9 +107,9 @@ public class UploadService {
         }
     }
 
-    private boolean createResolutionCopy(String filePath, String sourceResolution, String resolution, String outputDir, JwtUserDetails userDetails) throws IOException, InterruptedException {
+    private boolean createResolutionCopy(String filePath, String originalFilename, Long chunkIndex, String sourceResolution, String resolution, String outputDir, JwtUserDetails userDetails) throws IOException, InterruptedException {
         try {
-            String outputFileName = "Output_" + resolution + ".mp4";
+            String outputFileName = chunkIndex + "_" + originalFilename + "_" + resolution + ".mp4";
             outputDir += "/"+resolution;
             Path outputFilePath = Paths.get(outputDir, outputFileName);
 
