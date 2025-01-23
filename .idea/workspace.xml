@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

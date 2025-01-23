@@ -34,11 +34,8 @@ public class UploadController {
 
     @PostMapping("/upload")
     public CommonReturn<Boolean> upload(@RequestHeader("Authorization") String authorization,
-                                        @RequestPart("chunk") MultipartFile file,
-                                        @RequestParam("fileId") String fileId,
-                                        @RequestParam("chunkIndex") Long chunkIndex,
-                                        @RequestParam("totalChunks") Long totalChunks
-    ) {
+                                        @RequestPart("video") MultipartFile file,
+                                        @RequestParam("fileId") String fileId) {
         String token = authorization.replace("Bearer ", "");
 
         CommonReturn<JwtUserDetails> post_validated_request = authService.validateToken(token);
@@ -47,7 +44,7 @@ public class UploadController {
         }
 
         try {
-            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,fileId,chunkIndex,totalChunks,post_validated_request.getData());
+            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,fileId,post_validated_request.getData());
 
             if(isVideoUploadDoneAndSuccessful){
                 // Emit websocket push notification

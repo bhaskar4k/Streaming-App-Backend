@@ -24,12 +24,14 @@ public class UploadService {
     private Environment environment;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    private ProcessingService processingService;
 
     public UploadService(){
         this.environment = new Environment();
+        this.processingService = new ProcessingService();
     }
 
-    public boolean uploadAndProcessVideo(MultipartFile file, String fileId, Long chunkIndex, Long totalChunks, JwtUserDetails userDetails) {
+    public boolean uploadAndProcessVideo(MultipartFile file, String fileId, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return false;
         }
@@ -41,7 +43,7 @@ public class UploadService {
             Files.createDirectories(Paths.get(ORIGINAL_FILE));
             Files.createDirectories(Paths.get(OUTPUT_DIR));
 
-            Path tempFile = Paths.get(ORIGINAL_FILE, "uploaded_" + file.getOriginalFilename());
+            Path tempFile = Paths.get(ORIGINAL_FILE, "Original_" + file.getOriginalFilename());
             Files.write(tempFile, file.getBytes());
 
             String sourceResolution = getVideoResolution(tempFile.toString(), userDetails);
@@ -51,7 +53,7 @@ public class UploadService {
 
             String originalFilename = getFileNameWithoutExtension(file);
             for (String resolution : validResolutions) {
-                if(!createResolutionCopy(tempFile.toString(), originalFilename, chunkIndex, sourceResolution, resolution, OUTPUT_DIR, userDetails)){
+                if(!processingService.encodeIntoMultipleResolutions(tempFile.toString(), originalFilename, sourceResolution, resolution, OUTPUT_DIR, userDetails)){
                     // Have to do something if any chunk fails to encode.
                 }
             }
@@ -104,56 +106,6 @@ public class UploadService {
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getValidResolutions()",e.getMessage());
             return null;
-        }
-    }
-
-    private boolean createResolutionCopy(String filePath, String originalFilename, Long chunkIndex, String sourceResolution, String resolution, String outputDir, JwtUserDetails userDetails) throws IOException, InterruptedException {
-        try {
-            String outputFileName = chunkIndex + "_" + originalFilename + "_" + resolution + ".mp4";
-            outputDir += "/"+resolution;
-            Path outputFilePath = Paths.get(outputDir, outputFileName);
-
-            Files.createDirectories(Paths.get(outputDir));
-
-            int targetHeight = Integer.parseInt(resolution.replace("p", ""));
-
-            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
-            int sourceWidth = Integer.parseInt(sourceResolution.split("x")[0]);
-
-            long sourceBitrate = Math.max(sourceHeight * sourceWidth * 70L / 1000, 1000L);
-
-            long targetBitrate = Math.max(sourceBitrate * targetHeight / sourceHeight, 500L);
-
-            String ffmpegPath = environment.getFfmpegPath();
-
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    ffmpegPath, "-i", filePath,
-                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p",
-                    "-c:v", "libx264", "-b:v", targetBitrate + "k", "-maxrate", targetBitrate + "k", "-bufsize", (targetBitrate * 2) + "k",
-                    "-preset", "fast", "-crf", "23",
-                    outputFilePath.toString()
-            );
-
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                log(userDetails.getT_mst_user_id(),"createResolutionCopy()","Process wait error.");
-                return false;
-            }
-
-            return true;
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"createResolutionCopy()",e.getMessage());
-            return false;
         }
     }
 

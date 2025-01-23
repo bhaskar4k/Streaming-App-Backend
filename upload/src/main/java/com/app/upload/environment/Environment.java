@@ -18,6 +18,8 @@ public class Environment {
             "1440p", 1440, "2160p", 2160, "4320p", 4320
     );
 
+    private int chunkSize = 5 * 1024 * 1024;
+
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
     private String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
 
@@ -52,6 +54,10 @@ public class Environment {
 
     public String getFfmpegPath() {
         return ffmpegPath;
+    }
+
+    public int getChunkSize() {
+        return chunkSize;
     }
 
     //#region Custom environment
