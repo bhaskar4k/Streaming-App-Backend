@@ -64,7 +64,7 @@ public class ProcessingService {
             }
 
             try {
-                if(splitFile(originalFilename,resolution,outputFilePath.toString(), outputDir+"/Chunks")){
+                if(splitFile(originalFilename,resolution,outputFilePath.toString(), outputDir+"/Chunks", userDetails)){
                     return true;
                 }else{
                     return false;
@@ -80,51 +80,84 @@ public class ProcessingService {
         }
     }
 
-    public boolean splitFile(String originalFilename, String resolution, String inputFilePath, String outputDirPath) throws IOException {
-        // Ensure output directory exists
-        File outputDir = new File(outputDirPath);
-        if (!outputDir.exists() && !outputDir.mkdirs()) {
-            throw new IOException("Failed to create output directory: " + outputDirPath);
-        }
-
-        // FFmpeg command
-        // Use `%03d` to create sequential chunk filenames
-        String outputFilePattern = outputDirPath + File.separator + "chunk_%03d_" + originalFilename + "_" + resolution + ".mp4";
-        String[] command = {
-                environment.getFfmpegPath(),
-                "-i", inputFilePath,             // Input file
-                "-c", "copy",                    // Copy codec (no re-encoding)
-                "-map", "0",                     // Map all streams from input
-                "-f", "segment",                 // Use segment format
-                "-fs", "5242880",                // Set chunk size to 5MB (5 × 1024 × 1024 bytes)
-                outputFilePattern                // Output file pattern
-        };
-
-        // Execute FFmpeg command
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        processBuilder.redirectErrorStream(true);
-        Process process = processBuilder.start();
-
-        // Capture FFmpeg output
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-        }
-
+    public boolean splitFile(String originalFilename, String resolution, String inputFilePath, String outputDirPath, JwtUserDetails userDetails) throws IOException {
         try {
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                throw new IOException("FFmpeg process failed with exit code " + exitCode);
+            File outputDir = new File(outputDirPath);
+            if (!outputDir.exists() && !outputDir.mkdirs()) {
+                throw new IOException("Failed to create output directory: " + outputDirPath);
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IOException("FFmpeg process was interrupted", e);
-        }
 
-        System.out.println("Video splitting completed.");
-        return true;
+            int targetBitrateKbps = getBitrateInKbps(inputFilePath, userDetails);
+            int chunkDurationSeconds = (5 * 1024 * 8) / targetBitrateKbps;
+
+            // FFmpeg command
+            String outputFilePattern = outputDirPath + File.separator + "chunk_%03d_" + originalFilename + "_" + resolution + ".mp4";
+            String[] command = {
+                    environment.getFfmpegPath(),
+                    "-i", inputFilePath,
+                    "-c", "copy",
+                    "-map", "0",
+                    "-f", "segment",
+                    "-segment_time", String.valueOf(chunkDurationSeconds),
+                    "-reset_timestamps", "1",
+                    outputFilePattern
+            };
+
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+
+            try {
+                int exitCode = process.waitFor();
+                if (exitCode != 0) {
+                    throw new IOException("FFmpeg process failed with exit code " + exitCode);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IOException("FFmpeg process was interrupted", e);
+            }
+
+            System.out.println("Video splitting completed.");
+            return true;
+        } catch (Exception e) {
+            log(userDetails.getT_mst_user_id(),"splitFile()",e.getMessage());
+            return false;
+        }
+    }
+
+    private Integer getBitrateInKbps(String inputFilePath, JwtUserDetails userDetails) throws IOException {
+        try {
+            String[] bitrateCommand = {
+                    environment.getFfmpegPath(),
+                    "-i", inputFilePath,
+                    "-hide_banner"
+            };
+            ProcessBuilder processBuilder = new ProcessBuilder(bitrateCommand);
+            Process process = processBuilder.start();
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains("bitrate:")) {
+                        String[] parts = line.split("bitrate:");
+                        String bitratePart = parts[1].trim().split(" ")[0];
+                        return Integer.parseInt(bitratePart.replace("kb/s", "").trim());
+                    }
+                }
+            }
+
+            throw new IOException("Failed to determine video bitrate.");
+        } catch (Exception e) {
+            log(userDetails.getT_mst_user_id(),"getBitrateInKbps()",e.getMessage());
+            return 0;
+        }
     }
 
 
