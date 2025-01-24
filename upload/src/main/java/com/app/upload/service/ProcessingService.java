@@ -30,7 +30,7 @@ public class ProcessingService {
             String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(userDetails, VIDEO_GUID) + File.separator + resolution;
             Files.createDirectories(Paths.get(OUTPUT_DIR));
 
-            String outputFileName = originalFilename + "_" + resolution + ".mp4";
+            String outputFileName = originalFilename + ".mp4";
             Path outputFilePath = Paths.get(OUTPUT_DIR, outputFileName);
 
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
@@ -94,7 +94,7 @@ public class ProcessingService {
             int chunkDurationSeconds = (5 * 1024 * 8) / targetBitrateKbps;
 
             // FFmpeg command
-            String outputFilePattern = outputDirPath + File.separator + "chunk_%03d_" + originalFilename + "_" + resolution + ".mp4";
+            String outputFilePattern = outputDirPath + File.separator + "%06d.mp4";
             String[] command = {
                     environment.getFfmpegPath(),
                     "-i", inputFilePath,

@@ -17,7 +17,7 @@ public class Util {
 
     public String getUserSpecifiedFolder(JwtUserDetails userDetails, String uniqueID){
         try {
-            return "/UserID-" + userDetails.getT_mst_user_id() + "/VideoGUID-" + uniqueID;
+            return "/UserID-" + userDetails.getT_mst_user_id() + "/" + uniqueID;
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
             return null;
