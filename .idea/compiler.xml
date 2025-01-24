@@ -14,12 +14,19 @@
         <module name="dashboard" />
         <module name="authentication" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="processing" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="authentication" options="-parameters" />
       <module name="dashboard" options="-parameters" />
+      <module name="processing" options="-parameters" />
       <module name="streaming" options="-parameters" />
       <module name="upload" options="-parameters" />
     </option>

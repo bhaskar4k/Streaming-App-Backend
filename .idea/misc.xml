@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/dashboard/pom.xml" />
         <option value="$PROJECT_DIR$/streaming/pom.xml" />
         <option value="$PROJECT_DIR$/authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/processing/pom.xml" />
       </list>
     </option>
   </component>
