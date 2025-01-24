@@ -1,8 +1,12 @@
 package com.app.upload.service;
 
+import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
+import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
+import com.app.upload.repository.TLogExceptionsRepository;
+import com.app.upload.repository.TVideoInfoRepository;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,18 +20,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @Component
 public class UploadService {
     private Environment environment;
+    private Util util;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    @Autowired
+    private TVideoInfoRepository tVideoInfoRepository;
     private ProcessingService processingService;
 
     public UploadService(){
         this.environment = new Environment();
+        this.util = new Util();
         this.processingService = new ProcessingService();
     }
 
@@ -37,28 +46,43 @@ public class UploadService {
         }
 
         try {
-            String ORIGINAL_FILE = environment.getOriginalVideoPath()+getUserSpecifiedFolder(userDetails);
-            String OUTPUT_DIR = environment.getEncodedVideoPath()+getUserSpecifiedFolder(userDetails);
+            String VIDEO_GUID = util.getrandomGUID();
+            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(userDetails,VIDEO_GUID);
+            Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
-            Files.createDirectories(Paths.get(ORIGINAL_FILE));
-            Files.createDirectories(Paths.get(OUTPUT_DIR));
+            long fileSize = file.getSize();
+            String originalFilenameWithoutExtension = getFileNameWithoutExtension(file);
+            String originalFilename = file.getOriginalFilename();
 
-            Path tempFile = Paths.get(ORIGINAL_FILE, "Original_" + file.getOriginalFilename());
-            Files.write(tempFile, file.getBytes());
-
-            String sourceResolution = getVideoResolution(tempFile.toString(), userDetails);
-
-            List<String> resolutions = environment.getResolutions();
-            List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
-
-            String originalFilename = getFileNameWithoutExtension(file);
-            for (String resolution : validResolutions) {
-                if(!processingService.encodeIntoMultipleResolutions(tempFile.toString(), originalFilename, sourceResolution, resolution, OUTPUT_DIR, userDetails)){
-                    // Have to do something if any chunk fails to encode.
-                }
+            String fileExtension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             }
 
-            return true;
+            Path originalFile = Paths.get(ORIGINAL_FILE_DIR, originalFilename);
+            Files.write(originalFile, file.getBytes());
+
+            String sourceResolution = getVideoResolution(originalFile.toString(), userDetails);
+
+            TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, userDetails.getT_mst_user_id());
+
+            if(saveVideoDetails(tVideoInfo)){
+                List<String> resolutions = environment.getResolutions();
+                List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
+
+                for (String resolution : validResolutions) {
+                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFile.toString(), originalFilenameWithoutExtension, sourceResolution, resolution, userDetails)){
+                        // Have to do something if any resolution fails to encode.
+                        // Rollback the original file save
+                    }
+                }
+
+                return true;
+            }else{
+                // Rollback the original file save
+
+                return false;
+            }
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"uploadAndProcessVideo()",e.getMessage());
             return false;
@@ -71,15 +95,6 @@ public class UploadService {
             return originalFilename;
         }
         return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
-    }
-
-    private String getUserSpecifiedFolder(JwtUserDetails userDetails){
-        try {
-            return "/UserId-"+userDetails.getT_mst_user_id()+"/VideoId-2";
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
-            return null;
-        }
     }
 
     private String getVideoResolution(String filePath, JwtUserDetails userDetails) throws Exception {
@@ -109,6 +124,15 @@ public class UploadService {
         }
     }
 
+    public boolean saveVideoDetails(TVideoInfo video) {
+        try {
+            tVideoInfoRepository.save(video);
+            return true;
+        } catch (Exception e) {
+            log(video.getT_mst_user_id(),"saveVideoDetails()",e.getMessage());
+            return false;
+        }
+    }
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

@@ -1,5 +1,6 @@
 package com.app.upload.service;
 
+import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
@@ -12,25 +13,27 @@ import java.nio.file.Paths;
 
 public class ProcessingService {
     private Environment environment;
+    private Util util;
     @Autowired
     private LogExceptionsService logExceptionsService;
     private int CHUNK_SIZE;
 
     public ProcessingService(){
         this.environment = new Environment();
+        this.util = new Util();
         this.CHUNK_SIZE = environment.getChunkSize();
     }
 
-    public boolean encodeIntoMultipleResolutions(String filePath, String originalFilename, String sourceResolution, String resolution, String outputDir, JwtUserDetails userDetails) throws IOException, InterruptedException {
-        try {
-            outputDir += "/"+resolution;
-            String outputFileName = originalFilename + "_" + resolution + ".mp4";
 
-            Path outputFilePath = Paths.get(outputDir, outputFileName);
-            Files.createDirectories(Paths.get(outputDir));
+    public boolean encodeIntoMultipleResolutions(String VIDEO_GUID, String filePath, String originalFilename, String sourceResolution, String resolution, JwtUserDetails userDetails) throws IOException, InterruptedException {
+        try {
+            String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(userDetails, VIDEO_GUID) + File.separator + resolution;
+            Files.createDirectories(Paths.get(OUTPUT_DIR));
+
+            String outputFileName = originalFilename + "_" + resolution + ".mp4";
+            Path outputFilePath = Paths.get(OUTPUT_DIR, outputFileName);
 
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
-
             int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
             int sourceWidth = Integer.parseInt(sourceResolution.split("x")[0]);
 
@@ -64,7 +67,7 @@ public class ProcessingService {
             }
 
             try {
-                if(splitFile(originalFilename,resolution,outputFilePath.toString(), outputDir+"/Chunks", userDetails)){
+                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR+"/Chunks", userDetails)){
                     return true;
                 }else{
                     return false;
