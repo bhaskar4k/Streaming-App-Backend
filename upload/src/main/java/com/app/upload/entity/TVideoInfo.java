@@ -22,7 +22,7 @@ public class TVideoInfo {
     @Column(nullable = false, columnDefinition = "int default 1")
     private int is_active = 1;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime trans_datetime;
+    private LocalDateTime trans_datetime = LocalDateTime.now();
 
     public TVideoInfo(String guid, String filename, Long size, String extension, String source_resolution, Long t_mst_user_id) {
         this.guid = guid;

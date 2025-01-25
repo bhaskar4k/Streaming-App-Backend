@@ -90,10 +90,34 @@ public class ProcessingService {
                 throw new IOException("Failed to create output directory: " + outputDirPath);
             }
 
-            int targetBitrateKbps = getBitrateInKbps(inputFilePath, userDetails);
-            int chunkDurationSeconds = (5 * 1024 * 8) / targetBitrateKbps;
+            String[] probeDurationCommand = {
+                    environment.getFfprobePath(),
+                    "-v", "error",
+                    "-show_entries", "format=duration",
+                    "-of", "default=noprint_wrappers=1:nokey=1",
+                    inputFilePath
+            };
 
-            // FFmpeg command
+            ProcessBuilder probeBuilder = new ProcessBuilder(probeDurationCommand);
+            probeBuilder.redirectErrorStream(true);
+            Process probeProcess = probeBuilder.start();
+
+            String duration;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(probeProcess.getInputStream()))) {
+                duration = reader.readLine().trim();
+            }
+
+            int exitCode = probeProcess.waitFor();
+            if (exitCode != 0) {
+                throw new IOException("FFprobe process failed to get video duration");
+            }
+
+            double totalDuration = Double.parseDouble(duration);
+            int chunkSize = 5;
+            int totalChunks = (int) Math.ceil(totalDuration / chunkSize);
+
+            chunkSize = (int) Math.ceil(totalDuration / Math.ceil(totalDuration / chunkSize));
+
             String outputFilePattern = outputDirPath + File.separator + "%06d.mp4";
             String[] command = {
                     environment.getFfmpegPath(),
@@ -101,7 +125,8 @@ public class ProcessingService {
                     "-c", "copy",
                     "-map", "0",
                     "-f", "segment",
-                    "-segment_time", String.valueOf(chunkDurationSeconds),
+                    "-segment_time", String.valueOf(chunkSize),
+                    "-segment_start_number", "0",
                     "-reset_timestamps", "1",
                     outputFilePattern
             };
@@ -118,7 +143,7 @@ public class ProcessingService {
             }
 
             try {
-                int exitCode = process.waitFor();
+                exitCode = process.waitFor();
                 if (exitCode != 0) {
                     throw new IOException("FFmpeg process failed with exit code " + exitCode);
                 }
@@ -127,39 +152,11 @@ public class ProcessingService {
                 throw new IOException("FFmpeg process was interrupted", e);
             }
 
-            System.out.println("Video splitting completed.");
+            System.out.println("Video splitting completed. Total chunks: " + totalChunks);
             return true;
         } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"splitFile()",e.getMessage());
+            log(userDetails.getT_mst_user_id(), "splitFile()", e.getMessage());
             return false;
-        }
-    }
-
-    private Integer getBitrateInKbps(String inputFilePath, JwtUserDetails userDetails) throws IOException {
-        try {
-            String[] bitrateCommand = {
-                    environment.getFfmpegPath(),
-                    "-i", inputFilePath,
-                    "-hide_banner"
-            };
-            ProcessBuilder processBuilder = new ProcessBuilder(bitrateCommand);
-            Process process = processBuilder.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.contains("bitrate:")) {
-                        String[] parts = line.split("bitrate:");
-                        String bitratePart = parts[1].trim().split(" ")[0];
-                        return Integer.parseInt(bitratePart.replace("kb/s", "").trim());
-                    }
-                }
-            }
-
-            throw new IOException("Failed to determine video bitrate.");
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getBitrateInKbps()",e.getMessage());
-            return 0;
         }
     }
 
