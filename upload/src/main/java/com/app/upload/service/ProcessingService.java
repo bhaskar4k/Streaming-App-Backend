@@ -43,10 +43,16 @@ public class ProcessingService {
             String ffmpegPath = environment.getFfmpegPath();
 
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    ffmpegPath, "-i", filePath,
-                    "-vf", "scale=-2:" + targetHeight + ",format=yuv420p",
-                    "-c:v", "libx264", "-b:v", targetBitrate + "k", "-maxrate", targetBitrate + "k", "-bufsize", (targetBitrate * 2) + "k",
-                    "-preset", "fast", "-crf", "23",
+                    ffmpegPath,
+                    "-i", filePath,
+                    "-vf", "scale=-2:" + targetHeight + "" +
+                    ",format=yuv420p",
+                    "-c:v", "libx264",
+                    "-b:v", targetBitrate + "k",
+                    "-maxrate", targetBitrate + "k",
+                    "-bufsize", (targetBitrate * 2) + "k",
+                    "-preset", "fast",
+                    "-crf", "23",
                     outputFilePath.toString()
             );
 
@@ -67,7 +73,7 @@ public class ProcessingService {
             }
 
             try {
-                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR+"/Chunks", userDetails)){
+                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR + File.separator + "Chunks", userDetails)){
                     return true;
                 }else{
                     return false;
@@ -116,19 +122,18 @@ public class ProcessingService {
             int chunkSize = 5;
             int totalChunks = (int) Math.ceil(totalDuration / chunkSize);
 
-            chunkSize = (int) Math.ceil(totalDuration / Math.ceil(totalDuration / chunkSize));
+            String outputFileName = outputDirPath + File.separator + "%06d.mp4";
 
-            String outputFilePattern = outputDirPath + File.separator + "%06d.mp4";
             String[] command = {
                     environment.getFfmpegPath(),
                     "-i", inputFilePath,
                     "-c", "copy",
                     "-map", "0",
                     "-f", "segment",
-                    "-segment_time", String.valueOf(chunkSize),
+                    "-segment_time", "5",
                     "-segment_start_number", "0",
                     "-reset_timestamps", "1",
-                    outputFilePattern
+                    outputFileName
             };
 
             ProcessBuilder processBuilder = new ProcessBuilder(command);

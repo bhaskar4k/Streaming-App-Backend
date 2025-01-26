@@ -4,6 +4,8 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
 import java.util.UUID;
 
 public class Util {
@@ -17,7 +19,7 @@ public class Util {
 
     public String getUserSpecifiedFolder(JwtUserDetails userDetails, String uniqueID){
         try {
-            return "/UserID-" + userDetails.getT_mst_user_id() + "/" + uniqueID;
+            return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
             return null;

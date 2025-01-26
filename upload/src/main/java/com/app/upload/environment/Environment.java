@@ -1,5 +1,6 @@
 package com.app.upload.environment;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,8 @@ public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
 
-    private String originalVideoPath = "E:/Project/Streaming-App-Source-Video";
-    private String encodedVideoPath = "E:/Project/Streaming-App-Resized-Video";
+    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
+    private String encodedVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Resized-Video";
 
     private List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
     private Map<String, Integer> resolutionHeightMap = Map.of(

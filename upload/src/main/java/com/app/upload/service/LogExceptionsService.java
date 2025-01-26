@@ -16,7 +16,6 @@ public class LogExceptionsService {
             tLogExceptionsRepository.save(log);
             return true;
         } catch (Exception e) {
-            // Log Exception
             return false;
         }
     }
