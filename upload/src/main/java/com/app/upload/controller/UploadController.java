@@ -1,26 +1,16 @@
 package com.app.upload.controller;
 
-import com.app.authentication.model.ValidatedUserDetails;
 import com.app.upload.common.CommonReturn;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
-import com.app.upload.model.TokenRequest;
-import com.app.upload.model.VideoChunkInput;
 import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/upload")

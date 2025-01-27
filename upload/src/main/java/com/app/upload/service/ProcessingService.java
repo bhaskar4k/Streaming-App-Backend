@@ -4,6 +4,7 @@ import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
+import com.app.upload.python.PythonInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
@@ -16,12 +17,12 @@ public class ProcessingService {
     private Util util;
     @Autowired
     private LogExceptionsService logExceptionsService;
-    private int CHUNK_SIZE;
+    private final PythonInvoker pythonInvoker;
 
     public ProcessingService(){
         this.environment = new Environment();
         this.util = new Util();
-        this.CHUNK_SIZE = environment.getChunkSize();
+        this.pythonInvoker = new PythonInvoker();
     }
 
 
@@ -73,12 +74,18 @@ public class ProcessingService {
             }
 
             try {
-                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR + File.separator + "Chunks", userDetails)){
-                    return true;
-                }else{
-                    return false;
-                }
-            } catch (IOException e) {
+                String pythonScriptPath = "E:\\Project\\Streaming-App\\upload\\src\\main\\java\\com\\app\\upload\\python\\VideoSplitter.py";
+                String videoFilePath = "E:\\Project\\Vid\\Amkash.mp4";
+                String outputFolderPath = "E:\\Project\\Vid\\JOD";                 // Chunk duration in seconds
+
+                pythonInvoker.runPythonScript(pythonScriptPath, videoFilePath, outputFolderPath);
+
+//                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR + File.separator + "Chunks", userDetails)){
+//                    return true;
+//                }else{
+//                    return false;
+//                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
