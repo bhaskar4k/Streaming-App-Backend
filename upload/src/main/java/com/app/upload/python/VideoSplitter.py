@@ -26,7 +26,6 @@ def split_video_into_chunks(filepath, folderpath, chunk_duration):
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    # Command-line arguments: filepath, folderpath, chunk_duration
     filepath = sys.argv[1]
     folderpath = sys.argv[2]
     chunk_duration = 5

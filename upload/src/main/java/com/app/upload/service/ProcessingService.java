@@ -75,99 +75,17 @@ public class ProcessingService {
 
             try {
                 String pythonScriptPath = "E:\\Project\\Streaming-App\\upload\\src\\main\\java\\com\\app\\upload\\python\\VideoSplitter.py";
-                String videoFilePath = "E:\\Project\\Vid\\Amkash.mp4";
-                String outputFolderPath = "E:\\Project\\Vid\\JOD";                 // Chunk duration in seconds
+                String videoFilePath = outputFilePath.toString();
+                String outputFolderPath = OUTPUT_DIR + File.separator + "Chunks";
 
-                pythonInvoker.runPythonScript(pythonScriptPath, videoFilePath, outputFolderPath);
-
-//                if(splitFile(originalFilename,resolution,outputFilePath.toString(), OUTPUT_DIR + File.separator + "Chunks", userDetails)){
-//                    return true;
-//                }else{
-//                    return false;
-//                }
+                return pythonInvoker.runPythonScript(userDetails, pythonScriptPath, videoFilePath, outputFolderPath);
             } catch (Exception e) {
-                e.printStackTrace();
+                log(userDetails.getT_mst_user_id(),"createResolutionCopy()",e.getMessage());
             }
 
             return false;
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"createResolutionCopy()",e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean splitFile(String originalFilename, String resolution, String inputFilePath, String outputDirPath, JwtUserDetails userDetails) throws IOException {
-        try {
-            File outputDir = new File(outputDirPath);
-            if (!outputDir.exists() && !outputDir.mkdirs()) {
-                throw new IOException("Failed to create output directory: " + outputDirPath);
-            }
-
-            String[] probeDurationCommand = {
-                    environment.getFfprobePath(),
-                    "-v", "error",
-                    "-show_entries", "format=duration",
-                    "-of", "default=noprint_wrappers=1:nokey=1",
-                    inputFilePath
-            };
-
-            ProcessBuilder probeBuilder = new ProcessBuilder(probeDurationCommand);
-            probeBuilder.redirectErrorStream(true);
-            Process probeProcess = probeBuilder.start();
-
-            String duration;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(probeProcess.getInputStream()))) {
-                duration = reader.readLine().trim();
-            }
-
-            int exitCode = probeProcess.waitFor();
-            if (exitCode != 0) {
-                throw new IOException("FFprobe process failed to get video duration");
-            }
-
-            double totalDuration = Double.parseDouble(duration);
-            int chunkSize = 5;
-            int totalChunks = (int) Math.ceil(totalDuration / chunkSize);
-
-            String outputFileName = outputDirPath + File.separator + "%06d.mp4";
-
-            String[] command = {
-                    environment.getFfmpegPath(),
-                    "-i", inputFilePath,
-                    "-c", "copy",
-                    "-map", "0",
-                    "-f", "segment",
-                    "-segment_time", "5",
-                    "-segment_start_number", "0",
-                    "-reset_timestamps", "1",
-                    outputFileName
-            };
-
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-
-            try {
-                exitCode = process.waitFor();
-                if (exitCode != 0) {
-                    throw new IOException("FFmpeg process failed with exit code " + exitCode);
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IOException("FFmpeg process was interrupted", e);
-            }
-
-            System.out.println("Video splitting completed. Total chunks: " + totalChunks);
-            return true;
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(), "splitFile()", e.getMessage());
             return false;
         }
     }
