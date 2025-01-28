@@ -4,6 +4,7 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.UUID;
@@ -26,6 +27,24 @@ public class Util {
         }
     }
 
+    public String getFileNameWithoutExtension(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.contains(".")) {
+            return originalFilename;
+        }
+        return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
+    }
+
+    public String getFileExtension(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+
+        String fileExtension = "";
+        if (originalFilename.contains(".")) {
+            fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        }
+
+        return fileExtension;
+    }
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

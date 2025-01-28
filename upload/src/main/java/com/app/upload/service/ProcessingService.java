@@ -26,12 +26,11 @@ public class ProcessingService {
     }
 
 
-    public boolean encodeIntoMultipleResolutions(String VIDEO_GUID, String filePath, String originalFilename, String sourceResolution, String resolution, JwtUserDetails userDetails) throws IOException, InterruptedException {
+    public boolean encodeIntoMultipleResolutions(String VIDEO_GUID, String originalFilePath, String outputFileName, String sourceResolution, String resolution, JwtUserDetails userDetails) throws IOException, InterruptedException {
         try {
             String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(userDetails, VIDEO_GUID) + File.separator + resolution;
             Files.createDirectories(Paths.get(OUTPUT_DIR));
 
-            String outputFileName = originalFilename + ".mp4";
             Path outputFilePath = Paths.get(OUTPUT_DIR, outputFileName);
 
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
@@ -45,7 +44,7 @@ public class ProcessingService {
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     ffmpegPath,
-                    "-i", filePath,
+                    "-i", originalFilePath,
                     "-vf", "scale=-2:" + targetHeight + "" +
                     ",format=yuv420p",
                     "-c:v", "libx264",

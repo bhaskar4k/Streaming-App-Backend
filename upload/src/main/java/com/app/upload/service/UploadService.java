@@ -52,18 +52,17 @@ public class UploadService {
             Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
             long fileSize = file.getSize();
-            String originalFilenameWithoutExtension = getFileNameWithoutExtension(file);
+            String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file);
+            String fileExtension = util.getFileExtension(file);
             String originalFilename = file.getOriginalFilename();
 
-            String fileExtension = "";
-            if (originalFilename != null && originalFilename.contains(".")) {
-                fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-            }
+            originalFilename = originalFilename.replace(" ","");
+            originalFilenameWithoutExtension = originalFilenameWithoutExtension.replace(" ","");
 
-            Path originalFile = Paths.get(ORIGINAL_FILE_DIR, originalFilename);
-            Files.write(originalFile, file.getBytes());
+            Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, originalFilename);
+            Files.write(originalFilePath, file.getBytes());
 
-            String sourceResolution = getVideoResolution(originalFile.toString(), userDetails);
+            String sourceResolution = getVideoResolution(originalFilePath.toString(), userDetails);
 
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, userDetails.getT_mst_user_id());
 
@@ -72,7 +71,7 @@ public class UploadService {
                 List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
 
                 for (String resolution : validResolutions) {
-                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFile.toString(), originalFilenameWithoutExtension, sourceResolution, resolution, userDetails)){
+                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFilePath.toString(), originalFilename, sourceResolution, resolution, userDetails)){
                         // Have to do something if any resolution fails to encode.
                         // Rollback the original file save
                     }
@@ -90,13 +89,7 @@ public class UploadService {
         }
     }
 
-    public String getFileNameWithoutExtension(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || !originalFilename.contains(".")) {
-            return originalFilename;
-        }
-        return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
-    }
+
 
     private String getVideoResolution(String filePath, JwtUserDetails userDetails) throws Exception {
         try {

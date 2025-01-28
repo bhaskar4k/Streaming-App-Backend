@@ -14,7 +14,7 @@ def split_video_into_chunks(filepath, folderpath, chunk_duration):
 
         while start_time < video_duration:
             end_time = min(start_time + chunk_duration, video_duration)
-            chunk_filename = os.path.join(folderpath, f"{file_basename}_chunk{chunk_index}.mp4")
+            chunk_filename = os.path.join(folderpath, f"{chunk_index}.mp4")
             video.subclipped(start_time, end_time).write_videofile(chunk_filename, codec="libx264", audio_codec="aac")
             start_time += chunk_duration
             chunk_index += 1
