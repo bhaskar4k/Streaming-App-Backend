@@ -52,12 +52,11 @@ public class UploadService {
             Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
             long fileSize = file.getSize();
-            String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file);
             String fileExtension = util.getFileExtension(file);
-            String originalFilename = file.getOriginalFilename();
 
+            String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file);
+            String originalFilename = file.getOriginalFilename();
             originalFilename = originalFilename.replace(" ","");
-            originalFilenameWithoutExtension = originalFilenameWithoutExtension.replace(" ","");
 
             Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, originalFilename);
             Files.write(originalFilePath, file.getBytes());
