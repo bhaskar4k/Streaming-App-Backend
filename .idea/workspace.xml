@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/python/VideoSplitter.py" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/python/VideoSplitter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ProcessingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/AuthService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,11 +56,11 @@
       <recent name="E:\Project\Streaming-App\upload\src\main\java\com\app\upload\common" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.app.upload.security" />
       <recent name="com.app.upload.service" />
       <recent name="com.app.upload.repository" />
       <recent name="entity" />
       <recent name="com.app.upload.environment" />
-      <recent name="com.app.upload.entity" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -165,5 +163,21 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

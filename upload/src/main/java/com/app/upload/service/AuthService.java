@@ -6,23 +6,14 @@ import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.TokenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -64,6 +55,26 @@ public class AuthService {
         } catch (Exception e) {
             log(null,"validateToken()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    public JwtUserDetails getAuthenticatedUserFromContext() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()) {
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof JwtUserDetails) {
+                    return (JwtUserDetails) principal;
+                }else{
+                    return null;
+                }
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            log(-1L,"getAuthenticatedUserFromContext()",e.getMessage());
+            return null;
         }
     }
 
