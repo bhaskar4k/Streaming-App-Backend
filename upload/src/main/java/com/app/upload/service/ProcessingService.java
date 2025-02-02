@@ -73,7 +73,7 @@ public class ProcessingService {
             }
 
             try {
-                String pythonScriptPath = "E:\\Project\\Streaming-App\\upload\\src\\main\\java\\com\\app\\upload\\python\\VideoSplitter.py";
+                String pythonScriptPath = environment.getPythonScriptPath();
                 String videoFilePath = outputFilePath.toString();
                 String outputFolderPath = OUTPUT_DIR + File.separator + "Chunks";
 
