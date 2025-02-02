@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ProcessingService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +67,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Authentication">
+  <component name="RunManager" selected="Application.RabbitMQ">
     <configuration name="Authentication" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="23" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -97,6 +95,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RabbitMQ" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="23" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.app.rabbitmq.RabbitmqApplication" />
+      <module name="rabbitmq" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Streaming" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="23" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -117,9 +124,10 @@
     </configuration>
     <list>
       <item itemvalue="Application.Authentication" />
+      <item itemvalue="Application.Upload" />
+      <item itemvalue="Application.RabbitMQ" />
       <item itemvalue="Application.Processing" />
       <item itemvalue="Application.Dashboard" />
-      <item itemvalue="Application.Upload" />
       <item itemvalue="Application.Streaming" />
     </list>
   </component>

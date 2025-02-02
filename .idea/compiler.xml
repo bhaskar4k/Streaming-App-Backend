@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="processing" />
+        <module name="rabbitmq" />
       </profile>
       <profile name="Annotation profile for upload" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,6 +28,7 @@
       <module name="authentication" options="-parameters" />
       <module name="dashboard" options="-parameters" />
       <module name="processing" options="-parameters" />
+      <module name="rabbitmq" options="-parameters" />
       <module name="streaming" options="-parameters" />
       <module name="upload" options="-parameters" />
     </option>
