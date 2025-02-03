@@ -6,15 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/processing/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/python/PythonInvoker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/python/VideoSplitter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ProcessingService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,31 +177,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
-          <line>56</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

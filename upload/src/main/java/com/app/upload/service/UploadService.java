@@ -33,13 +33,11 @@ public class UploadService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private TVideoInfoRepository tVideoInfoRepository;
-    private ProcessingService processingService;
     private RabbitQueuePublish rabbitQueuePublish;
 
     public UploadService(){
         this.environment = new Environment();
         this.util = new Util();
-        this.processingService = new ProcessingService();
         this.rabbitQueuePublish = new RabbitQueuePublish();
     }
 
@@ -71,18 +69,6 @@ public class UploadService {
             if(saveVideoDetails(tVideoInfo)){
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),originalFilename,userDetails.getT_mst_user_id());
                 return rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
-
-//                List<String> resolutions = environment.getResolutions();
-//                List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
-//
-//                for (String resolution : validResolutions) {
-//                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFilePath.toString(), originalFilename, sourceResolution, resolution, userDetails)){
-//                        // Have to do something if any resolution fails to encode.
-//                        // Rollback the original file save
-//                    }
-//                }
-//
-//                return true;
             }else{
                 // Rollback the original file save
 
@@ -93,8 +79,6 @@ public class UploadService {
             return false;
         }
     }
-
-
 
     private String getVideoResolution(String filePath, JwtUserDetails userDetails) throws Exception {
         try {
@@ -107,18 +91,6 @@ public class UploadService {
             }
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getVideoResolution()",e.getMessage());
-            return null;
-        }
-    }
-
-    private List<String> getValidResolutions(String sourceResolution, List<String> resolutions, JwtUserDetails userDetails) {
-        try {
-            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
-            Map<String, Integer> resolutionHeightMap = environment.getResolutionHeightMap();
-
-            return resolutions.stream().filter(res -> resolutionHeightMap.get(res) <= sourceHeight).collect(Collectors.toList());
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getValidResolutions()",e.getMessage());
             return null;
         }
     }
