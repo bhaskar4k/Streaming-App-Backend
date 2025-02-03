@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/upload/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

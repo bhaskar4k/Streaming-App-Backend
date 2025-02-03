@@ -19,7 +19,7 @@ public class Publisher {
         this.environment = new Environment();
     }
 
-    @PostMapping("/process")
+    @PostMapping("/")
     public String publishIntoQueue(@RequestBody String filePath){
         template.convertAndSend(environment.getExchangeName(),environment.getRoutingKey(),filePath);
         return "Places in queue";
