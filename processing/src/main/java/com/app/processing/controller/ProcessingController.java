@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/processing")
 public class ProcessingController {
+    @Autowired
     private ProcessingService processingService;
-
-    public ProcessingController(){
-        this.processingService = new ProcessingService();
-    }
 
     @PostMapping("/process_video")
     public CommonReturn<Boolean> process_video(@RequestBody Video video) {

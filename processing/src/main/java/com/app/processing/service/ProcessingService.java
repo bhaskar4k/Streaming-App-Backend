@@ -6,6 +6,8 @@ import com.app.processing.environment.Environment;
 import com.app.processing.model.Video;
 import com.app.processing.python.PythonInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
+@Service
 public class ProcessingService {
     private Environment environment;
     private Util util;
