@@ -1,6 +1,8 @@
 package com.app.rabbitmq.publisher;
 
+import com.app.rabbitmq.common.CommonReturn;
 import com.app.rabbitmq.environment.Environment;
+import com.app.rabbitmq.model.Video;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +21,9 @@ public class Publisher {
         this.environment = new Environment();
     }
 
-    @PostMapping("/")
-    public String publishIntoQueue(@RequestBody String filePath){
-        template.convertAndSend(environment.getExchangeName(),environment.getRoutingKey(),filePath);
-        return "Places in queue";
+    @PostMapping("/put_in_queue")
+    public CommonReturn<Boolean> publishIntoQueue(@RequestBody Video video){
+        template.convertAndSend(environment.getExchangeName(),environment.getRoutingKey(),video);
+        return CommonReturn.success("placed in queue", true);
     }
 }

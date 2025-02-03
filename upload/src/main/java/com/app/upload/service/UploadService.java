@@ -5,7 +5,8 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
-import com.app.upload.repository.TLogExceptionsRepository;
+import com.app.upload.model.Video;
+import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TVideoInfoRepository;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,17 @@ public class UploadService {
     @Autowired
     private TVideoInfoRepository tVideoInfoRepository;
     private ProcessingService processingService;
+    private RabbitQueuePublish rabbitQueuePublish;
 
     public UploadService(){
         this.environment = new Environment();
         this.util = new Util();
         this.processingService = new ProcessingService();
+        this.rabbitQueuePublish = new RabbitQueuePublish();
     }
 
 
-    public boolean uploadAndProcessVideo(MultipartFile file, String fileId, JwtUserDetails userDetails) {
+    public Boolean uploadAndProcessVideo(MultipartFile file, String fileId, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return false;
         }
@@ -66,17 +69,20 @@ public class UploadService {
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, userDetails.getT_mst_user_id());
 
             if(saveVideoDetails(tVideoInfo)){
-                List<String> resolutions = environment.getResolutions();
-                List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
+                Video video = new Video(VIDEO_GUID,originalFilePath.toString(),originalFilename,userDetails.getT_mst_user_id());
+                return rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
 
-                for (String resolution : validResolutions) {
-                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFilePath.toString(), originalFilename, sourceResolution, resolution, userDetails)){
-                        // Have to do something if any resolution fails to encode.
-                        // Rollback the original file save
-                    }
-                }
-
-                return true;
+//                List<String> resolutions = environment.getResolutions();
+//                List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, userDetails);
+//
+//                for (String resolution : validResolutions) {
+//                    if(!processingService.encodeIntoMultipleResolutions(VIDEO_GUID, originalFilePath.toString(), originalFilename, sourceResolution, resolution, userDetails)){
+//                        // Have to do something if any resolution fails to encode.
+//                        // Rollback the original file save
+//                    }
+//                }
+//
+//                return true;
             }else{
                 // Rollback the original file save
 

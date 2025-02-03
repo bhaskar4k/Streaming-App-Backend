@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
-    private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
 
     // Desktop
 //    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
@@ -29,13 +28,13 @@ public class Environment {
 
     // Desktop
 //    private String pythonScriptPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App" + File.separator +
-//            "upload" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-//            "com" + File.separator + "app" + File.separator + "upload" + File.separator + "python" + File.separator + "VideoSplitter.py";
+//            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
+//            "com" + File.separator + "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
     // Laptop
-    private String pythonScriptPath = "D:" + File.separator + "Streaming-App" + File.separator + "upload" + File.separator +
+    private String pythonScriptPath = "D:" + File.separator + "Streaming-App" + File.separator + "processing" + File.separator +
             "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator +
-            "app" + File.separator + "upload" + File.separator + "python" + File.separator + "VideoSplitter.py";
+            "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
 
     public List<String> getAllowedOrigins() {
@@ -56,10 +55,6 @@ public class Environment {
 
     public String getFfprobePath() {
         return ffprobePath;
-    }
-
-    public String getAuthServiceUrl() {
-        return authServiceUrl;
     }
 
     public Map<String, Integer> getResolutionHeightMap() {

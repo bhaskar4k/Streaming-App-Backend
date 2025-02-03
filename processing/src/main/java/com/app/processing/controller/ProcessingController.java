@@ -2,15 +2,25 @@ package com.app.processing.controller;
 
 
 import com.app.processing.common.CommonReturn;
+import com.app.processing.model.Video;
+import com.app.processing.service.ProcessingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/processing")
 public class ProcessingController {
-    @PostMapping("/create_multiple_resolutions_of_video")
-    public CommonReturn<Boolean> create_multiple_resolutions_of_video() {
+    private ProcessingService processingService;
+
+    public ProcessingController(){
+        this.processingService = new ProcessingService();
+    }
+
+    @PostMapping("/process_video")
+    public CommonReturn<Boolean> process_video(@RequestBody Video video) {
         try {
-            return CommonReturn.error(400,"Video process done.");
+            boolean value = processingService.encodeVideo(video);
+            return CommonReturn.success("OK",value);
         } catch (Exception e) {
             return CommonReturn.error(400,"Internal Server Error.");
         }

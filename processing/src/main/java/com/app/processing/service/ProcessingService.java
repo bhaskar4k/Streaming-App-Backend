@@ -3,6 +3,7 @@ package com.app.processing.service;
 import com.app.processing.common.Util;
 import com.app.processing.entity.TLogExceptions;
 import com.app.processing.environment.Environment;
+import com.app.processing.model.Video;
 import com.app.processing.python.PythonInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +11,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProcessingService {
     private Environment environment;
@@ -24,13 +28,29 @@ public class ProcessingService {
         this.pythonInvoker = new PythonInvoker();
     }
 
+    public boolean encodeVideo(Video video) throws Exception {
+        String sourceResolution = getVideoResolution(video.getOriginalFilePath(), video.getTMstUserId());
 
-    public boolean encodeIntoMultipleResolutions(String VIDEO_GUID, String originalFilePath, String outputFileName, String sourceResolution, String resolution, long t_mst_user_id) throws IOException, InterruptedException {
+        List<String> resolutions = environment.getResolutions();
+        List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, video.getTMstUserId());
+
+        for (String resolution : validResolutions) {
+            if(!encodeIntoMultipleResolutions(video, sourceResolution, resolution)){
+                // Have to do something if any resolution fails to encode.
+                // Rollback the original file save
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean encodeIntoMultipleResolutions(Video video, String sourceResolution, String resolution) {
         try {
-            String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(t_mst_user_id, VIDEO_GUID) + File.separator + resolution;
+            String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(video.getTMstUserId(), video.getVIDEO_GUID()) + File.separator + resolution;
             Files.createDirectories(Paths.get(OUTPUT_DIR));
 
-            Path outputFilePath = Paths.get(OUTPUT_DIR, outputFileName);
+            Path outputFilePath = Paths.get(OUTPUT_DIR, video.getOriginalFileName());
 
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
             int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
@@ -43,7 +63,7 @@ public class ProcessingService {
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     ffmpegPath,
-                    "-i", originalFilePath,
+                    "-i", video.getOriginalFilePath(),
                     "-vf", "scale=-2:" + targetHeight + "" +
                     ",format=yuv420p",
                     "-c:v", "libx264",
@@ -67,7 +87,7 @@ public class ProcessingService {
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                log(t_mst_user_id,"createResolutionCopy()","Process wait error.");
+                log(video.getTMstUserId(), "createResolutionCopy()","Process wait error.");
                 return false;
             }
 
@@ -76,15 +96,42 @@ public class ProcessingService {
                 String videoFilePath = outputFilePath.toString();
                 String outputFolderPath = OUTPUT_DIR + File.separator + "Chunks";
 
-                return pythonInvoker.runPythonScript(t_mst_user_id, pythonScriptPath, videoFilePath, outputFolderPath);
+                return pythonInvoker.runPythonScript(video.getTMstUserId(), pythonScriptPath, videoFilePath, outputFolderPath);
             } catch (Exception e) {
-                log(t_mst_user_id,"createResolutionCopy()",e.getMessage());
+                log(video.getTMstUserId(),"createResolutionCopy()",e.getMessage());
             }
 
             return false;
         } catch (Exception e) {
-            log(t_mst_user_id,"createResolutionCopy()",e.getMessage());
+            log(video.getTMstUserId(),"createResolutionCopy()",e.getMessage());
             return false;
+        }
+    }
+
+    private String getVideoResolution(String filePath, long t_mst_user_id) throws Exception {
+        try {
+            String ffprobePath = environment.getFfprobePath();
+            ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",
+                    "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
+            Process process = processBuilder.start();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                return reader.readLine();
+            }
+        } catch (Exception e) {
+            log(t_mst_user_id,"getVideoResolution()",e.getMessage());
+            return null;
+        }
+    }
+
+    private List<String> getValidResolutions(String sourceResolution, List<String> resolutions, long t_mst_user_id) {
+        try {
+            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
+            Map<String, Integer> resolutionHeightMap = environment.getResolutionHeightMap();
+
+            return resolutions.stream().filter(res -> resolutionHeightMap.get(res) <= sourceHeight).collect(Collectors.toList());
+        } catch (Exception e) {
+            log(t_mst_user_id,"getValidResolutions()",e.getMessage());
+            return null;
         }
     }
 

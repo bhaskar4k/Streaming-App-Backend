@@ -9,11 +9,13 @@
       <change beforePath="$PROJECT_DIR$/processing/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/processing/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/DbWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/DbWorker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TLogExceptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TLogExceptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,34 +41,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Authentication.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Dashboard.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Processing.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.RabbitMQ.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Streaming.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Upload.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Project/Streaming-App/processing&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Authentication.executor": "Debug",
+    "Application.Dashboard.executor": "Debug",
+    "Application.Processing.executor": "Debug",
+    "Application.RabbitMQ.executor": "Debug",
+    "Application.Streaming.executor": "Debug",
+    "Application.Upload.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Streaming-App/rabbitmq/src/main/java/com/app/rabbitmq/common",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Streaming-App\rabbitmq\src\main\java\com\app\rabbitmq\common" />
       <recent name="E:\Project\Streaming-App\upload\src\main\java\com\app\upload\common" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.app.processing.security" />
       <recent name="com.app.upload.security" />
       <recent name="com.app.upload.service" />
       <recent name="com.app.upload.repository" />
       <recent name="entity" />
-      <recent name="com.app.upload.environment" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -179,5 +182,31 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
+          <line>58</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
