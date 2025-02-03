@@ -6,7 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/publisher/Publisher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/processing/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/DbWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/DbWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/common/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TLogExceptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TLogExceptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

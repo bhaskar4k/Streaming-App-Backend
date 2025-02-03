@@ -1,4 +1,4 @@
-package com.app.upload.common;
+package com.app.processing.common;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

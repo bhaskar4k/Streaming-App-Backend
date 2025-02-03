@@ -1,5 +1,6 @@
 package com.app.processing.environment;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,13 @@ public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
 
-    private String originalVideoPath = "E:/Project/Streaming-App-Source-Video";
-    private String encodedVideoPath = "E:/Project/Streaming-App-Resized-Video";
+    // Desktop
+//    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
+//    private String encodedVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Resized-Video";
+
+    // Laptop
+    private String originalVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Source-Video";
+    private String encodedVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Resized-Video";
 
     private List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
     private Map<String, Integer> resolutionHeightMap = Map.of(
@@ -18,10 +24,18 @@ public class Environment {
             "1440p", 1440, "2160p", 2160, "4320p", 4320
     );
 
-    private int chunkSize = 5 * 1024 * 1024;
-
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
     private String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
+
+    // Desktop
+//    private String pythonScriptPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App" + File.separator +
+//            "upload" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
+//            "com" + File.separator + "app" + File.separator + "upload" + File.separator + "python" + File.separator + "VideoSplitter.py";
+
+    // Laptop
+    private String pythonScriptPath = "D:" + File.separator + "Streaming-App" + File.separator + "upload" + File.separator +
+            "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator +
+            "app" + File.separator + "upload" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
 
     public List<String> getAllowedOrigins() {
@@ -56,8 +70,8 @@ public class Environment {
         return ffmpegPath;
     }
 
-    public int getChunkSize() {
-        return chunkSize;
+    public String getPythonScriptPath() {
+        return pythonScriptPath;
     }
 
     //#region Custom environment

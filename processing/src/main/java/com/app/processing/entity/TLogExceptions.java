@@ -1,4 +1,4 @@
-package com.app.upload.entity;
+package com.app.processing.entity;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;

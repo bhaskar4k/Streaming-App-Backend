@@ -1,8 +1,7 @@
-package com.app.upload.common;
+package com.app.processing.common;
 
-import com.app.upload.entity.TLogExceptions;
-import com.app.upload.model.JwtUserDetails;
-import com.app.upload.service.LogExceptionsService;
+import com.app.processing.entity.TLogExceptions;
+import com.app.processing.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,11 +17,11 @@ public class Util {
         return UUID.randomUUID().toString();
     }
 
-    public String getUserSpecifiedFolder(JwtUserDetails userDetails, String uniqueID){
+    public String getUserSpecifiedFolder(long user_id, String uniqueID){
         try {
-            return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
+            return File.separator + "UserID-" + user_id + File.separator + uniqueID;
         } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
+            log(user_id,"getUserSpecifiedFolder()",e.getMessage());
             return null;
         }
     }
