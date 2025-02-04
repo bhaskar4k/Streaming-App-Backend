@@ -163,12 +163,7 @@ public class UploadService {
     public boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
         try {
             tVideoInfoRepository.save(video);
-
-            sql_string = "select id from t_video_info where guid = :value1";
-            params = List.of(video.getGuid());
-
-            Long t_video_info_id = (long)dbWorker.getQuery(sql_string, entityManager, params, TMstUser.class).getSingleResult();
-            encodedVideoInfo.setT_video_info_id(t_video_info_id);
+            encodedVideoInfo.setT_video_info_id(video.getId());
             tEncodedVideoInfoRepository.save(encodedVideoInfo);
             return true;
         } catch (Exception e) {
