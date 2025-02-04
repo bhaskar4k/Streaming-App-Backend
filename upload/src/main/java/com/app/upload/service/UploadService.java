@@ -87,7 +87,14 @@ public class UploadService {
                     "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
             Process process = processBuilder.start();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                return reader.readLine();
+                String res = reader.readLine();
+                int size=res.length();
+
+                if(res.charAt(size-1)=='x'){
+                    res = res.substring(0, size-1);
+                }
+
+                return res;
             }
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"getVideoResolution()",e.getMessage());
