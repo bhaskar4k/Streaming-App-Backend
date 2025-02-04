@@ -19,7 +19,7 @@ public class ProcessingController {
             boolean ok = processingService.encodeVideo(video);
 
             if(ok){
-                return CommonReturn.success("Video Processed Successfully",ok);
+                return CommonReturn.success("Video Processed Successfully",true);
             }else{
                 return CommonReturn.error(400,"Error In Video Processing.");
             }

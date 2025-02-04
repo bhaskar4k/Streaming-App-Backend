@@ -27,7 +27,7 @@ public class UploadController {
         this.environment = new Environment();
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/upload_video")
     public CommonReturn<Boolean> upload(@RequestPart("video") MultipartFile file, @RequestParam("fileId") String fileId) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 

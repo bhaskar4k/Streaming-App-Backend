@@ -24,7 +24,7 @@ function Upload() {
         formData.append("fileId", fileId);
 
         try {
-            const response = await fetch('http://localhost:8093/upload/upload', {
+            const response = await fetch('http://localhost:8093/upload/upload_video', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`,
