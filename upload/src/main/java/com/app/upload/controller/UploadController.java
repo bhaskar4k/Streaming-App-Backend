@@ -35,7 +35,6 @@ public class UploadController {
             boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,fileId,post_validated_request);
 
             if(isVideoUploadDoneAndSuccessful){
-                // Emit websocket push notification
                 return CommonReturn.success("Video has been uploaded successfully", true);
             }
 

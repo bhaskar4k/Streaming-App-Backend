@@ -95,8 +95,7 @@ public class UploadService {
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
                 return rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
             }else{
-                // Rollback the original file save
-
+                deleteVideoDetails(tVideoInfo,tEncodedVideoInfo);
                 return false;
             }
         } catch (Exception e) {
@@ -169,6 +168,15 @@ public class UploadService {
         } catch (Exception e) {
             log(video.getT_mst_user_id(),"saveVideoDetails()",e.getMessage());
             return false;
+        }
+    }
+
+    public void deleteVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
+        try {
+            tVideoInfoRepository.deleteById(video.getId());
+            tEncodedVideoInfoRepository.deleteById(encodedVideoInfo.getId());
+        } catch (Exception e) {
+            log(video.getT_mst_user_id(),"deleteVideoDetails()",e.getMessage());
         }
     }
 
