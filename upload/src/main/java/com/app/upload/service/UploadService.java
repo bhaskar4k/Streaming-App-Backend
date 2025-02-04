@@ -1,16 +1,24 @@
 package com.app.upload.service;
 
+import com.app.authentication.common.DbWorker;
+import com.app.authentication.entity.TMstUser;
 import com.app.upload.common.Util;
+import com.app.upload.entity.TEncodedVideoInfo;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.Video;
 import com.app.upload.rabbitmq.RabbitQueuePublish;
+import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -33,12 +41,22 @@ public class UploadService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private TVideoInfoRepository tVideoInfoRepository;
+    @Autowired
+    private TEncodedVideoInfoRepository tEncodedVideoInfoRepository;
     private RabbitQueuePublish rabbitQueuePublish;
+    private DbWorker dbWorker;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private String sql_string;
+    List<Object> params;
 
     public UploadService(){
         this.environment = new Environment();
         this.util = new Util();
         this.rabbitQueuePublish = new RabbitQueuePublish();
+        this.dbWorker=new DbWorker();
     }
 
 
@@ -53,21 +71,28 @@ public class UploadService {
             Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
             long fileSize = file.getSize();
-            String fileExtension = util.getFileExtension(file);
+            String fileExtension = util.getFileExtension(file.getOriginalFilename());
 
-            String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file);
-            String originalFilename = file.getOriginalFilename();
-            originalFilename = originalFilename.replace(" ","");
+            String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file.getOriginalFilename());
+            String encodedFileName = file.getOriginalFilename();
+            encodedFileName = encodedFileName.replace(" ","");
 
-            Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, originalFilename);
+            Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, encodedFileName);
             Files.write(originalFilePath, file.getBytes());
 
             String sourceResolution = getVideoResolution(originalFilePath.toString(), userDetails);
+            Double duration = getVideoDuration(originalFilePath.toString(),userDetails);
+            Long no_of_chunks = (long)Math.ceil(duration / 5L);
 
-            TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, userDetails.getT_mst_user_id());
+            List<String> validResolutions = getValidResolutions(sourceResolution, environment.getResolutions(), userDetails.getT_mst_user_id());
 
-            if(saveVideoDetails(tVideoInfo)){
-                Video video = new Video(VIDEO_GUID,originalFilePath.toString(),originalFilename,userDetails.getT_mst_user_id());
+            TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
+            TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(util.getUserSpecifiedFolder(userDetails,VIDEO_GUID),
+                                                                        util.getFileNameWithoutExtension(encodedFileName),
+                                                                        String.join(",", validResolutions));
+
+            if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo)){
+                Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
                 return rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
             }else{
                 // Rollback the original file save
@@ -102,9 +127,49 @@ public class UploadService {
         }
     }
 
-    public boolean saveVideoDetails(TVideoInfo video) {
+    private List<String> getValidResolutions(String sourceResolution, List<String> resolutions, long t_mst_user_id) {
+        try {
+            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
+            Map<String, Integer> resolutionHeightMap = environment.getResolutionHeightMap();
+
+            return resolutions.stream().filter(res -> resolutionHeightMap.get(res) <= sourceHeight).collect(Collectors.toList());
+        } catch (Exception e) {
+            log(t_mst_user_id,"getValidResolutions()",e.getMessage());
+            return null;
+        }
+    }
+
+    public Double getVideoDuration(String filePath, JwtUserDetails userDetails) {
+        try {
+            String ffprobePath = environment.getFfprobePath();
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    ffprobePath, "-i", filePath, "-show_entries", "format=duration",
+                    "-v", "quiet", "-of", "csv=p=0"
+            );
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String duration = reader.readLine();
+            process.waitFor();
+            return duration != null ? Double.parseDouble(duration) : 0.0;
+        } catch (Exception e) {
+            log(userDetails.getT_mst_user_id(),"getVideoResolution()",e.getMessage());
+            return null;
+        }
+    }
+
+    @Transactional
+    public boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
         try {
             tVideoInfoRepository.save(video);
+
+            sql_string = "select id from t_video_info where guid = :value1";
+            params = List.of(video.getGuid());
+
+            Long t_video_info_id = (long)dbWorker.getQuery(sql_string, entityManager, params, TMstUser.class).getSingleResult();
+            encodedVideoInfo.setT_video_info_id(t_video_info_id);
+            tEncodedVideoInfoRepository.save(encodedVideoInfo);
             return true;
         } catch (Exception e) {
             log(video.getT_mst_user_id(),"saveVideoDetails()",e.getMessage());

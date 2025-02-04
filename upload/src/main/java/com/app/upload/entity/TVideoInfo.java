@@ -14,22 +14,26 @@ public class TVideoInfo {
     private Long id;
     private String guid;
     @Column(length = 1000)
-    private String filename;
+    private String original_filename;
     private Long size;
     private String extension;
     private String source_resolution;
+    private Double duration;
+    private Long no_of_chunks;
     private Long t_mst_user_id;
     @Column(nullable = false, columnDefinition = "int default 1")
     private int is_active = 1;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
-    public TVideoInfo(String guid, String filename, Long size, String extension, String source_resolution, Long t_mst_user_id) {
+    public TVideoInfo(String guid, String original_filename, Long size, String extension, String source_resolution, Double duration, Long no_of_chunks, Long t_mst_user_id) {
         this.guid = guid;
-        this.filename = filename;
+        this.original_filename = original_filename;
         this.size = size;
         this.extension = extension;
         this.source_resolution = source_resolution;
+        this.duration = duration;
+        this.no_of_chunks = no_of_chunks;
         this.t_mst_user_id = t_mst_user_id;
     }
 
@@ -49,12 +53,12 @@ public class TVideoInfo {
         this.guid = guid;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getOriginal_filename() {
+        return original_filename;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setOriginal_filename(String original_filename) {
+        this.original_filename = original_filename;
     }
 
     public Long getSize() {
@@ -79,6 +83,22 @@ public class TVideoInfo {
 
     public void setSource_resolution(String source_resolution) {
         this.source_resolution = source_resolution;
+    }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
+    public Long getNo_of_chunks() {
+        return no_of_chunks;
+    }
+
+    public void setNo_of_chunks(Long no_of_chunks) {
+        this.no_of_chunks = no_of_chunks;
     }
 
     public Long getT_mst_user_id() {

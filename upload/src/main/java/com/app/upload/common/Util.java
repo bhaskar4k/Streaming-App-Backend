@@ -22,17 +22,14 @@ public class Util {
         return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
     }
 
-    public String getFileNameWithoutExtension(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
+    public String getFileNameWithoutExtension(String originalFilename) {
         if (originalFilename == null || !originalFilename.contains(".")) {
             return originalFilename;
         }
         return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
     }
 
-    public String getFileExtension(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-
+    public String getFileExtension(String originalFilename) {
         String fileExtension = "";
         if (originalFilename.contains(".")) {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);

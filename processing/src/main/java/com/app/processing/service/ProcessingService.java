@@ -51,10 +51,10 @@ public class ProcessingService {
 
     private boolean encodeIntoMultipleResolutions(Video video, String sourceResolution, String resolution) {
         try {
-            String OUTPUT_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(video.getTMstUserId(), video.getVIDEO_GUID()) + File.separator + resolution;
-            Files.createDirectories(Paths.get(OUTPUT_DIR));
+            String ENCODED_VIDEO_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(video.getTMstUserId(), video.getVIDEO_GUID()) + File.separator + resolution + File.separator + "EncodedVideo";
+            Files.createDirectories(Paths.get(ENCODED_VIDEO_DIR));
 
-            Path outputFilePath = Paths.get(OUTPUT_DIR, video.getOriginalFileName());
+            Path encodedOutputFilePath = Paths.get(ENCODED_VIDEO_DIR, video.getOriginalFileName());
 
             int targetHeight = Integer.parseInt(resolution.replace("p", ""));
             int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
@@ -76,7 +76,7 @@ public class ProcessingService {
                     "-bufsize", (targetBitrate * 2) + "k",
                     "-preset", "fast",
                     "-crf", "23",
-                    outputFilePath.toString()
+                    encodedOutputFilePath.toString()
             );
 
             processBuilder.redirectErrorStream(true);
@@ -97,10 +97,18 @@ public class ProcessingService {
 
             try {
                 String pythonScriptPath = environment.getPythonScriptPath();
-                String videoFilePath = outputFilePath.toString();
-                String outputFolderPath = OUTPUT_DIR + File.separator + "Chunks";
+                String ENCODED_SPLITTED_VIDEO_DIR = environment.getEncodedVideoPath() + util.getUserSpecifiedFolder(video.getTMstUserId(), video.getVIDEO_GUID()) + File.separator + resolution;
 
-                return pythonInvoker.runPythonScript(video.getTMstUserId(), pythonScriptPath, videoFilePath, outputFolderPath);
+                boolean is_chunked = pythonInvoker.runPythonScript(video.getTMstUserId(), pythonScriptPath, encodedOutputFilePath.toString(), ENCODED_SPLITTED_VIDEO_DIR);
+
+                if(is_chunked){
+                    File videoObj = new File(encodedOutputFilePath.toString());
+                    videoObj.delete();
+                    File folderObj = new File(ENCODED_VIDEO_DIR);
+                    folderObj.delete();
+                }
+
+                return is_chunked;
             } catch (Exception e) {
                 log(video.getTMstUserId(),"createResolutionCopy()",e.getMessage());
             }

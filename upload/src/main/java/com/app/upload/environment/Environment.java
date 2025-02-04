@@ -19,6 +19,13 @@ public class Environment {
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
     private String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
 
+    private List<String> resolutions = List.of("144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "4320p");
+    private Map<String, Integer> resolutionHeightMap = Map.of(
+            "144p", 144, "240p", 240, "360p", 360,
+            "480p", 480, "720p", 720, "1080p", 1080,
+            "1440p", 1440, "2160p", 2160, "4320p", 4320
+    );
+
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
@@ -42,5 +49,13 @@ public class Environment {
 
     public String getFfmpegPath() {
         return ffmpegPath;
+    }
+
+    public List<String> getResolutions() {
+        return resolutions;
+    }
+
+    public Map<String, Integer> getResolutionHeightMap() {
+        return resolutionHeightMap;
     }
 }
