@@ -11,12 +11,10 @@ public class LogExceptionsService {
     @Autowired
     private TLogExceptionsRepository tLogExceptionsRepository;
 
-    public boolean saveLogException(TLogExceptions log) {
+    public void saveLogException(TLogExceptions log) {
         try {
             tLogExceptionsRepository.save(log);
-            return true;
         } catch (Exception e) {
-            return false;
         }
     }
 }
