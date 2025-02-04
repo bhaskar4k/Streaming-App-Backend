@@ -80,7 +80,7 @@ public class UploadService {
         }
     }
 
-    private String getVideoResolution(String filePath, JwtUserDetails userDetails) throws Exception {
+    private String getVideoResolution(String filePath, JwtUserDetails userDetails){
         try {
             String ffprobePath = environment.getFfprobePath();
             ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",

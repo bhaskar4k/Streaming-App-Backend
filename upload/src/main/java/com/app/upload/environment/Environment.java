@@ -13,7 +13,7 @@ public class Environment {
 //    Desktop
 //    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
 
-    // Laptop
+//    Laptop
     private String originalVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Source-Video";
 
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
@@ -43,8 +43,4 @@ public class Environment {
     public String getFfmpegPath() {
         return ffmpegPath;
     }
-
-    //#region Custom environment
-
-    //#endregion
 }

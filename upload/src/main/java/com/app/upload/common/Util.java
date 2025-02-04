@@ -19,12 +19,7 @@ public class Util {
     }
 
     public String getUserSpecifiedFolder(JwtUserDetails userDetails, String uniqueID){
-        try {
-            return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getUserSpecifiedFolder()",e.getMessage());
-            return null;
-        }
+        return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
     }
 
     public String getFileNameWithoutExtension(MultipartFile file) {
@@ -44,17 +39,5 @@ public class Util {
         }
 
         return fileExtension;
-    }
-
-    private void log(Long t_mst_user_id, String function_name, String exception_msg){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-
-        String full_class_path = stackTraceElements[2].getClassName();
-        String class_name = full_class_path.substring(full_class_path.lastIndexOf(".") + 1);
-
-        String full_package_path = full_class_path.substring(0, full_class_path.lastIndexOf("."));
-        String package_name = full_package_path.substring(full_package_path.lastIndexOf(".") + 1);
-
-        logExceptionsService.saveLogException(new TLogExceptions(package_name,class_name,function_name,exception_msg,t_mst_user_id));
     }
 }
