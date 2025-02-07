@@ -12,10 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -32,42 +29,17 @@ public class Consumer {
         this.environment = new Environment();
     }
 
-    @PostMapping("/pull")
-    public CommonReturn<Boolean> consumeMessageFromQueue() throws JsonProcessingException {
-        Video video = null;
-
+    @GetMapping("/pull")
+    public CommonReturn<Video> consumeMessageFromQueue(){
         try{
-            video = (Video) rabbitTemplate.receiveAndConvert("video_processing_queue");
+            Video video = (Video) rabbitTemplate.receiveAndConvert(environment.getQueueName());
             if(video == null){
-                // Queue is empty
+                return CommonReturn.error(404,"Queue is empty.");
             }
-            return pullFromQueueAndStartProcessingVideo(video);
+
+            return CommonReturn.success("Video Metadata pulled from queue.",video);
         } catch (Exception e) {
-            log(video.getTMstUserId(),"consumeMessageFromQueue()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
-        }
-    }
-
-    public CommonReturn<Boolean> pullFromQueueAndStartProcessingVideo(Video video){
-        String PROCESS_SERVICE_URL = environment.getProcessVideoServiceURL();
-
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            HttpEntity<Video> entity = new HttpEntity<>(video, headers);
-
-            ResponseEntity<CommonReturn<Boolean>> response = restTemplate.exchange(
-                    PROCESS_SERVICE_URL,
-                    HttpMethod.POST,
-                    entity,
-                    new ParameterizedTypeReference<CommonReturn<Boolean>>() {}
-            );
-
-            return response.getBody();
-        } catch (Exception e) {
-            //log(null,"validateToken()",e.getMessage());
+            log(0L,"consumeMessageFromQueue()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

@@ -7,6 +7,11 @@
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/ProcessingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/ProcessingApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +42,7 @@
     "Application.Authentication.executor": "Debug",
     "Application.Dashboard.executor": "Debug",
     "Application.Processing.executor": "Debug",
-    "Application.RabbitMQ.executor": "Run",
+    "Application.RabbitMQ.executor": "Debug",
     "Application.Streaming.executor": "Debug",
     "Application.Upload.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -173,5 +178,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java</url>
+          <line>151</line>
+          <properties class="com.app.processing.service.ProcessingService" method="getVideoResolution">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

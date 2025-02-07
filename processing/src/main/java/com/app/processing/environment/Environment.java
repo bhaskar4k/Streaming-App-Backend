@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
+    private String rabbitMQConsumerURL = "http://localhost:8095/consumer/pull";
 
     // Desktop
 //    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
@@ -69,7 +70,7 @@ public class Environment {
         return pythonScriptPath;
     }
 
-    //#region Custom environment
-
-    //#endregion
+    public String getRabbitMQConsumerURL() {
+        return rabbitMQConsumerURL;
+    }
 }

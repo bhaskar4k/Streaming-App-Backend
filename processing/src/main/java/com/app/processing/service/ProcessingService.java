@@ -1,13 +1,17 @@
 package com.app.processing.service;
 
+import com.app.processing.common.CommonReturn;
 import com.app.processing.common.Util;
 import com.app.processing.entity.TLogExceptions;
 import com.app.processing.environment.Environment;
 import com.app.processing.model.Video;
 import com.app.processing.python.PythonInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -30,6 +34,31 @@ public class ProcessingService {
         this.environment = new Environment();
         this.util = new Util();
         this.pythonInvoker = new PythonInvoker();
+    }
+
+    public CommonReturn<Boolean> pullFromQueueAndStartProcessingVideo(){
+        String RABBITMQ_CONSUMER_URL = environment.getRabbitMQConsumerURL();
+
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<CommonReturn<Video>> response = restTemplate.exchange(
+                    RABBITMQ_CONSUMER_URL,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<CommonReturn<Video>>() {}
+            );
+
+            if(response.getBody().getStatus()!=200){
+                return CommonReturn.error(response.getBody().getStatus(),response.getBody().getMessage());
+            }
+
+            Boolean status = encodeVideo(response.getBody().getData());
+
+            return CommonReturn.success("Video Processing done.", status);
+        } catch (Exception e) {
+            //log(null,"validateToken()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
     }
 
     public boolean encodeVideo(Video video) throws Exception {

@@ -14,15 +14,11 @@ public class ProcessingController {
     private ProcessingService processingService;
 
     @PostMapping("/process_video")
-    public CommonReturn<Boolean> process_video(@RequestBody Video video) {
+    public CommonReturn<Boolean> process_video() {
         try {
-            boolean ok = processingService.encodeVideo(video);
+            CommonReturn<Boolean> response = processingService.pullFromQueueAndStartProcessingVideo();
 
-            if(ok){
-                return CommonReturn.success("Video Processed Successfully",true);
-            }else{
-                return CommonReturn.error(400,"Error In Video Processing.");
-            }
+            return CommonReturn.success(response.getMessage(),response.getData());
         } catch (Exception e) {
             return CommonReturn.error(400,"Internal Server Error.");
         }
