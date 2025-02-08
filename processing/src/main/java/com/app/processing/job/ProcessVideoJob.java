@@ -1,24 +1,31 @@
 package com.app.processing.job;
 import java.time.LocalDateTime;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ProcessVideoJob {
-    private static Timer timer = new Timer();
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private static int running_thread = 0;
 
     public static void start() {
         System.out.println("Service started...");
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                log("Service is running at: " + LocalDateTime.now());
-            }
-        }, 0, 5000); // Runs every 5 seconds
+        scheduleNextRun(0);
     }
 
-    public static void stop() {
-        System.out.println("Service stopped...");
-        timer.cancel();
+    private static void scheduleNextRun(long delay) {
+        scheduler.schedule(() -> {
+            if (running_thread < 4) {
+                log("Service - " + running_thread + " is running at - " + LocalDateTime.now());
+                running_thread++;
+                scheduleNextRun(1); // Continue every second
+            } else {
+                running_thread = 0;
+                log("Pausing for 6 seconds...");
+                scheduleNextRun(6); // Pause for 6 seconds
+            }
+        }, delay, TimeUnit.SECONDS);
     }
 
     private static void log(String message) {

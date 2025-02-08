@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/ProcessingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/ProcessingApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/consumer/Consumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq/src/main/java/com/app/rabbitmq/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/job/ProcessVideoJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/job/ProcessVideoJob.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,24 +33,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Authentication.executor": "Debug",
-    "Application.Dashboard.executor": "Debug",
-    "Application.Processing.executor": "Debug",
-    "Application.RabbitMQ.executor": "Debug",
-    "Application.Streaming.executor": "Debug",
-    "Application.Upload.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Streaming-App/rabbitmq/src/main/java/com/app/rabbitmq/common",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Authentication.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Dashboard.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Processing.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.RabbitMQ.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Streaming.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Upload.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Streaming-App/rabbitmq/src/main/java/com/app/rabbitmq/common&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Streaming-App\rabbitmq\src\main\java\com\app\rabbitmq\common" />
@@ -178,20 +174,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java</url>
-          <line>151</line>
-          <properties class="com.app.processing.service.ProcessingService" method="getVideoResolution">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
