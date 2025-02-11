@@ -36,30 +36,6 @@ public class ProcessingService {
         this.pythonInvoker = new PythonInvoker();
     }
 
-    public CommonReturn<Boolean> pullFromQueueAndStartProcessingVideo(){
-        String RABBITMQ_CONSUMER_URL = environment.getRabbitMQConsumerURL();
-
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            ResponseEntity<CommonReturn<Video>> response = restTemplate.exchange(
-                    RABBITMQ_CONSUMER_URL,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<CommonReturn<Video>>() {}
-            );
-
-            if(response.getBody().getStatus()!=200){
-                return CommonReturn.error(response.getBody().getStatus(),response.getBody().getMessage());
-            }
-
-            Boolean status = encodeVideo(response.getBody().getData());
-
-            return CommonReturn.success("Video Processing done.", status);
-        } catch (Exception e) {
-            //log(null,"validateToken()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
-        }
-    }
 
     public boolean encodeVideo(Video video) throws Exception {
         String sourceResolution = getVideoResolution(video.getOriginalFilePath(), video.getTMstUserId());

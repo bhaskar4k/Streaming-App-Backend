@@ -17,11 +17,12 @@ public class ProcessingController {
     @PostMapping("/process_video")
     public CommonReturn<Boolean> process_video() {
         try {
-            CommonReturn<Boolean> response = processingService.pullFromQueueAndStartProcessingVideo();
-            ProcessVideoJob.start();
-            return CommonReturn.success(response.getMessage(),response.getData());
+//            CommonReturn<Boolean> response = processingService.pullFromQueueAndStartProcessingVideo();
+//            ProcessVideoJob.start();
+//            return CommonReturn.success(response.getMessage(),response.getData());
         } catch (Exception e) {
             return CommonReturn.error(400,"Internal Server Error.");
         }
+        return CommonReturn.error(400,"Internal Server Error.");
     }
 }
