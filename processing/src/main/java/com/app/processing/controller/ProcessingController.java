@@ -19,7 +19,6 @@ public class ProcessingController {
     @GetMapping("/process_video")
     public CommonReturn<Boolean> process_video() {
         try {
-            processVideoJob.startPolling();
             return CommonReturn.success("Ok",true);
         } catch (Exception e) {
             return CommonReturn.error(400,"Internal Server Error.");

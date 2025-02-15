@@ -22,26 +22,33 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ProcessVideoJob {
     @Autowired
-    private static ProcessingService processingService;
+    private ProcessingService processingService;
     @Autowired
-    private static LogExceptionsService logExceptionsService;
-    private static Environment environment;
+    private LogExceptionsService logExceptionsService;
+    private Environment environment;
 
-    private static final int MAX_CONCURRENT_JOBS = 2;
-    private static final int POLL_INTERVAL_SECONDS = 20;
+    private final int MAX_CONCURRENT_JOBS = 2;
+    private final int POLL_INTERVAL_SECONDS = 20;
 
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private final ExecutorService workerPool = Executors.newFixedThreadPool(MAX_CONCURRENT_JOBS);
-    private final Semaphore semaphore = new Semaphore(MAX_CONCURRENT_JOBS);
+    private ScheduledExecutorService scheduler;
+    private ExecutorService workerPool;
+    private Semaphore semaphore;
 
     public ProcessVideoJob(){
         this.environment = new Environment();
-        System.out.println("Job started from constructor...");
+        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        this.workerPool = Executors.newFixedThreadPool(MAX_CONCURRENT_JOBS);
+        this.semaphore = new Semaphore(MAX_CONCURRENT_JOBS);
+
+        this.start();
+    }
+
+    private void start(){
+        System.out.println("Processing Job Is Started...");
         scheduler.scheduleAtFixedRate(this::pollRabbitMQServer, 0, POLL_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
-
-    public void startPolling() {
+    private void startPolling() {
         try {
             System.out.println("Job started...");
             scheduler.scheduleAtFixedRate(this::pollRabbitMQServer, 0, POLL_INTERVAL_SECONDS, TimeUnit.SECONDS);
@@ -70,7 +77,7 @@ public class ProcessVideoJob {
         }
     }
 
-    public CommonReturn<Video> pullFromRabbitMQ(){
+    private CommonReturn<Video> pullFromRabbitMQ(){
         String RABBITMQ_CONSUMER_URL = environment.getRabbitMQConsumerURL();
 
         RestTemplate restTemplate = new RestTemplate();

@@ -29,7 +29,5 @@ if __name__ == "__main__":
     filepath = sys.argv[1]
     folderpath = sys.argv[2]
     chunk_duration = 5
-    # filepath = "E:\\My Videos\\Kinemaster\\Amkash.mp4"
-    # folderpath = "E:\\My Videos\\Kinemaster\\JOD"
-    # chunk_duration = 5
+
     split_video_into_chunks(filepath, folderpath, chunk_duration)

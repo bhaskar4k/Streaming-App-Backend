@@ -96,10 +96,11 @@ public class ProcessingService {
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
+            System.out.println("Encoding into " + resolution);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
+                    //System.out.println(line);
                 }
             }
 
