@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class ProcessingController {
     @Autowired
     private ProcessingService processingService;
+    @Autowired
+    private ProcessVideoJob processVideoJob;
 
-    @PostMapping("/process_video")
+    @GetMapping("/process_video")
     public CommonReturn<Boolean> process_video() {
         try {
-//            CommonReturn<Boolean> response = processingService.pullFromQueueAndStartProcessingVideo();
-//            ProcessVideoJob.start();
-//            return CommonReturn.success(response.getMessage(),response.getData());
+            processVideoJob.startPolling();
+            return CommonReturn.success("Ok",true);
         } catch (Exception e) {
             return CommonReturn.error(400,"Internal Server Error.");
         }
-        return CommonReturn.error(400,"Internal Server Error.");
     }
 }

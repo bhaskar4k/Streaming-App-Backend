@@ -19,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,21 +39,28 @@ public class ProcessingService {
     }
 
 
-    public boolean encodeVideo(Video video) throws Exception {
-        String sourceResolution = getVideoResolution(video.getOriginalFilePath(), video.getTMstUserId());
+    public Future<Boolean> encodeVideo(Video video, ExecutorService workerPool) throws Exception {
+        return workerPool.submit(() -> {
+            try {
+                String sourceResolution = getVideoResolution(video.getOriginalFilePath(), video.getTMstUserId());
 
-        List<String> resolutions = environment.getResolutions();
-        List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, video.getTMstUserId());
+                List<String> resolutions = environment.getResolutions();
+                List<String> validResolutions = getValidResolutions(sourceResolution, resolutions, video.getTMstUserId());
 
-        for (String resolution : validResolutions) {
-            if(!encodeIntoMultipleResolutions(video, sourceResolution, resolution)){
-                // Have to do something if any resolution fails to encode.
-                // Rollback the original file save
+                for (String resolution : validResolutions) {
+                    if(!encodeIntoMultipleResolutions(video, sourceResolution, resolution)){
+                        // Have to do something if any resolution fails to encode.
+                        // Rollback the original file save
+                        return false;
+                    }
+                }
+
+                return true;
+            } catch (Exception e) {
+                log(video.getTMstUserId(),"encodeVideo()",e.getMessage());
                 return false;
             }
-        }
-
-        return true;
+        });
     }
 
     private boolean encodeIntoMultipleResolutions(Video video, String sourceResolution, String resolution) {
