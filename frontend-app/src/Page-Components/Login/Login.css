@@ -72,6 +72,10 @@ input {
 	width: 100%;
 }
 
+input:focus {
+	outline: none;
+}
+
 .login-container {
 	background: #f6f5f7;
 	display: flex;
@@ -82,7 +86,7 @@ input {
 	width: 100vw;
 }
 
-.container {
+.login-child-container {
 	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -107,7 +111,7 @@ input {
 	z-index: 2;
 }
 
-.container.right-panel-active .sign-in-container {
+.login-child-container.right-panel-active .sign-in-container {
 	transform: translateX(100%);
 }
 
@@ -118,7 +122,7 @@ input {
 	z-index: 1;
 }
 
-.container.right-panel-active .sign-up-container {
+.login-child-container.right-panel-active .sign-up-container {
 	transform: translateX(100%);
 	opacity: 1;
 	z-index: 5;
@@ -151,7 +155,7 @@ input {
 	z-index: 100;
 }
 
-.container.right-panel-active .overlay-container {
+.login-child-container.right-panel-active .overlay-container {
 	transform: translateX(-100%);
 }
 
@@ -171,7 +175,7 @@ input {
 	transition: transform 0.6s ease-in-out;
 }
 
-.container.right-panel-active .overlay {
+.login-child-container.right-panel-active .overlay {
 	transform: translateX(50%);
 }
 
@@ -194,7 +198,7 @@ input {
 	transform: translateX(-20%);
 }
 
-.container.right-panel-active .overlay-left {
+.login-child-container.right-panel-active .overlay-left {
 	transform: translateX(0);
 }
 
@@ -203,7 +207,7 @@ input {
 	transform: translateX(0);
 }
 
-.container.right-panel-active .overlay-right {
+.login-child-container.right-panel-active .overlay-right {
 	transform: translateX(20%);
 }
 

@@ -3,6 +3,8 @@ import React, { useState, useCallback } from 'react';
 import { Client } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 
+import Layout from './Layout/Layout.jsx';
+
 import Home from './Page-Components/Home/Home.jsx';
 import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';
 import Login from './Page-Components/Login/Login.jsx';
@@ -102,17 +104,21 @@ function App() {
 
   return (
     <>
-      <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={Environment.colorError} />
       <Routes>
-        <Route index element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/upload" element={<Upload />} />
         <Route path="*" element={<Error />} />
         <Route path="/error" element={<Error />} />
+
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/upload" element={<Upload />} />
+        </Route>
       </Routes>
+
+      <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={Environment.colorError} />
     </>
   );
 }

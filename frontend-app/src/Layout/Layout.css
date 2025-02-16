@@ -1,0 +1,75 @@
+.navbar {
+    width: 100vw;
+    height: 50px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.mainBody {
+    width: 100vw;
+    height: calc(100vh - 50px);
+    background-color: rgb(221, 221, 221);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.menubar {
+    width: 13rem;
+    background-color: rgb(255, 255, 255);
+    height: 98%;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-left: 10px;
+    transition: 0.2s all ease-in-out;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.navbar img{
+    margin-left: 12px;
+}
+
+.menu-icons{
+    height: 30px;
+    cursor: pointer;
+}
+
+.navbar-text{
+    margin: 0 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.mainContent {
+    flex-grow: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+    background-color: rgb(221, 221, 221);
+}
+
+.a-menu-item{
+    height: 40px;
+    position: relative;
+}
+
+.menu-item{
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.menu-item-text{
+    margin: 0;
+    padding-top: 4px;
+    padding-left: 10px;
+    font-weight: 500;
+    display: block;
+}

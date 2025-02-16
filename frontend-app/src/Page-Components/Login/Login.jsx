@@ -34,7 +34,7 @@ function Login() {
 
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+    const container = document.getElementById('login_child_container');
 
     signUpButton.addEventListener('click', () => {
       container.classList.add("right-panel-active");
@@ -204,7 +204,7 @@ function Login() {
     <>
       <div className='login-container'>
         <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal} />
-        <div className="container" id="container">
+        <div className="login-child-container" id="login_child_container">
           <div className="form-container sign-up-container">
 
             <div className='form-div'>
