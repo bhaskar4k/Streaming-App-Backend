@@ -24,7 +24,7 @@ function Layout() {
             newDisplay = 'block';
         }else{
             newWidthMenubar = '70px';
-            newWidthMainContent = '95.5%';
+            newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
         }
 
@@ -50,35 +50,35 @@ function Layout() {
             <div className='mainBody' id='mainBody'>
                 <div className='menubar' id='menubar'>
                     <div className='a-menu-item'>
-                        <div className='menu-item'>
+                        <div className='menu-item' id='menu-item-home'>
                             <img src={home} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-home'>Home</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item'>
-                        <div className='menu-item'>
+                        <div className='menu-item' id='menu-item-dashboard'>
                             <img src={dashboard} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-dashboard'>Dashboard</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item'>
-                        <div className='menu-item'>
+                        <div className='menu-item' id='menu-item-upload'>
                             <img src={upload} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-upload'>Upload</h4>
                         </div>
                     </div>
                     
                     <div className='a-menu-item'>
-                        <div className='menu-item'>
+                        <div className='menu-item' id='menu-item-profile'>
                             <img src={profile} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-profile'>Profile</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item'>
-                        <div className='menu-item'>
+                        <div className='menu-item' id='menu-item-logout'>
                             <img src={logout} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-logout'>Logout</h4>
                         </div>
