@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { AuthenticationService } from '../../Service/AuthenticationService';
-import Upload from '../Upload/Upload';
 
 function Home() {
     const authenticationService = new AuthenticationService();
@@ -9,7 +8,6 @@ function Home() {
     return (
         <>
             <h1>HOME</h1>
-            <Upload />
         </>
     );
 }

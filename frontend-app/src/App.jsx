@@ -7,6 +7,7 @@ import Home from './Page-Components/Home/Home.jsx';
 import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';
 import Login from './Page-Components/Login/Login.jsx';
 import Profile from './Page-Components/Profile/Profile.jsx';
+import Upload from './Page-Components/Upload/Upload.jsx';
 import Error from './Error.jsx';
 import AlertModal from './Page-Components/Common-Components/AlertModal/AlertModal.jsx';
 
@@ -108,6 +109,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/upload" element={<Upload />} />
         <Route path="*" element={<Error />} />
         <Route path="/error" element={<Error />} />
       </Routes>

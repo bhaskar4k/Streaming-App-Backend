@@ -8,6 +8,7 @@ let EndpointMicroservice = {
 let EndpointAuthentication = {
     do_signup: "/authentication/do_signup",
     do_login: "/authentication/do_login",
+    get_userid_from_jwt: "/authentication/get_userid_from_jwt"
 }
 
 let EndpointDashboard = {
@@ -19,7 +20,7 @@ let EndpointStreaming = {
 }
 
 let EndpointUpload = {
-    upload: "/upload/temp",
+    upload_video: "/upload/upload_video",
 }
 
 let EndpointWebsocket = {

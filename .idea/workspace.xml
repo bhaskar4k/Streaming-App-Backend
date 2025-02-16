@@ -6,10 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/controller/ProcessingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/job/ProcessVideoJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/job/ProcessVideoJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/python/VideoSplitter.py" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/python/VideoSplitter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/service/ProcessingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Home/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,5 +180,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/UploadController.java</url>
+          <line>30</line>
+          <properties class="com.app.upload.controller.UploadController" method="upload">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

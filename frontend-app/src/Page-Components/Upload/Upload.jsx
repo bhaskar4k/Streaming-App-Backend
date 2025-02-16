@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { AuthenticationService } from '../../Service/AuthenticationService';
+import './Upload.css';
+
+
+import { UploadService } from '../../Service/UploadService';
 
 function Upload() {
     const [file, setFile] = useState(null);
-    const authenticationService = new AuthenticationService();
+    const uploadService = new UploadService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
+
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
@@ -24,17 +28,10 @@ function Upload() {
         formData.append("fileId", fileId);
 
         try {
-            const response = await fetch('http://localhost:8093/upload/upload_video', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`,
-                },
-                body: formData,
-            });
-
-            const result = await response.json();
+            const result = await uploadService.DoUploadVideo(formData);
 
             if (result.status === 200) {
+                setFile(null);
                 alert("Video uploaded successfully!", result.message);
                 console.log('Video uploaded successfully!:', result.status, result.message);
             } else {
@@ -46,13 +43,19 @@ function Upload() {
         }
     }
 
+
     return (
         <>
-            <h1>Upload</h1>
-            <form onSubmit={handleSubmit}>
-                <input type="file" accept="video/*" onChange={handleFileChange} />
-                <button type="submit">Upload Video</button>
-            </form>
+            <div className='container'>
+                <form onSubmit={handleSubmit} className='file-upload-form'>
+                    <label  className="drop-container" id="dropcontainer">
+                        <span className="drop-title">Drop files here</span>
+                        or
+                        <input type="file" accept="video/*" onChange={handleFileChange} required />
+                        <button type="submit">Upload Video</button>
+                    </label>
+                </form>
+            </div>
         </>
     );
 }

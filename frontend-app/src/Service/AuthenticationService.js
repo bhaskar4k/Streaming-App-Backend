@@ -57,7 +57,8 @@ export class AuthenticationService {
 
     async GetTMstUserIdFromJWTSubject(JWT) {
         try {
-            const response = await fetch('http://localhost:8090/authentication/get_userid_from_jwt', {
+            let url = this.BASE_URL.concat(EndpointAuthentication.get_userid_from_jwt);
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${JWT}`,
