@@ -17,22 +17,26 @@ function Layout() {
     function toggleSidebar(){
         const menubar = document.getElementById('menubar');
 
-        let newWidth, newDisplay;
-        if(document.getElementById('menubar').style.width === '4.5rem'){
-            newWidth = '13rem';
+        let newWidthMenubar, newWidthMainContent, newDisplay;
+        if(document.getElementById('menubar').style.width === '70px'){
+            newWidthMenubar = '13%';
+            newWidthMainContent = '86%';
             newDisplay = 'block';
         }else{
-            newWidth = '4.5rem';
+            newWidthMenubar = '70px';
+            newWidthMainContent = '95.5%';
             newDisplay = 'none';
         }
 
-        menubar.style.width = newWidth;
+        menubar.style.width = newWidthMenubar;
         
         document.getElementById('menu-item-text-home').style.display = newDisplay;
         document.getElementById('menu-item-text-dashboard').style.display = newDisplay;
         document.getElementById('menu-item-text-upload').style.display = newDisplay;
         document.getElementById('menu-item-text-profile').style.display = newDisplay;
         document.getElementById('menu-item-text-logout').style.display = newDisplay;
+
+        document.getElementById('mainContent').style.width = newWidthMainContent;
     }
 
 
@@ -81,8 +85,10 @@ function Layout() {
                     </div>
                 </div>
 
-                <div className='mainContent'>
-                    <Outlet />
+                <div id='mainContent'>
+                    <div className='mainContentActualPortion'>
+                        <Outlet />
+                    </div>
                 </div>
             </div>
         </>
