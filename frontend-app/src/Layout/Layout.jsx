@@ -2,6 +2,8 @@ import React from 'react';
 import './Layout.css';
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import home from '../../public/Images/home.svg';
 import dashboard from '../../public/Images/dashboard.svg';
 import upload from '../../public/Images/upload.svg';
@@ -10,9 +12,12 @@ import logout from '../../public/Images/logout.svg';
 import bars from '../../public/Images/bars.svg';
 
 function Layout() {
+    const navigate = useNavigate();
+
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [previousWindowWidth, setPreviousWindowWidth] = useState(window.innerWidth);
     const [toogleStatus, setToogleStatus] = useState(0);
+
     const elements = [
         "menu-item-text-home",
         "menu-item-text-dashboard",
@@ -20,6 +25,7 @@ function Layout() {
         "menu-item-text-profile",
         "menu-item-text-logout",
     ];
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -69,7 +75,6 @@ function Layout() {
     }, [windowWidth]);
 
 
-
     function toggleSidebar(){
         if(windowWidth < 1200) return;
 
@@ -109,35 +114,35 @@ function Layout() {
 
             <div className='mainBody' id='mainBody'>
                 <div className='menubar' id='menubar'>
-                    <div className='a-menu-item'>
+                    <div className='a-menu-item' onClick={() => navigate("/home")}>
                         <div className='menu-item' id='menu-item-home'>
                             <img src={home} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-home'>Home</h4>
                         </div>
                     </div>
 
-                    <div className='a-menu-item'>
+                    <div className='a-menu-item' onClick={() => navigate("/dashboard")}>
                         <div className='menu-item' id='menu-item-dashboard'>
                             <img src={dashboard} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-dashboard'>Dashboard</h4>
                         </div>
                     </div>
 
-                    <div className='a-menu-item'>
+                    <div className='a-menu-item' onClick={() => navigate("/upload")}>
                         <div className='menu-item' id='menu-item-upload'>
                             <img src={upload} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-upload'>Upload</h4>
                         </div>
                     </div>
                     
-                    <div className='a-menu-item'>
+                    <div className='a-menu-item' onClick={() => navigate("/profile")}>
                         <div className='menu-item' id='menu-item-profile'>
                             <img src={profile} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-profile'>Profile</h4>
                         </div>
                     </div>
 
-                    <div className='a-menu-item'>
+                    <div className='a-menu-item' onClick={() => navigate("/logout")}>
                         <div className='menu-item' id='menu-item-logout'>
                             <img src={logout} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-logout'>Logout</h4>
