@@ -10,11 +10,69 @@ import logout from '../../public/Images/logout.svg';
 import bars from '../../public/Images/bars.svg';
 
 function Layout() {
-    useEffect(() => {
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [previousWindowWidth, setPreviousWindowWidth] = useState(window.innerWidth);
+    const [toogleStatus, setToogleStatus] = useState(0);
+    const elements = [
+        "menu-item-text-home",
+        "menu-item-text-dashboard",
+        "menu-item-text-upload",
+        "menu-item-text-profile",
+        "menu-item-text-logout",
+    ];
 
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener("resize", handleResize);
+        
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
+    useEffect(() => {
+        const menubar = document.getElementById("menubar");
+        let newWidthMenubar, newWidthMainContent, newDisplay;
+
+        if (windowWidth >= 1200) {
+            if(previousWindowWidth >= 1200 || !toogleStatus){
+                setPreviousWindowWidth(windowWidth);
+                return;
+            }
+            newWidthMenubar = "13%";
+            newWidthMainContent = "86%";
+            newDisplay = "block";
+        } else {
+            if(previousWindowWidth < 1200){
+                setPreviousWindowWidth(windowWidth);
+                return;
+            }
+            newWidthMenubar = "70px";
+            newWidthMainContent = "calc(100% - 85px)";
+            newDisplay = "none";
+        }
+
+        if (menubar) menubar.style.width = newWidthMenubar;
+
+        elements.forEach((id) => {
+            const elem = document.getElementById(id);
+            if (elem) elem.style.display = newDisplay;
+        });
+
+        const mainContent = document.getElementById("mainContent");
+        if (mainContent) mainContent.style.width = newWidthMainContent;
+
+        setPreviousWindowWidth(windowWidth);
+    }, [windowWidth]);
+
+
+
     function toggleSidebar(){
+        if(windowWidth < 1200) return;
+
         const menubar = document.getElementById('menubar');
 
         let newWidthMenubar, newWidthMainContent, newDisplay;
@@ -22,28 +80,30 @@ function Layout() {
             newWidthMenubar = '13%';
             newWidthMainContent = '86%';
             newDisplay = 'block';
+            setToogleStatus(1);
         }else{
             newWidthMenubar = '70px';
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
+            setToogleStatus(0);
         }
 
         menubar.style.width = newWidthMenubar;
         
-        document.getElementById('menu-item-text-home').style.display = newDisplay;
-        document.getElementById('menu-item-text-dashboard').style.display = newDisplay;
-        document.getElementById('menu-item-text-upload').style.display = newDisplay;
-        document.getElementById('menu-item-text-profile').style.display = newDisplay;
-        document.getElementById('menu-item-text-logout').style.display = newDisplay;
+        elements.forEach((id) => {
+            const elem = document.getElementById(id);
+            if (elem) elem.style.display = newDisplay;
+        });
 
-        document.getElementById('mainContent').style.width = newWidthMainContent;
+        const mainContent = document.getElementById("mainContent");
+        if (mainContent) mainContent.style.width = newWidthMainContent;
     }
 
 
     return (
         <>
             <div className='navbar' id='navbar'>
-                <img src={bars} className='menu-icons' onClick={toggleSidebar}></img>
+                <img src={bars} className='menu-icons toggleMenu' onClick={toggleSidebar}></img>
                 <p className='navbar-text'>Streamer</p>
             </div>
 
