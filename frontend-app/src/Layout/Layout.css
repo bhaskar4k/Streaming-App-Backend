@@ -8,16 +8,16 @@
     box-sizing: border-box;
 }
 
-.navbar img{
+.navbar img {
     margin-left: 12px;
 }
 
-.menu-icons{
+.menu-icons {
     height: 30px;
     cursor: pointer;
 }
 
-.navbar-text{
+.navbar-text {
     margin: 0 20px;
     font-size: 20px;
     font-weight: 600;
@@ -46,12 +46,12 @@
     left: 0;
 }
 
-.a-menu-item{
+.a-menu-item {
     height: 40px;
     position: relative;
 }
 
-.menu-item{
+.menu-item {
     display: flex;
     position: absolute;
     top: 50%;
@@ -59,7 +59,7 @@
     cursor: pointer;
 }
 
-.menu-item-text{
+.menu-item-text {
     margin: 0;
     padding-top: 4px;
     padding-left: 10px;
@@ -76,9 +76,10 @@
     position: absolute;
     right: 0;
     transition: 0.2s all ease-in-out;
+    overflow: hidden;
 }
 
-.mainContentActualPortion{
+.mainContentActualPortion {
     width: 98%;
     height: 98%;
     position: absolute;
@@ -89,4 +90,28 @@
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
+    overflow: hidden;
+}
+
+.mainContentActualPortionChild {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.mainContentActualPortionChild::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.mainContentActualPortionChild::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+.mainContentActualPortionChild::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
 }

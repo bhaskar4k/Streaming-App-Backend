@@ -33,7 +33,7 @@ function Layout() {
         };
 
         window.addEventListener("resize", handleResize);
-        
+
         return () => {
             window.removeEventListener("resize", handleResize);
         };
@@ -44,7 +44,7 @@ function Layout() {
         let newWidthMenubar, newWidthMainContent, newDisplay;
 
         if (windowWidth >= 1200) {
-            if(previousWindowWidth >= 1200 || !toogleStatus){
+            if (previousWindowWidth >= 1200 || !toogleStatus) {
                 setPreviousWindowWidth(windowWidth);
                 return;
             }
@@ -52,7 +52,7 @@ function Layout() {
             newWidthMainContent = "86%";
             newDisplay = "block";
         } else {
-            if(previousWindowWidth < 1200){
+            if (previousWindowWidth < 1200) {
                 setPreviousWindowWidth(windowWidth);
                 return;
             }
@@ -75,18 +75,18 @@ function Layout() {
     }, [windowWidth]);
 
 
-    function toggleSidebar(){
-        if(windowWidth < 1200) return;
+    function toggleSidebar() {
+        if (windowWidth < 1200) return;
 
         const menubar = document.getElementById('menubar');
 
         let newWidthMenubar, newWidthMainContent, newDisplay;
-        if(document.getElementById('menubar').style.width === '70px'){
+        if (document.getElementById('menubar').style.width === '70px') {
             newWidthMenubar = '13%';
             newWidthMainContent = '86%';
             newDisplay = 'block';
             setToogleStatus(1);
-        }else{
+        } else {
             newWidthMenubar = '70px';
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
@@ -94,7 +94,7 @@ function Layout() {
         }
 
         menubar.style.width = newWidthMenubar;
-        
+
         elements.forEach((id) => {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = newDisplay;
@@ -134,7 +134,7 @@ function Layout() {
                             <h4 className='menu-item-text' id='menu-item-text-upload'>Upload</h4>
                         </div>
                     </div>
-                    
+
                     <div className='a-menu-item' onClick={() => navigate("/profile")}>
                         <div className='menu-item' id='menu-item-profile'>
                             <img src={profile} className='menu-icons'></img>
@@ -150,9 +150,11 @@ function Layout() {
                     </div>
                 </div>
 
-                <div id='mainContent'>
+                <div id='mainContent' className='mainContent'>
                     <div className='mainContentActualPortion'>
-                        <Outlet />
+                        <div className='mainContentActualPortionChild'>
+                            <Outlet />
+                        </div>
                     </div>
                 </div>
             </div>

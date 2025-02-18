@@ -43,7 +43,7 @@ function Upload() {
 
     return (
         <>
-            <div className='container'>
+            <div className='container-upload '>
                 <form onSubmit={handleSubmit} className='file-upload-form'>
                     <label  className="drop-container" id="dropcontainer">
                         <span className="drop-title">Drop files here</span>
@@ -52,6 +52,12 @@ function Upload() {
                         <button type="submit">Upload Video</button>
                     </label>
                 </form>
+
+                <span>Title<span>*</span></span>
+                <input type="text" class="upload_input upload_normal_input" />
+
+                <span>Description<span>*</span></span>
+                <textarea class="upload_input upload_textarea" rows="10"></textarea>
             </div>
         </>
     );
