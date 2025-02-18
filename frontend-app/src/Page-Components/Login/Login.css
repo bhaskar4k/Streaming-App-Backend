@@ -26,7 +26,7 @@ a {
 	margin: 15px 0;
 }
 
-button {
+.loginPageButtons {
 	border-radius: 20px;
 	border: 1px solid #FF4B2B;
 	background-color: #FF4B2B;
@@ -40,15 +40,15 @@ button {
 	cursor: pointer;
 }
 
-button:active {
+.loginPageButtons:active {
 	transform: scale(0.95);
 }
 
-button:focus {
+.loginPageButtons:focus {
 	outline: none;
 }
 
-button.ghost {
+.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
 }

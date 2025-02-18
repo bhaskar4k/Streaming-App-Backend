@@ -88,3 +88,33 @@
 .upload_input:focus {
   border-color: #6200ee;
 }
+
+.thumbnail_and_save{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.drop-container-thumbnail {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px dashed #555;
+  color: #444;
+  cursor: pointer;
+  transition: background .2s ease-in-out, border .2s ease-in-out;
+  overflow: hidden;
+  width: 600px;
+}
+
+.video_save-button{
+  width: 100px;
+  height: 40px;
+  text-align: center;
+}

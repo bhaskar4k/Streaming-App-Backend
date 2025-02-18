@@ -58,6 +58,16 @@ function Upload() {
 
                 <span>Description<span>*</span></span>
                 <textarea class="upload_input upload_textarea" rows="10"></textarea>
+
+                <div className='thumbnail_and_save'>
+                    <label  className="drop-container-thumbnail" id="dropcontainer">
+                        <span className="drop-title">Drop thumbnail here</span>
+                        or
+                        <input type="file" accept="image/*" onChange={handleFileChange} required />
+                    </label>
+
+                    <button className='video_save-button'>Save</button>
+                </div>
             </div>
         </>
     );

@@ -221,7 +221,7 @@ function Login() {
               <input type="password" placeholder="Password" id="signup_password" />
               <input type="password" placeholder="Confirm Password" id="signup_confirm_password" />
 
-              <button className="signup_btn" onClick={DoSignUp}>Sign Up</button>
+              <button className="signup_btn loginPageButtons" onClick={DoSignUp}>Sign Up</button>
             </div>
           </div>
 
@@ -238,7 +238,7 @@ function Login() {
               <input type="password" placeholder="Password" id="login_password" />
 
               <a href="#">Forgot your password?</a>
-              <button onClick={DoLogin}>Sign In</button>
+              <button onClick={DoLogin} className='loginPageButtons'>Sign In</button>
             </div>
           </div>
 
@@ -247,12 +247,12 @@ function Login() {
               <div className="overlay-panel overlay-left">
                 <h1>Welcome Back!</h1>
                 <p>To keep connected with us please login with your personal info</p>
-                <button className="ghost" id="signIn">Sign In</button>
+                <button className="loginPageButtons ghost" id="signIn">Sign In</button>
               </div>
               <div className="overlay-panel overlay-right">
                 <h1>Hello, Friend!</h1>
                 <p>Enter your personal details and start journey with us</p>
-                <button className="ghost" id="signUp">Sign Up</button>
+                <button className="loginPageButtons ghost" id="signUp">Sign Up</button>
               </div>
             </div>
 
