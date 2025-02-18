@@ -6,6 +6,7 @@ import { UploadService } from '../../Service/UploadService';
 
 function Upload() {
     const [file, setFile] = useState(null);
+    const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
     const uploadService = new UploadService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
 
@@ -41,32 +42,56 @@ function Upload() {
     }
 
 
+    function handleVideoStatusToggleSwitch() {
+        const toggle = document.getElementById('video_status_toggle');
+
+        toggle.classList.toggle('toggle-right');
+
+        if (video_pubblicity_status === 0) {
+            set_video_pubblicity_status(1);
+        } else {
+            set_video_pubblicity_status(0);
+        }
+    }
+
+
+
     return (
         <>
             <div className='container-upload '>
                 <form onSubmit={handleSubmit} className='file-upload-form'>
-                    <label  className="drop-container" id="dropcontainer">
+                    <label className="drop-container" id="dropcontainer">
                         <span className="drop-title">Drop files here</span>
                         or
                         <input type="file" accept="video/*" onChange={handleFileChange} required />
-                        <button type="submit">Upload Video</button>
+                        <button type="submit" className='video-upload-button'>Upload Video</button>
                     </label>
                 </form>
 
                 <span>Title<span>*</span></span>
-                <input type="text" class="upload_input upload_normal_input" />
+                <input type="text" className="upload_input upload_normal_input" />
 
                 <span>Description<span>*</span></span>
-                <textarea class="upload_input upload_textarea" rows="10"></textarea>
+                <textarea className="upload_input upload_textarea" rows="10"></textarea>
 
                 <div className='thumbnail_and_save'>
-                    <label  className="drop-container-thumbnail" id="dropcontainer">
+                    <label className="drop-container-thumbnail" id="dropcontainer">
                         <span className="drop-title">Drop thumbnail here</span>
                         or
                         <input type="file" accept="image/*" onChange={handleFileChange} required />
                     </label>
 
-                    <button className='video_save-button'>Save</button>
+                    <div className='video_right_side_buttons'>
+                        <div className='video_publicity_switch_container'>
+                            <span className='video_publicity_name'>Private</span>
+                            <div className='video_publicity_switch' onClick={handleVideoStatusToggleSwitch}>
+                                <div id='video_status_toggle'></div>
+                            </div>
+                            <span className='video_publicity_name'>Public</span>
+                        </div>
+
+                        <button className='video-save-button'>Save</button>
+                    </div>
                 </div>
             </div>
         </>
