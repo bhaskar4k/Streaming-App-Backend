@@ -28,11 +28,11 @@ public class UploadController {
     }
 
     @PostMapping("/upload_video")
-    public CommonReturn<Boolean> upload(@RequestPart("video") MultipartFile file, @RequestParam("fileId") String fileId) {
+    public CommonReturn<Boolean> upload(@RequestPart("video") MultipartFile file) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,fileId,post_validated_request);
+            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,post_validated_request);
 
             if(isVideoUploadDoneAndSuccessful){
                 return CommonReturn.success("Video has been uploaded successfully", true);

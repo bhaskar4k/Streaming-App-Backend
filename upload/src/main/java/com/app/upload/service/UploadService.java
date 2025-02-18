@@ -60,7 +60,7 @@ public class UploadService {
     }
 
 
-    public Boolean uploadAndProcessVideo(MultipartFile file, String fileId, JwtUserDetails userDetails) {
+    public Boolean uploadAndProcessVideo(MultipartFile file, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return false;
         }

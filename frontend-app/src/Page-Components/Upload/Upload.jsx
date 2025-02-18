@@ -21,11 +21,8 @@ function Upload() {
             return;
         }
 
-        const fileId = `${Date.now()}-${file.name}`
-
         const formData = new FormData();
         formData.append("video", file);
-        formData.append("fileId", fileId);
 
         try {
             const result = await uploadService.DoUploadVideo(formData);
