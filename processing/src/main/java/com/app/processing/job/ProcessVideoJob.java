@@ -27,7 +27,7 @@ public class ProcessVideoJob {
     private LogExceptionsService logExceptionsService;
     private Environment environment;
 
-    private final int MAX_CONCURRENT_JOBS = 2;
+    private final int MAX_CONCURRENT_JOBS = 4;
     private final int POLL_INTERVAL_SECONDS = 20;
 
     private ScheduledExecutorService scheduler;
