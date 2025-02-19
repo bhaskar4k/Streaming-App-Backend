@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.io.File;
 
 @Service
 @Component
@@ -60,7 +61,7 @@ public class UploadService {
     }
 
 
-    public Boolean uploadAndProcessVideo(MultipartFile file, JwtUserDetails userDetails) {
+    public Boolean saveVideo(MultipartFile file, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return false;
         }
@@ -180,6 +181,20 @@ public class UploadService {
         }
     }
 
+    public boolean saveVideoMetadata(String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+        try {
+            File thumbnailDir = new File(environment.getOriginalThumbnailPath());
+            if (!thumbnailDir.exists()) thumbnailDir.mkdirs();
+
+            File destinationFile = new File(environment.getOriginalThumbnailPath() + File.separator + thumbnail.getOriginalFilename());
+            thumbnail.transferTo(destinationFile);
+
+            return true;
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(),"saveVideoMetadata()",e.getMessage());
+            return false;
+        }
+    }
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

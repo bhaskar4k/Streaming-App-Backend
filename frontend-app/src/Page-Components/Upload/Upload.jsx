@@ -11,6 +11,7 @@ function Upload() {
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
     const [video_upload_success, set_video_upload_success] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [thumbnail, set_thumbnail] = useState(null);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
     const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
@@ -80,8 +81,8 @@ function Upload() {
     }
 
 
-    function thumbnailUpload() {
-
+    function thumbnailUpload(event) {
+        set_thumbnail(event.target.files[0]);
     }
 
 
@@ -92,13 +93,25 @@ function Upload() {
 
         if (validateVideoFormData(title, description) === false) return;
 
-        let obj = {
-            title: title,
-            description: description,
-            is_public: is_public,
-        };
+        if (!thumbnail) {
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, "Please select a thumbnail");
+            return;
+        }
 
-        console.log("obj", obj);
+        let formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("isPublic", is_public);
+        formData.append("thumbnail", thumbnail);
+
+        try {
+            let response = await uploadService.DoUploadVideoInfo(formData);
+
+            console.log("Success:", response);
+        } catch (error) {
+            console.error("Error:", error);
+            Alert("Error", "red", "Failed to upload video info.");
+        }
     }
 
 

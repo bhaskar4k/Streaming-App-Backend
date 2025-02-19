@@ -32,13 +32,31 @@ public class UploadController {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            boolean isVideoUploadDoneAndSuccessful = uploadService.uploadAndProcessVideo(file,post_validated_request);
+            boolean isVideoUploadDoneAndSuccessful = uploadService.saveVideo(file,post_validated_request);
 
             if(isVideoUploadDoneAndSuccessful){
                 return CommonReturn.success("Video has been uploaded successfully", true);
             }
 
             return CommonReturn.error(400,"Video upload failed.");
+        } catch (Exception e) {
+            log("upload()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+
+    @PostMapping("/upload_video_info")
+    public CommonReturn<Boolean> upload_video_info(@RequestParam("title") String title,
+                                                   @RequestParam("description") String description,
+                                                   @RequestParam("isPublic") boolean isPublic,
+                                                   @RequestParam("thumbnail") MultipartFile thumbnail) {
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(title, description, isPublic, thumbnail, post_validated_request);
+
+            return CommonReturn.success("Video has been uploaded successfully", isVideoMetadataUploadDoneAndSuccessful);
         } catch (Exception e) {
             log("upload()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");

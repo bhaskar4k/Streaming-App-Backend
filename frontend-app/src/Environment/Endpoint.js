@@ -21,6 +21,7 @@ let EndpointStreaming = {
 
 let EndpointUpload = {
     upload_video: "/upload/upload_video",
+    upload_video_info: "/upload/upload_video_info",
 }
 
 let EndpointWebsocket = {

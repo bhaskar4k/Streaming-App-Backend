@@ -12,9 +12,11 @@ public class Environment {
 
 //    Desktop
     private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
+    private String originalThumbnailPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Thumbnail";
 
 //    Laptop
 //    private String originalVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Source-Video";
+//    private String originalThumbnailPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Thumbnail";
 
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
     private String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
@@ -33,6 +35,10 @@ public class Environment {
 
     public String getOriginalVideoPath() {
         return originalVideoPath;
+    }
+
+    public String getOriginalThumbnailPath() {
+        return originalThumbnailPath;
     }
 
     public String getFfprobePath() {
