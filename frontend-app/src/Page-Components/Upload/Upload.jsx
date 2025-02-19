@@ -39,7 +39,7 @@ function Upload() {
             if (result.data.status === 200) {
                 set_video_upload_success(true);
             } else {
-                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, "Error uploading video! (Internal server error)");
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Error uploading video! (Internal server error)");
             }
         } catch (error) {
             console.error('Error uploading video:', error);
