@@ -71,8 +71,7 @@ function Login() {
     }
 
     if (validationStatus === false) {
-      setColorOfAlertModal(Environment.colorWarning);
-      openAlertModal(Environment.alert_modal_header_signup, warning_message);
+      Alert(Environment.alert_modal_header_signup, Environment.colorWarning, warning_message);
     }
 
     return validationStatus;
@@ -81,7 +80,6 @@ function Login() {
 
   async function DoSignUp() {
     api_response_status = null;
-    closeAlertModal();
 
     let first_name = document.getElementById("signup_firstname").value;
     let last_name = document.getElementById("signup_lastname").value;
@@ -102,7 +100,7 @@ function Login() {
     api_response_status = response.status;
 
     if (api_response_status === 200) {
-      setColorOfAlertModal(Environment.colorSuccess);
+      Alert(Environment.alert_modal_header_signup, Environment.colorSuccess, response.message);
 
       document.getElementById("signup_firstname").value = null;
       document.getElementById("signup_lastname").value = null;
@@ -110,14 +108,8 @@ function Login() {
       document.getElementById("signup_password").value = null;
       document.getElementById("signup_confirm_password").value = null;
     } else {
-      setColorOfAlertModal(Environment.colorError);
+      Alert(Environment.alert_modal_header_signup, Environment.colorError, response.message);
     }
-
-    openAlertModal(Environment.alert_modal_header_signup, response.message);
-
-    loadAlertModal = setTimeout(() => {
-      closeAlertModal();
-    }, 5000);
   }
 
 
@@ -134,8 +126,7 @@ function Login() {
     }
 
     if (validationStatus === false) {
-      setColorOfAlertModal(Environment.colorWarning);
-      openAlertModal(Environment.alert_modal_header_login, warning_message);
+      Alert(Environment.alert_modal_header_login, Environment.colorWarning, warning_message);
     }
 
     return validationStatus;
@@ -144,7 +135,6 @@ function Login() {
 
   async function DoLogin() {
     api_response_status = null;
-    closeAlertModal();
 
     let email = document.getElementById("login_email").value;
     let password = document.getElementById("login_password").value;
@@ -161,21 +151,27 @@ function Login() {
     api_response_status = response.status;
 
     if (api_response_status !== 200) {
-      setColorOfAlertModal(Environment.colorError);
-
-      openAlertModal(Environment.alert_modal_header_login, response.message);
+      Alert(Environment.alert_modal_header_login, Environment.colorError, response.message);
     } else {
       localStorage.removeItem("JWT");
       localStorage.setItem("JWT", JSON.stringify(response.data));
       redirect_to_home(navigate);
     }
+  }
+
+
+  function Alert(header, color, message) {
+    closeAlertModal();
+
+    setColorOfAlertModal(color);
+    openAlertModal(header, message);
 
     loadAlertModal = setTimeout(() => {
       closeAlertModal();
     }, 5000);
   }
 
-
+  
   function openAlertModal(header_text, body_text) {
     setHeaderTextOfAlertModal(header_text);
     setBodyTextOfAlertModal(body_text);
@@ -204,6 +200,7 @@ function Login() {
     <>
       <div className='login-container'>
         <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal} />
+
         <div className="login-child-container" id="login_child_container">
           <div className="form-container sign-up-container">
 

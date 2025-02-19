@@ -11,6 +11,7 @@ let Environment = {
     alert_modal_header_signup: 'SIGN-UP',
     alert_modal_header_login: 'LOGIN',
     alert_modal_header_logout: 'LOGOUT',
+    alert_modal_header_video_info_upload: 'UPLOAD',
 }
 
 export { Environment };

@@ -24,7 +24,7 @@
   border: 2px dashed #555;
   color: #444;
   cursor: pointer;
-  transition: background .2s ease-in-out, border .2s ease-in-out;
+  transition: 0.2s all ease-in-out;
   overflow: hidden;
 }
 
@@ -45,9 +45,46 @@
   transition: color .2s ease-in-out;
 }
 
+.drop-or-text {
+  margin: 0;
+}
+
 .drop-container input {
   border-radius: 10px;
   padding: 40px;
+}
+
+.uploading-percentage-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes dots {
+  0% {
+    content: "Uploading";
+  }
+
+  25% {
+    content: "Uploading.";
+  }
+
+  50% {
+    content: "Uploading..";
+  }
+
+  75% {
+    content: "Uploading...";
+  }
+
+  100% {
+    content: "Uploading.";
+  }
+}
+
+.uploading-text::after {
+  content: "Uploading.";
+  animation: dots 1s infinite steps(1);
 }
 
 .upload_input {
@@ -294,5 +331,14 @@
   padding-top: 8px;
   color: black;
   z-index: 2;
-  pointer-events: none; 
+  pointer-events: none;
+}
+
+.required_color {
+  color: red;
+}
+
+.title,
+.description {
+  margin-top: 20px;
 }

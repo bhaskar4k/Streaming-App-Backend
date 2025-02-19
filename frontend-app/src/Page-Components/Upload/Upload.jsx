@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import { Environment } from '../../Environment/Environment';
+import AlertModal from '../Common-Components/AlertModal/AlertModal';
 import './Upload.css';
-
-
 import { UploadService } from '../../Service/UploadService';
 
+
+let loadAlertModal = null;
 function Upload() {
-    const [file, setFile] = useState(null);
+    const [file_not_uploaded, set_file_not_uploaded] = useState(true);
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
+    const [video_upload_success, set_video_upload_success] = useState(false);
     const [progress, setProgress] = useState(0);
+
+    const [showAlertModal, setShowAlertModal] = useState(false);
+    const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
+    const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
+    const [colorOfAlertModal, setColorOfAlertModal] = useState('green');
+
     const uploadService = new UploadService();
 
 
-    function handleFileChange(event) {
-        setFile(event.target.files[0]);
-    }
+    async function handleVideoUpload(event) {
+        set_file_not_uploaded(false);
+        document.getElementById("dropcontainer").style.height = "180px";
+        let file = event.target.files[0];
 
-    async function handleSubmit(event) {
-        event.preventDefault();
         if (!file) {
-            alert('Please select a file');
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, "Please select a video file.");
             return;
         }
-
-        document.getElementById("video-upload-button").style.display = "none";
 
         const formData = new FormData();
         formData.append("video", file);
@@ -31,12 +37,9 @@ function Upload() {
             const result = await uploadService.DoUploadVideo(formData, setProgress);
 
             if (result.data.status === 200) {
-                setFile(null);
-                alert("Video uploaded successfully!", result.message);
-                console.log('Video uploaded successfully!:', result.status, result.message);
+                set_video_upload_success(true);
             } else {
-                alert("Error uploading video!");
-                console.error('Error uploading chunk:', result.status, result.message);
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, "Error uploading video! (Internal server error)");
             }
         } catch (error) {
             console.error('Error uploading video:', error);
@@ -57,40 +60,121 @@ function Upload() {
     }
 
 
+    function validateVideoFormData(title, description) {
+        let validationStatus = true;
+        let warning_message = "";
+
+        if (title === "" || title === null) {
+            warning_message = "Video title can't be empty.";
+            validationStatus = false;
+        } else if (description === "" || description === null) {
+            warning_message = "Video description can't be empty.";
+            validationStatus = false;
+        }
+
+        if (validationStatus === false) {
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, warning_message);
+        }
+
+        return validationStatus;
+    }
+
+
+    function thumbnailUpload() {
+
+    }
+
+
+    async function saveVideoInfo() {
+        let title = document.getElementById("video_title").value;
+        let description = document.getElementById("video_description").value;
+        let is_public = (video_pubblicity_status === 1) ? true : false;
+
+        if (validateVideoFormData(title, description) === false) return;
+
+        let obj = {
+            title: title,
+            description: description,
+            is_public: is_public,
+        };
+
+        console.log("obj", obj);
+    }
+
+
+    function Alert(header, color, message) {
+        closeAlertModal();
+
+        setColorOfAlertModal(color);
+        openAlertModal(header, message);
+
+        loadAlertModal = setTimeout(() => {
+            closeAlertModal();
+        }, 5000);
+    }
+
+
+    function openAlertModal(header_text, body_text) {
+        setHeaderTextOfAlertModal(header_text);
+        setBodyTextOfAlertModal(body_text);
+        setShowAlertModal(true);
+    }
+
+
+    function closeAlertModal() {
+        setShowAlertModal(false);
+        setHeaderTextOfAlertModal(null);
+        setBodyTextOfAlertModal(null);
+
+        clearTimeout(loadAlertModal);
+        loadAlertModal = null;
+    }
+
+
     return (
         <>
             <div className='container-upload '>
-                <form onSubmit={handleSubmit} className='file-upload-form'>
+                <AlertModal showModal={showAlertModal} handleClose={closeAlertModal} headerText={headerTextOfAlertModal} bodyText={bodyTextOfAlertModal} alertColor={colorOfAlertModal} />
+
+                <form className='file-upload-form'>
                     <label className="drop-container" id="dropcontainer">
-                        <span className="drop-title">Drop files here</span>
-                        or
-                        <input type="file" accept="video/*" onChange={handleFileChange} required />
-                        <button type="submit" id='video-upload-button'>Upload Video</button>
+                        {file_not_uploaded && <span className="drop-title">Drop files here</span>}
+                        {file_not_uploaded && <h3 className="drop-or-text">or</h3>}
+                        {file_not_uploaded && <input type="file" accept="video/*" onChange={handleVideoUpload} required />}
+
+                        {!file_not_uploaded &&
+                            <div className='uploading-percentage-text'>
+                                {!video_upload_success && <h1 class="uploading-text"></h1>}
+                                {video_upload_success && <h1>Uploaded</h1>}
+                                <h1>&nbsp;({progress}%)</h1>
+                            </div>
+                        }
 
                         {progress > 0 && (
                             <div className="upload_progress_bar">
                                 <div className="progress_bar_container">
                                     <div className="upload_progress" style={{ width: `${progress}%` }}></div>
-                                    <p className="progress_percentage">{progress}% Uploaded</p>
                                 </div>
                             </div>
-
                         )}
                     </label>
                 </form>
 
+                <div className='title'>
+                    <span>Title<span className="required_color">*</span></span>
+                    <input type="text" className="upload_input upload_normal_input" id="video_title" />
+                </div>
 
-                <span>Title<span>*</span></span>
-                <input type="text" className="upload_input upload_normal_input" />
-
-                <span>Description<span>*</span></span>
-                <textarea className="upload_input upload_textarea" rows="10"></textarea>
+                <div className='description'>
+                    <span>Description<span className="required_color">*</span></span>
+                    <textarea className="upload_input upload_textarea" rows="10" id="video_description"></textarea>
+                </div>
 
                 <div className='thumbnail_and_save'>
                     <label className="drop-container-thumbnail" id="dropcontainer">
                         <span className="drop-title">Drop thumbnail here</span>
                         or
-                        <input type="file" accept="image/*" onChange={handleFileChange} required />
+                        <input type="file" accept="image/*" onChange={thumbnailUpload} required />
                     </label>
 
                     <div className='video_right_side_buttons'>
@@ -102,7 +186,7 @@ function Upload() {
                             <span className='video_publicity_name'>Public</span>
                         </div>
 
-                        <button className='video-save-button'>Save</button>
+                        <button className='video-save-button' onClick={saveVideoInfo}>Save</button>
                     </div>
                 </div>
             </div>
