@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Upload.css';
 
 
@@ -7,6 +8,7 @@ import { UploadService } from '../../Service/UploadService';
 function Upload() {
     const [file, setFile] = useState(null);
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
+    const [progress, setProgress] = useState(0);
     const uploadService = new UploadService();
     const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
 
@@ -22,11 +24,28 @@ function Upload() {
             return;
         }
 
+        document.getElementById("video-upload-button").style.display = "none";
+
         const formData = new FormData();
         formData.append("video", file);
 
         try {
-            const result = await uploadService.DoUploadVideo(formData);
+            // const result = await axios.post("http://localhost:8093/upload/upload_video", formData, {
+            //     headers: {
+            //         'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`,
+            //     },
+            //     onUploadProgress: (progressEvent) => {
+            //         const percentCompleted = Math.round(
+            //             (progressEvent.loaded * 100) / progressEvent.total
+            //         );
+            //         setProgress(percentCompleted);
+            //     },
+            // });
+
+            // const result = await uploadService.DoUploadVideo(formData);
+
+            const result = await uploadService.DoUploadVideo(formData, setProgress);
+            console.log(result)
 
             if (result.status === 200) {
                 setFile(null);
@@ -64,9 +83,20 @@ function Upload() {
                         <span className="drop-title">Drop files here</span>
                         or
                         <input type="file" accept="video/*" onChange={handleFileChange} required />
-                        <button type="submit" className='video-upload-button'>Upload Video</button>
+                        <button type="submit" id='video-upload-button'>Upload Video</button>
+
+                        {progress > 0 && (
+                            <div className="upload_progress_bar">
+                                <div className="progress_bar_container">
+                                    <div className="upload_progress" style={{ width: `${progress}%` }}></div>
+                                    <p className="progress_percentage">{progress}% Uploaded</p>
+                                </div>
+                            </div>
+
+                        )}
                     </label>
                 </form>
+
 
                 <span>Title<span>*</span></span>
                 <input type="text" className="upload_input upload_normal_input" />

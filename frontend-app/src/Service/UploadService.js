@@ -1,4 +1,5 @@
 import { EndpointMicroservice, EndpointUpload } from '../Environment/Endpoint';
+import axios from "axios";
 
 export class UploadService {
     constructor() {
@@ -6,16 +7,22 @@ export class UploadService {
         this.BASE_URL = EndpointMicroservice.upload;
     }
 
-    async DoUploadVideo(obj) {
+    async DoUploadVideo(obj, onProgress) {
         try {
             let url = this.BASE_URL.concat(EndpointUpload.upload_video);
-            console.log(obj)
-            let response = await fetch(url, {
-                method: 'POST',
+
+            const response = await axios.post(url, obj, {
                 headers: {
                     'Authorization': `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
                 },
-                body: obj,
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    if (onProgress) {
+                        onProgress(percentCompleted);
+                    }
+                },
             });
 
             if (!response.ok) {
