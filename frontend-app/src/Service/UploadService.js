@@ -25,13 +25,12 @@ export class UploadService {
                 },
             });
 
-            if (!response.ok) {
+            if (response.status != 200) {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
 
-            let res = await response.json();
-            return res;
+            return response;
         } catch (ex) {
             console.log(ex);
             return { status: 404, message: 'Internal Server Error.', data: null };

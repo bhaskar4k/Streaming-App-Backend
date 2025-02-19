@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import './Upload.css';
 
 
@@ -10,7 +9,6 @@ function Upload() {
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
     const [progress, setProgress] = useState(0);
     const uploadService = new UploadService();
-    const JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
 
 
     function handleFileChange(event) {
@@ -30,24 +28,9 @@ function Upload() {
         formData.append("video", file);
 
         try {
-            // const result = await axios.post("http://localhost:8093/upload/upload_video", formData, {
-            //     headers: {
-            //         'Authorization': `Bearer ${JWT_TOKEN_INFO.jwt}`,
-            //     },
-            //     onUploadProgress: (progressEvent) => {
-            //         const percentCompleted = Math.round(
-            //             (progressEvent.loaded * 100) / progressEvent.total
-            //         );
-            //         setProgress(percentCompleted);
-            //     },
-            // });
-
-            // const result = await uploadService.DoUploadVideo(formData);
-
             const result = await uploadService.DoUploadVideo(formData, setProgress);
-            console.log(result)
 
-            if (result.status === 200) {
+            if (result.data.status === 200) {
                 setFile(null);
                 alert("Video uploaded successfully!", result.message);
                 console.log('Video uploaded successfully!:', result.status, result.message);
@@ -72,7 +55,6 @@ function Upload() {
             set_video_pubblicity_status(0);
         }
     }
-
 
 
     return (
