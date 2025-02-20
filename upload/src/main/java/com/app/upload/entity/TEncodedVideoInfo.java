@@ -15,24 +15,23 @@ public class TEncodedVideoInfo {
     private Long t_video_info_id;
     @Column(length = 500)
     private String encoded_filepath;
-    @Column(length = 1000)
-    private String encoded_filename;
     @Column(length = 500)
     private String encoded_resolutions;
+    private int processing_status;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
-    public TEncodedVideoInfo(String encoded_filepath, String encoded_filename, String encoded_resolutions) {
+    public TEncodedVideoInfo(String encoded_filepath, String encoded_resolutions, int processing_status) {
         this.encoded_filepath = encoded_filepath;
-        this.encoded_filename = encoded_filename;
         this.encoded_resolutions = encoded_resolutions;
+        this.processing_status = processing_status;
     }
 
-    public TEncodedVideoInfo(Long t_video_info_id, String encoded_filepath, String encoded_filename, String encoded_resolutions) {
+    public TEncodedVideoInfo(Long t_video_info_id, String encoded_filepath, String encoded_resolutions, int processing_status) {
         this.t_video_info_id = t_video_info_id;
         this.encoded_filepath = encoded_filepath;
-        this.encoded_filename = encoded_filename;
         this.encoded_resolutions = encoded_resolutions;
+        this.processing_status = processing_status;
     }
 
     public Long getId() {
@@ -59,20 +58,20 @@ public class TEncodedVideoInfo {
         this.encoded_filepath = encoded_filepath;
     }
 
-    public String getEncoded_filename() {
-        return encoded_filename;
-    }
-
-    public void setEncoded_filename(String encoded_filename) {
-        this.encoded_filename = encoded_filename;
-    }
-
     public String getEncoded_resolutions() {
         return encoded_resolutions;
     }
 
     public void setEncoded_resolutions(String encoded_resolutions) {
         this.encoded_resolutions = encoded_resolutions;
+    }
+
+    public int getProcessing_status() {
+        return processing_status;
+    }
+
+    public void setProcessing_status(int processing_status) {
+        this.processing_status = processing_status;
     }
 
     public LocalDateTime getTrans_datetime() {

@@ -8,6 +8,7 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
+import com.app.upload.model.UIEnum;
 import com.app.upload.model.Video;
 import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
@@ -61,9 +62,9 @@ public class UploadService {
     }
 
 
-    public Boolean saveVideo(MultipartFile file, JwtUserDetails userDetails) {
+    public Long saveVideo(MultipartFile file, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
-            return false;
+            return null;
         }
 
         try {
@@ -75,8 +76,7 @@ public class UploadService {
             String fileExtension = util.getFileExtension(file.getOriginalFilename());
 
             String originalFilenameWithoutExtension = util.getFileNameWithoutExtension(file.getOriginalFilename());
-            String encodedFileName = file.getOriginalFilename();
-            encodedFileName = encodedFileName.replace(" ","");
+            String encodedFileName = VIDEO_GUID + "." + fileExtension;
 
             Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, encodedFileName);
             Files.write(originalFilePath, file.getBytes());
@@ -89,19 +89,20 @@ public class UploadService {
 
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
             TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(util.getUserSpecifiedFolder(userDetails,VIDEO_GUID),
-                                                                        util.getFileNameWithoutExtension(encodedFileName),
-                                                                        String.join(",", validResolutions));
+                                                                        String.join(",", validResolutions),
+                                                                        UIEnum.ProcessingStatus.TO_BE_PROCESSED.getValue());
 
             if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo)){
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
-                return rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
+                rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
+                return tVideoInfo.getId();
             }else{
                 deleteVideoDetails(tVideoInfo,tEncodedVideoInfo);
-                return false;
+                return null;
             }
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"uploadAndProcessVideo()",e.getMessage());
-            return false;
+            return null;
         }
     }
 
@@ -181,7 +182,7 @@ public class UploadService {
         }
     }
 
-    public boolean saveVideoMetadata(String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+    public boolean saveVideoMetadata(Long video_id, String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
             File thumbnailDir = new File(environment.getOriginalThumbnailPath());
             if (!thumbnailDir.exists()) thumbnailDir.mkdirs();

@@ -2,6 +2,7 @@ package com.app.upload.controller;
 
 import com.app.upload.common.CommonReturn;
 import com.app.upload.entity.TLogExceptions;
+import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.service.AuthService;
@@ -28,14 +29,14 @@ public class UploadController {
     }
 
     @PostMapping("/upload_video")
-    public CommonReturn<Boolean> upload(@RequestPart("video") MultipartFile file) {
+    public CommonReturn<Long> upload(@RequestPart("video") MultipartFile file) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            boolean isVideoUploadDoneAndSuccessful = uploadService.saveVideo(file,post_validated_request);
+            Long video_id = uploadService.saveVideo(file,post_validated_request);
 
-            if(isVideoUploadDoneAndSuccessful){
-                return CommonReturn.success("Video has been uploaded successfully", true);
+            if(video_id != null){
+                return CommonReturn.success("Video has been uploaded successfully", video_id);
             }
 
             return CommonReturn.error(400,"Video upload failed.");
@@ -49,12 +50,13 @@ public class UploadController {
     @PostMapping("/upload_video_info")
     public CommonReturn<Boolean> upload_video_info(@RequestParam("title") String title,
                                                    @RequestParam("description") String description,
-                                                   @RequestParam("isPublic") boolean isPublic,
-                                                   @RequestParam("thumbnail") MultipartFile thumbnail) {
+                                                   @RequestParam("is_public") boolean isPublic,
+                                                   @RequestParam("thumbnail") MultipartFile thumbnail,
+                                                   @RequestParam("video_id") Long video_id) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(title, description, isPublic, thumbnail, post_validated_request);
+            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_id, title, description, isPublic, thumbnail, post_validated_request);
 
             return CommonReturn.success("Video has been uploaded successfully", isVideoMetadataUploadDoneAndSuccessful);
         } catch (Exception e) {

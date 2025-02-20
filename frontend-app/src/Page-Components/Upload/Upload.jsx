@@ -12,6 +12,7 @@ function Upload() {
     const [video_upload_success, set_video_upload_success] = useState(false);
     const [progress, setProgress] = useState(0);
     const [thumbnail, set_thumbnail] = useState(null);
+    const [video_id, set_video_id] = useState(null);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
     const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
@@ -36,9 +37,10 @@ function Upload() {
 
         try {
             const result = await uploadService.DoUploadVideo(formData, setProgress);
-
+            
             if (result.data.status === 200) {
                 set_video_upload_success(true);
+                set_video_id(result.data.data);
             } else {
                 Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Error uploading video! (Internal server error)");
             }
@@ -101,8 +103,9 @@ function Upload() {
         let formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("isPublic", is_public);
+        formData.append("is_public", is_public);
         formData.append("thumbnail", thumbnail);
+        formData.append("video_id", video_id);
 
         try {
             let response = await uploadService.DoUploadVideoInfo(formData);
@@ -199,7 +202,7 @@ function Upload() {
                             <span className='video_publicity_name'>Public</span>
                         </div>
 
-                        <button className='video-save-button' onClick={saveVideoInfo}>Save</button>
+                        {video_upload_success && <button className='video-save-button' onClick={saveVideoInfo}>Save</button>}
                     </div>
                 </div>
             </div>
