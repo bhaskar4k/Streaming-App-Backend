@@ -8,9 +8,12 @@ import com.app.upload.model.JwtUserDetails;
 import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.UploadService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.DataInput;
 
 
 @RestController
@@ -29,14 +32,14 @@ public class UploadController {
     }
 
     @PostMapping("/upload_video")
-    public CommonReturn<Long> upload(@RequestPart("video") MultipartFile file) {
+    public CommonReturn<TVideoInfo> upload(@RequestPart("video") MultipartFile file) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            Long video_id = uploadService.saveVideo(file,post_validated_request);
+            TVideoInfo video_info = uploadService.saveVideo(file,post_validated_request);
 
-            if(video_id != null){
-                return CommonReturn.success("Video has been uploaded successfully", video_id);
+            if(video_info != null){
+                return CommonReturn.success("Video has been uploaded successfully", video_info);
             }
 
             return CommonReturn.error(400,"Video upload failed.");
@@ -52,11 +55,15 @@ public class UploadController {
                                                    @RequestParam("description") String description,
                                                    @RequestParam("is_public") boolean isPublic,
                                                    @RequestParam("thumbnail") MultipartFile thumbnail,
-                                                   @RequestParam("video_id") Long video_id) {
+                                                   @RequestParam("video_info") String video_info_json) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_id, title, description, isPublic, thumbnail, post_validated_request);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
+            TVideoInfo video_info = objectMapper.readValue(video_info_json, TVideoInfo.class);
+
+            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_info, title, description, isPublic, thumbnail, post_validated_request);
 
             return CommonReturn.success("Video has been uploaded successfully", isVideoMetadataUploadDoneAndSuccessful);
         } catch (Exception e) {

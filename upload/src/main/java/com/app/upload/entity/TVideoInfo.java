@@ -1,5 +1,7 @@
 package com.app.upload.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
@@ -35,6 +37,31 @@ public class TVideoInfo {
         this.duration = duration;
         this.no_of_chunks = no_of_chunks;
         this.t_mst_user_id = t_mst_user_id;
+    }
+
+    @JsonCreator
+    public TVideoInfo(@JsonProperty("guid") String guid,
+                      @JsonProperty("original_filename") String original_filename,
+                      @JsonProperty("size") long size,
+                      @JsonProperty("extension") String extension,
+                      @JsonProperty("source_resolution") String source_resolution,
+                      @JsonProperty("duration") double duration,
+                      @JsonProperty("no_of_chunks") long no_of_chunks,
+                      @JsonProperty("t_mst_user_id") long t_mst_user_id,
+                      @JsonProperty("id") long id,
+                      @JsonProperty("is_active") int is_active,
+                      @JsonProperty("trans_datetime") LocalDateTime trans_datetime) {
+        this.guid = guid;
+        this.original_filename = original_filename;
+        this.size = size;
+        this.extension = extension;
+        this.source_resolution = source_resolution;
+        this.duration = duration;
+        this.no_of_chunks = no_of_chunks;
+        this.t_mst_user_id = t_mst_user_id;
+        this.id = id;
+        this.is_active = is_active;
+        this.trans_datetime = trans_datetime;
     }
 
     public Long getId() {

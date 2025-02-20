@@ -1,7 +1,6 @@
 package com.app.upload.service;
 
 import com.app.authentication.common.DbWorker;
-import com.app.authentication.entity.TMstUser;
 import com.app.upload.common.Util;
 import com.app.upload.entity.TEncodedVideoInfo;
 import com.app.upload.entity.TLogExceptions;
@@ -14,7 +13,6 @@ import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,9 +29,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 @Service
 @Component
@@ -62,7 +63,7 @@ public class UploadService {
     }
 
 
-    public Long saveVideo(MultipartFile file, JwtUserDetails userDetails) {
+    public TVideoInfo saveVideo(MultipartFile file, JwtUserDetails userDetails) {
         if (file.isEmpty()) {
             return null;
         }
@@ -95,13 +96,13 @@ public class UploadService {
             if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo)){
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
                 rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
-                return tVideoInfo.getId();
+                return tVideoInfo;
             }else{
                 deleteVideoDetails(tVideoInfo,tEncodedVideoInfo);
                 return null;
             }
         } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"uploadAndProcessVideo()",e.getMessage());
+            log(userDetails.getT_mst_user_id(),"saveVideo()",e.getMessage());
             return null;
         }
     }
@@ -182,20 +183,57 @@ public class UploadService {
         }
     }
 
-    public boolean saveVideoMetadata(Long video_id, String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+    public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
-            File thumbnailDir = new File(environment.getOriginalThumbnailPath());
+            String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request);
+
+            File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
             if (!thumbnailDir.exists()) thumbnailDir.mkdirs();
 
-            File destinationFile = new File(environment.getOriginalThumbnailPath() + File.separator + thumbnail.getOriginalFilename());
-            thumbnail.transferTo(destinationFile);
+            String fileExtension = util.getFileExtension(thumbnail.getOriginalFilename());
+            File tempUploadedThumbnailFile = new File(THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "_TEMPCPYFILE." + fileExtension);
+            thumbnail.transferTo(tempUploadedThumbnailFile);
 
+            String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "." + fileExtension;
+            convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
+
+            tempUploadedThumbnailFile.delete();
             return true;
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(),"saveVideoMetadata()",e.getMessage());
             return false;
         }
     }
+
+    public boolean convertImageToJPGFormatAndSave(String inputFilePath, String outputFilePath, JwtUserDetails post_validated_request) {
+        try {
+            File inputFile = new File(inputFilePath);
+            BufferedImage inputImage = ImageIO.read(inputFile);
+
+            if (inputImage == null) {
+                log(post_validated_request.getT_mst_user_id(),"convertImgToJPG()","Invalid image format or corrupted file.");
+                return false;
+            }
+
+            BufferedImage outputImage = new BufferedImage(
+                    inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+            Graphics2D g2d = outputImage.createGraphics();
+            g2d.setColor(Color.BLACK);
+            g2d.fillRect(0, 0, inputImage.getWidth(), inputImage.getHeight());
+            g2d.drawImage(inputImage, 0, 0, null);
+            g2d.dispose();
+
+            File outputFile = new File(outputFilePath);
+            ImageIO.write(outputImage, "jpg", outputFile);
+
+            return true;
+        } catch (IOException e) {
+            log(post_validated_request.getT_mst_user_id(),"convertImgToJPG()",e.getMessage());
+            return false;
+        }
+    }
+
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

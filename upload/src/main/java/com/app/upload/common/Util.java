@@ -22,6 +22,10 @@ public class Util {
         return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
     }
 
+    public String getUserSpecifiedFolderForThumbnail(JwtUserDetails userDetails){
+        return File.separator + "UserID-" + userDetails.getT_mst_user_id();
+    }
+
     public String getFileNameWithoutExtension(String originalFilename) {
         if (originalFilename == null || !originalFilename.contains(".")) {
             return originalFilename;

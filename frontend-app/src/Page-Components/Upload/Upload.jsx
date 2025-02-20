@@ -12,7 +12,7 @@ function Upload() {
     const [video_upload_success, set_video_upload_success] = useState(false);
     const [progress, setProgress] = useState(0);
     const [thumbnail, set_thumbnail] = useState(null);
-    const [video_id, set_video_id] = useState(null);
+    const [video_info, set_video_info] = useState(null);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
     const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
@@ -40,7 +40,7 @@ function Upload() {
             
             if (result.data.status === 200) {
                 set_video_upload_success(true);
-                set_video_id(result.data.data);
+                set_video_info(result.data.data);
             } else {
                 Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Error uploading video! (Internal server error)");
             }
@@ -105,7 +105,7 @@ function Upload() {
         formData.append("description", description);
         formData.append("is_public", is_public);
         formData.append("thumbnail", thumbnail);
-        formData.append("video_id", video_id);
+        formData.append("video_info", JSON.stringify(video_info));
 
         try {
             let response = await uploadService.DoUploadVideoInfo(formData);
