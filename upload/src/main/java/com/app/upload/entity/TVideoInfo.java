@@ -1,5 +1,6 @@
 package com.app.upload.entity;
 
+import com.app.upload.model.UIEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ public class TVideoInfo {
     private Long no_of_chunks;
     private Long t_mst_user_id;
     @Column(nullable = false, columnDefinition = "int default 1")
-    private int is_active = 1;
+    private int is_active = UIEnum.YesNo.YES.getValue();
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 

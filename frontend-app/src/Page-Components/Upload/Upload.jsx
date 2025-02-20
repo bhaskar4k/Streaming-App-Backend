@@ -91,7 +91,6 @@ function Upload() {
     async function saveVideoInfo() {
         let title = document.getElementById("video_title").value;
         let description = document.getElementById("video_description").value;
-        let is_public = (video_pubblicity_status === 1) ? true : false;
 
         if (validateVideoFormData(title, description) === false) return;
 
@@ -103,7 +102,7 @@ function Upload() {
         let formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("is_public", is_public);
+        formData.append("is_public", parseInt(video_pubblicity_status));
         formData.append("thumbnail", thumbnail);
         formData.append("video_info", JSON.stringify(video_info));
 

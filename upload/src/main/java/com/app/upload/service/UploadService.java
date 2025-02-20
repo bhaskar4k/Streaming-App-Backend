@@ -5,6 +5,7 @@ import com.app.upload.common.Util;
 import com.app.upload.entity.TEncodedVideoInfo;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
+import com.app.upload.entity.TVideoMetadata;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.UIEnum;
@@ -12,6 +13,7 @@ import com.app.upload.model.Video;
 import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
+import com.app.upload.repository.TVideoMetadataRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
@@ -51,6 +53,8 @@ public class UploadService {
     private TVideoInfoRepository tVideoInfoRepository;
     @Autowired
     private TEncodedVideoInfoRepository tEncodedVideoInfoRepository;
+    @Autowired
+    private TVideoMetadataRepository tVideoMetadataRepository;
     private RabbitQueuePublish rabbitQueuePublish;
     private DbWorker dbWorker;
 
@@ -187,7 +191,7 @@ public class UploadService {
         }
     }
 
-    public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+    public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
             String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id());
 
@@ -199,9 +203,18 @@ public class UploadService {
             thumbnail.transferTo(tempUploadedThumbnailFile);
 
             String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + ".jpg";
-            convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
+            boolean thumbnail_saved = convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
 
-            tempUploadedThumbnailFile.delete();
+            TVideoMetadata tVideoMetadata;
+
+            if(thumbnail_saved){
+                tempUploadedThumbnailFile.delete();
+                tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.YES.getValue());
+            }else{
+                tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
+            }
+
+            tVideoMetadataRepository.save(tVideoMetadata);
             return true;
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(),"saveVideoMetadata()",e.getMessage());

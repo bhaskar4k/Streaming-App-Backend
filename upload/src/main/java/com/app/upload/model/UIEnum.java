@@ -17,4 +17,19 @@ public class UIEnum {
             return value;
         }
     }
+
+    public enum YesNo {
+        YES(1),
+        NO(0);
+
+        private final int value;
+
+        YesNo(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

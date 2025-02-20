@@ -53,7 +53,7 @@ public class UploadController {
     @PostMapping("/upload_video_info")
     public CommonReturn<Boolean> upload_video_info(@RequestParam("title") String title,
                                                    @RequestParam("description") String description,
-                                                   @RequestParam("is_public") boolean isPublic,
+                                                   @RequestParam("is_public") int is_public,
                                                    @RequestParam("thumbnail") MultipartFile thumbnail,
                                                    @RequestParam("video_info") String video_info_json) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
@@ -63,7 +63,7 @@ public class UploadController {
             objectMapper.findAndRegisterModules();
             TVideoInfo video_info = objectMapper.readValue(video_info_json, TVideoInfo.class);
 
-            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_info, title, description, isPublic, thumbnail, post_validated_request);
+            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
 
             return CommonReturn.success("Video has been uploaded successfully", isVideoMetadataUploadDoneAndSuccessful);
         } catch (Exception e) {
