@@ -18,12 +18,12 @@ public class Util {
         return UUID.randomUUID().toString();
     }
 
-    public String getUserSpecifiedFolder(JwtUserDetails userDetails, String uniqueID){
-        return File.separator + "UserID-" + userDetails.getT_mst_user_id() + File.separator + uniqueID;
+    public String getUserSpecifiedFolder(Long t_mst_user_id, String uniqueID){
+        return File.separator + "UserID-" + t_mst_user_id + File.separator + uniqueID;
     }
 
-    public String getUserSpecifiedFolderForThumbnail(JwtUserDetails userDetails){
-        return File.separator + "UserID-" + userDetails.getT_mst_user_id();
+    public String getUserSpecifiedFolderForThumbnail(Long t_mst_user_id){
+        return File.separator + "UserID-" + t_mst_user_id;
     }
 
     public String getFileNameWithoutExtension(String originalFilename) {

@@ -27,13 +27,18 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.io.File;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 @Service
 @Component
@@ -70,7 +75,7 @@ public class UploadService {
 
         try {
             String VIDEO_GUID = util.getrandomGUID();
-            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(userDetails,VIDEO_GUID);
+            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(userDetails.getT_mst_user_id(),VIDEO_GUID);
             Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
             long fileSize = file.getSize();
@@ -89,8 +94,7 @@ public class UploadService {
             List<String> validResolutions = getValidResolutions(sourceResolution, environment.getResolutions(), userDetails.getT_mst_user_id());
 
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
-            TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(util.getUserSpecifiedFolder(userDetails,VIDEO_GUID),
-                                                                        String.join(",", validResolutions),
+            TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(String.join(",", validResolutions),
                                                                         UIEnum.ProcessingStatus.TO_BE_PROCESSED.getValue());
 
             if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo)){
@@ -185,7 +189,7 @@ public class UploadService {
 
     public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, boolean isPublic, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
-            String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request);
+            String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id());
 
             File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
             if (!thumbnailDir.exists()) thumbnailDir.mkdirs();
@@ -194,7 +198,7 @@ public class UploadService {
             File tempUploadedThumbnailFile = new File(THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "_TEMPCPYFILE." + fileExtension);
             thumbnail.transferTo(tempUploadedThumbnailFile);
 
-            String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "." + fileExtension;
+            String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + ".jpg";
             convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
 
             tempUploadedThumbnailFile.delete();
@@ -207,29 +211,36 @@ public class UploadService {
 
     public boolean convertImageToJPGFormatAndSave(String inputFilePath, String outputFilePath, JwtUserDetails post_validated_request) {
         try {
-            File inputFile = new File(inputFilePath);
-            BufferedImage inputImage = ImageIO.read(inputFile);
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    environment.getFfmpegPath(),
+                    "-i", inputFilePath,
+                    "-vf", "format=rgb24",
+                    "-q:v", "2",
+                    "-y",
+                    outputFilePath
+            );
 
-            if (inputImage == null) {
-                log(post_validated_request.getT_mst_user_id(),"convertImgToJPG()","Invalid image format or corrupted file.");
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            StringBuilder output = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+            }
+
+            int exitCode = process.waitFor();
+
+            if (exitCode == 1) {
+                log(post_validated_request.getT_mst_user_id(), "convertImageToJPGFormatAndSave()", "FFmpeg failed with exit code " + exitCode + ": " + output.toString());
                 return false;
             }
 
-            BufferedImage outputImage = new BufferedImage(
-                    inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-
-            Graphics2D g2d = outputImage.createGraphics();
-            g2d.setColor(Color.BLACK);
-            g2d.fillRect(0, 0, inputImage.getWidth(), inputImage.getHeight());
-            g2d.drawImage(inputImage, 0, 0, null);
-            g2d.dispose();
-
-            File outputFile = new File(outputFilePath);
-            ImageIO.write(outputImage, "jpg", outputFile);
-
             return true;
-        } catch (IOException e) {
-            log(post_validated_request.getT_mst_user_id(),"convertImgToJPG()",e.getMessage());
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(), "convertImageToJPGFormatAndSave()", e.getMessage());
             return false;
         }
     }

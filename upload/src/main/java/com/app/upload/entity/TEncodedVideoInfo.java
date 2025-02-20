@@ -14,22 +14,19 @@ public class TEncodedVideoInfo {
     private Long id;
     private Long t_video_info_id;
     @Column(length = 500)
-    private String encoded_filepath;
-    @Column(length = 500)
     private String encoded_resolutions;
     private int processing_status;
+    private LocalDateTime processed_at;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
-    public TEncodedVideoInfo(String encoded_filepath, String encoded_resolutions, int processing_status) {
-        this.encoded_filepath = encoded_filepath;
+    public TEncodedVideoInfo(String encoded_resolutions, int processing_status) {
         this.encoded_resolutions = encoded_resolutions;
         this.processing_status = processing_status;
     }
 
-    public TEncodedVideoInfo(Long t_video_info_id, String encoded_filepath, String encoded_resolutions, int processing_status) {
+    public TEncodedVideoInfo(Long t_video_info_id, String encoded_resolutions, int processing_status) {
         this.t_video_info_id = t_video_info_id;
-        this.encoded_filepath = encoded_filepath;
         this.encoded_resolutions = encoded_resolutions;
         this.processing_status = processing_status;
     }
@@ -48,14 +45,6 @@ public class TEncodedVideoInfo {
 
     public void setT_video_info_id(Long t_video_info_id) {
         this.t_video_info_id = t_video_info_id;
-    }
-
-    public String getEncoded_filepath() {
-        return encoded_filepath;
-    }
-
-    public void setEncoded_filepath(String encoded_filepath) {
-        this.encoded_filepath = encoded_filepath;
     }
 
     public String getEncoded_resolutions() {
