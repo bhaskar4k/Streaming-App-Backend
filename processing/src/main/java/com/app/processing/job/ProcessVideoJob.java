@@ -48,15 +48,6 @@ public class ProcessVideoJob {
         scheduler.scheduleAtFixedRate(this::pollRabbitMQServer, 0, POLL_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
-    private void startPolling() {
-        try {
-            System.out.println("Job started...");
-            scheduler.scheduleAtFixedRate(this::pollRabbitMQServer, 0, POLL_INTERVAL_SECONDS, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            log(0L,"startPolling()",e.getMessage());
-        }
-    }
-
     private void pollRabbitMQServer() {
         if (semaphore.availablePermits() == 0) {
             System.out.println("All worker slots are busy. Skipping polling...");
