@@ -81,11 +81,15 @@ function Upload() {
 
         try {
             let response = await uploadService.DoUploadVideoInfo(formData);
-
-            console.log("Success:", response);
+            
+            if(response.status == 200){
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorSuccess, response.message);
+            }else{
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, response.message);
+            }
         } catch (error) {
             console.error("Error:", error);
-            Alert("Error", "red", "Failed to upload video info.");
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
         }
     }
 
