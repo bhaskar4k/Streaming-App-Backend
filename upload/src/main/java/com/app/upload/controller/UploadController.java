@@ -51,11 +51,11 @@ public class UploadController {
 
 
     @PostMapping("/upload_video_info")
-    public CommonReturn<Boolean> upload_video_info(@RequestParam("title") String title,
-                                                   @RequestParam("description") String description,
-                                                   @RequestParam("is_public") int is_public,
-                                                   @RequestParam("thumbnail") MultipartFile thumbnail,
-                                                   @RequestParam("video_info") String video_info_json) {
+    public CommonReturn<Boolean> upload_video_info(@RequestParam(value = "title", required = false) String title,
+                                                    @RequestParam(value = "description", required = false) String description,
+                                                    @RequestParam(value = "is_public") int is_public,
+                                                    @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
+                                                    @RequestParam("video_info") String video_info_json) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {

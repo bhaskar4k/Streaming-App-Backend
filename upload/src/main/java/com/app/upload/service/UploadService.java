@@ -2,6 +2,7 @@ package com.app.upload.service;
 
 import com.app.authentication.common.DbWorker;
 import com.app.upload.common.Util;
+import com.app.upload.common.VideoUtil;
 import com.app.upload.entity.TEncodedVideoInfo;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
@@ -55,6 +56,8 @@ public class UploadService {
     private TEncodedVideoInfoRepository tEncodedVideoInfoRepository;
     @Autowired
     private TVideoMetadataRepository tVideoMetadataRepository;
+    @Autowired
+    private VideoUtil videoUtil;
     private RabbitQueuePublish rabbitQueuePublish;
     private DbWorker dbWorker;
 
@@ -91,11 +94,11 @@ public class UploadService {
             Path originalFilePath = Paths.get(ORIGINAL_FILE_DIR, encodedFileName);
             Files.write(originalFilePath, file.getBytes());
 
-            String sourceResolution = getVideoResolution(originalFilePath.toString(), userDetails);
-            Double duration = getVideoDuration(originalFilePath.toString(),userDetails);
+            String sourceResolution = videoUtil.getVideoResolution(originalFilePath.toString(), userDetails);
+            Double duration = videoUtil.getVideoDuration(originalFilePath.toString(),userDetails);
             Long no_of_chunks = (long)Math.ceil(duration / 5L);
 
-            List<String> validResolutions = getValidResolutions(sourceResolution, environment.getResolutions(), userDetails.getT_mst_user_id());
+            List<String> validResolutions = videoUtil.getValidResolutions(sourceResolution, environment.getResolutions(), userDetails.getT_mst_user_id());
 
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
             TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(String.join(",", validResolutions),
@@ -111,60 +114,6 @@ public class UploadService {
             }
         } catch (Exception e) {
             log(userDetails.getT_mst_user_id(),"saveVideo()",e.getMessage());
-            return null;
-        }
-    }
-
-    private String getVideoResolution(String filePath, JwtUserDetails userDetails){
-        try {
-            String ffprobePath = environment.getFfprobePath();
-            ProcessBuilder processBuilder = new ProcessBuilder(ffprobePath, "-v", "error", "-select_streams", "v:0",
-                    "-show_entries", "stream=width,height", "-of", "csv=s=x:p=0", filePath);
-            Process process = processBuilder.start();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String res = reader.readLine();
-                int size=res.length();
-
-                if(res.charAt(size-1)=='x'){
-                    res = res.substring(0, size-1);
-                }
-
-                return res;
-            }
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getVideoResolution()",e.getMessage());
-            return null;
-        }
-    }
-
-    private List<String> getValidResolutions(String sourceResolution, List<String> resolutions, long t_mst_user_id) {
-        try {
-            int sourceHeight = Integer.parseInt(sourceResolution.split("x")[1]);
-            Map<String, Integer> resolutionHeightMap = environment.getResolutionHeightMap();
-
-            return resolutions.stream().filter(res -> resolutionHeightMap.get(res) <= sourceHeight).collect(Collectors.toList());
-        } catch (Exception e) {
-            log(t_mst_user_id,"getValidResolutions()",e.getMessage());
-            return null;
-        }
-    }
-
-    public Double getVideoDuration(String filePath, JwtUserDetails userDetails) {
-        try {
-            String ffprobePath = environment.getFfprobePath();
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    ffprobePath, "-i", filePath, "-show_entries", "format=duration",
-                    "-v", "quiet", "-of", "csv=p=0"
-            );
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String duration = reader.readLine();
-            process.waitFor();
-            return duration != null ? Double.parseDouble(duration) : 0.0;
-        } catch (Exception e) {
-            log(userDetails.getT_mst_user_id(),"getVideoResolution()",e.getMessage());
             return null;
         }
     }
@@ -193,25 +142,25 @@ public class UploadService {
 
     public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
-            String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id());
+            TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
 
-            File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
-            if (!thumbnailDir.exists()) thumbnailDir.mkdirs();
+            if (thumbnail != null && !thumbnail.isEmpty()) {
+                String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id());
 
-            String fileExtension = util.getFileExtension(thumbnail.getOriginalFilename());
-            File tempUploadedThumbnailFile = new File(THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "_TEMPCPYFILE." + fileExtension);
-            thumbnail.transferTo(tempUploadedThumbnailFile);
+                File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
+                if (!thumbnailDir.exists()) thumbnailDir.mkdirs();
 
-            String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + ".jpg";
-            boolean thumbnail_saved = convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
+                String fileExtension = util.getFileExtension(thumbnail.getOriginalFilename());
+                File tempUploadedThumbnailFile = new File(THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + "_TEMPCPYFILE." + fileExtension);
+                thumbnail.transferTo(tempUploadedThumbnailFile);
 
-            TVideoMetadata tVideoMetadata;
+                String ConvertedJPGFileOutputPath = THUMBNAIL_FILE_DIR + File.separator + video_info.getGuid() + ".jpg";
+                boolean thumbnail_saved = convertImageToJPGFormatAndSave(tempUploadedThumbnailFile.getAbsolutePath(), ConvertedJPGFileOutputPath, post_validated_request);
 
-            if(thumbnail_saved){
-                tempUploadedThumbnailFile.delete();
-                tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.YES.getValue());
-            }else{
-                tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
+                if(thumbnail_saved){
+                    tempUploadedThumbnailFile.delete();
+                    tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.YES.getValue());
+                }
             }
 
             tVideoMetadataRepository.save(tVideoMetadata);

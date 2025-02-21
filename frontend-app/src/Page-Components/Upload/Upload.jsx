@@ -63,26 +63,6 @@ function Upload() {
     }
 
 
-    function validateVideoFormData(title, description) {
-        let validationStatus = true;
-        let warning_message = "";
-
-        if (title === "" || title === null) {
-            warning_message = "Video title can't be empty.";
-            validationStatus = false;
-        } else if (description === "" || description === null) {
-            warning_message = "Video description can't be empty.";
-            validationStatus = false;
-        }
-
-        if (validationStatus === false) {
-            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, warning_message);
-        }
-
-        return validationStatus;
-    }
-
-
     function thumbnailUpload(event) {
         set_thumbnail(event.target.files[0]);
     }
@@ -91,13 +71,6 @@ function Upload() {
     async function saveVideoInfo() {
         let title = document.getElementById("video_title").value;
         let description = document.getElementById("video_description").value;
-
-        if (validateVideoFormData(title, description) === false) return;
-
-        if (!thumbnail) {
-            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorWarning, "Please select a thumbnail");
-            return;
-        }
 
         let formData = new FormData();
         formData.append("title", title);
