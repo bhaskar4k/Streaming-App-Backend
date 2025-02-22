@@ -171,7 +171,7 @@ function Login() {
     }, 5000);
   }
 
-  
+
   function openAlertModal(header_text, body_text) {
     setHeaderTextOfAlertModal(header_text);
     setBodyTextOfAlertModal(body_text);

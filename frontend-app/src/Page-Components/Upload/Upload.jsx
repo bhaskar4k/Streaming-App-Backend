@@ -41,7 +41,7 @@ function Upload() {
 
         try {
             const result = await uploadService.DoUploadVideo(formData, setProgress);
-            
+
             if (result.data.status === 200) {
                 set_video_upload_success(true);
                 set_video_info(result.data.data);
@@ -76,7 +76,7 @@ function Upload() {
     }
 
 
-    function removeThumbnail(){
+    function removeThumbnail() {
         event.preventDefault();
         set_thumbnail(null);
         set_thumbnail_name("");
@@ -96,10 +96,10 @@ function Upload() {
 
         try {
             let response = await uploadService.DoUploadVideoInfo(formData);
-            
-            if(response.status == 200){
+
+            if (response.status == 200) {
                 Alert(Environment.alert_modal_header_video_info_upload, Environment.colorSuccess, response.message);
-            }else{
+            } else {
                 Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, response.message);
             }
         } catch (error) {
@@ -166,7 +166,7 @@ function Upload() {
                         )}
                     </label>
                 </form>
-                           
+
                 <div className='title'>
                     <span>Title<span className="required_color">*</span></span>
                     <input type="text" className="upload_input upload_normal_input" id="video_title" />

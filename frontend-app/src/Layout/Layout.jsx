@@ -23,8 +23,9 @@ function Layout() {
         "menu-item-text-home",
         "menu-item-text-dashboard",
         "menu-item-text-upload",
+        "menu-item-text-manage-ideo",
         "menu-item-text-profile",
-        "menu-item-text-logout",
+        "menu-item-text-logout"
     ];
 
 
@@ -57,8 +58,8 @@ function Layout() {
                 setPreviousWindowWidth(windowWidth);
                 return;
             }
-            newWidthMenubar = "70px";
-            newWidthMainContent = "calc(100% - 85px)";
+            newWidthMenubar = '70px';
+            newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = "none";
         }
 
@@ -96,13 +97,13 @@ function Layout() {
 
         menubar.style.width = newWidthMenubar;
 
+        const mainContent = document.getElementById("mainContent");
+        if (mainContent) mainContent.style.width = newWidthMainContent;
+
         elements.forEach((id) => {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = newDisplay;
         });
-
-        const mainContent = document.getElementById("mainContent");
-        if (mainContent) mainContent.style.width = newWidthMainContent;
     }
 
 
@@ -116,42 +117,42 @@ function Layout() {
             <div className='mainBody' id='mainBody'>
                 <div className='menubar' id='menubar'>
                     <div className='a-menu-item' onClick={() => navigate("/home")}>
-                        <div className='menu-item' id='menu-item-home'>
+                        <div className='menu-item'>
                             <img src={home} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-home'>Home</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item' onClick={() => navigate("/dashboard")}>
-                        <div className='menu-item' id='menu-item-dashboard'>
+                        <div className='menu-item'>
                             <img src={dashboard} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-dashboard'>Dashboard</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item' onClick={() => navigate("/upload")}>
-                        <div className='menu-item' id='menu-item-upload'>
+                        <div className='menu-item'>
                             <img src={upload} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-upload'>Upload</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item' onClick={() => navigate("/manage-video")}>
-                        <div className='menu-item' id='menu-item-upload'>
+                        <div className='menu-item'>
                             <img src={video} className='menu-icons'></img>
-                            <h4 className='menu-item-text' id='menu-item-text-upload'>Manage Video</h4>
+                            <h4 className='menu-item-text' id='menu-item-text-manage-ideo'>Manage Video</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item' onClick={() => navigate("/profile")}>
-                        <div className='menu-item' id='menu-item-profile'>
+                        <div className='menu-item'>
                             <img src={profile} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-profile'>Profile</h4>
                         </div>
                     </div>
 
                     <div className='a-menu-item' onClick={() => navigate("/logout")}>
-                        <div className='menu-item' id='menu-item-logout'>
+                        <div className='menu-item'>
                             <img src={logout} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-logout'>Logout</h4>
                         </div>
