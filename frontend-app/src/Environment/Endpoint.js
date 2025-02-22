@@ -12,7 +12,7 @@ let EndpointAuthentication = {
 }
 
 let EndpointDashboard = {
-    dashboard: "/dashboard/temp",
+    menu: "/dashboard/menu",
 }
 
 let EndpointStreaming = {

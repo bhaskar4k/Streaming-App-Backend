@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { do_logout } from '../Common/Utils';
+import { DashboardService } from '../Service/DashboardService';
 
 import bars from '../../public/Images/bars.svg';
 import home from '../../public/Images/home.svg';
@@ -20,6 +21,8 @@ function Layout() {
     const [previousWindowWidth, setPreviousWindowWidth] = useState(window.innerWidth);
     const [toogleStatus, setToogleStatus] = useState(0);
 
+    const dashboardService = new DashboardService();
+
     const elements = [
         "menu-item-text-home",
         "menu-item-text-dashboard",
@@ -28,6 +31,53 @@ function Layout() {
         "menu-item-text-profile",
         "menu-item-text-logout"
     ];
+
+
+    useEffect(() => {
+        getLeftSideMenu();
+    }, []);
+
+
+    async function getLeftSideMenu() {
+        try {
+            let response = await dashboardService.DoGetMenu();
+
+            console.log("menu", response);
+        } catch (error) {
+            console.error("Error:", error);
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
+        }
+    }
+
+
+    function toggleSidebar() {
+        if (windowWidth < 1200) return;
+
+        const menubar = document.getElementById('menubar');
+
+        let newWidthMenubar, newWidthMainContent, newDisplay;
+        if (document.getElementById('menubar').style.width === '70px') {
+            newWidthMenubar = '13%';
+            newWidthMainContent = '86%';
+            newDisplay = 'block';
+            setToogleStatus(1);
+        } else {
+            newWidthMenubar = '70px';
+            newWidthMainContent = 'calc(100% - 85px)';
+            newDisplay = 'none';
+            setToogleStatus(0);
+        }
+
+        menubar.style.width = newWidthMenubar;
+
+        const mainContent = document.getElementById("mainContent");
+        if (mainContent) mainContent.style.width = newWidthMainContent;
+
+        elements.forEach((id) => {
+            const elem = document.getElementById(id);
+            if (elem) elem.style.display = newDisplay;
+        });
+    }
 
 
     useEffect(() => {
@@ -77,36 +127,6 @@ function Layout() {
 
         setPreviousWindowWidth(windowWidth);
     }, [windowWidth]);
-
-
-    function toggleSidebar() {
-        if (windowWidth < 1200) return;
-
-        const menubar = document.getElementById('menubar');
-
-        let newWidthMenubar, newWidthMainContent, newDisplay;
-        if (document.getElementById('menubar').style.width === '70px') {
-            newWidthMenubar = '13%';
-            newWidthMainContent = '86%';
-            newDisplay = 'block';
-            setToogleStatus(1);
-        } else {
-            newWidthMenubar = '70px';
-            newWidthMainContent = 'calc(100% - 85px)';
-            newDisplay = 'none';
-            setToogleStatus(0);
-        }
-
-        menubar.style.width = newWidthMenubar;
-
-        const mainContent = document.getElementById("mainContent");
-        if (mainContent) mainContent.style.width = newWidthMainContent;
-
-        elements.forEach((id) => {
-            const elem = document.getElementById(id);
-            if (elem) elem.style.display = newDisplay;
-        });
-    }
 
 
     return (

@@ -1,5 +1,6 @@
 package com.app.dashboard.controller;
 
+import com.app.authentication.common.CommonReturn;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,8 @@ public class DashboardController {
     private LogExceptionsService logExceptionsService;
 
     @GetMapping("/menu")
-    public String menu(){
-        log("upload()","e.getMessage()");
-        return "Baler menu le bara";
+    public CommonReturn<String> get_layout_menu(){
+        return CommonReturn.success("Baler menu le bara","menuuuu");
     }
 
 
