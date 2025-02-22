@@ -10,6 +10,7 @@ import upload from '../../public/Images/upload.svg';
 import profile from '../../public/Images/profile.svg';
 import logout from '../../public/Images/logout.svg';
 import bars from '../../public/Images/bars.svg';
+import video from '../../public/Images/video.svg';
 
 function Layout() {
     const navigate = useNavigate();
@@ -132,6 +133,13 @@ function Layout() {
                         <div className='menu-item' id='menu-item-upload'>
                             <img src={upload} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-upload'>Upload</h4>
+                        </div>
+                    </div>
+
+                    <div className='a-menu-item' onClick={() => navigate("/manage-video")}>
+                        <div className='menu-item' id='menu-item-upload'>
+                            <img src={video} className='menu-icons'></img>
+                            <h4 className='menu-item-text' id='menu-item-text-upload'>Manage Video</h4>
                         </div>
                     </div>
 

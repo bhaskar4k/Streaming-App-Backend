@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
+import './Manage-Video.css';
 
 function Home() {
     return (
         <>
-            <h1>HOME</h1>
+            <h1>Manage Video</h1>
         </>
     );
 }
