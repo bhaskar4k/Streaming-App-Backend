@@ -1,0 +1,41 @@
+package com.app.dashboard.common;
+
+import com.app.dashboard.service.LogExceptionsService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.util.UUID;
+
+public class Util {
+    @Autowired
+    private LogExceptionsService logExceptionsService;
+
+
+    public String getrandomGUID(){
+        return UUID.randomUUID().toString();
+    }
+
+    public String getUserSpecifiedFolder(Long t_mst_user_id, String uniqueID){
+        return File.separator + "UserID-" + t_mst_user_id + File.separator + uniqueID;
+    }
+
+    public String getUserSpecifiedFolderForThumbnail(Long t_mst_user_id){
+        return File.separator + "UserID-" + t_mst_user_id;
+    }
+
+    public String getFileNameWithoutExtension(String originalFilename) {
+        if (originalFilename == null || !originalFilename.contains(".")) {
+            return originalFilename;
+        }
+        return originalFilename.substring(0, originalFilename.lastIndexOf('.'));
+    }
+
+    public String getFileExtension(String originalFilename) {
+        String fileExtension = "";
+        if (originalFilename.contains(".")) {
+            fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        }
+
+        return fileExtension;
+    }
+}
