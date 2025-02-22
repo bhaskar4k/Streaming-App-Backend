@@ -4,8 +4,6 @@ import AlertModal from '../Common-Components/AlertModal/AlertModal';
 import './Upload.css';
 import removeFile from '../../../public/Images/remove-file.svg';
 import { UploadService } from '../../Service/UploadService';
-import { remove } from 'welcome-ui/Toast';
-import { th } from '@xstyled/styled-components';
 
 
 let loadAlertModal = null;

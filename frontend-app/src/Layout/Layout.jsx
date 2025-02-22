@@ -3,6 +3,7 @@ import './Layout.css';
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { do_logout } from '../Common/Utils';
 
 import bars from '../../public/Images/bars.svg';
 import home from '../../public/Images/home.svg';
@@ -152,7 +153,7 @@ function Layout() {
                         </div>
                     </div>
 
-                    <div className='a-menu-item' onClick={() => navigate("/logout")}>
+                    <div className='a-menu-item' onClick={() => do_logout(navigate)}>
                         <div className='menu-item'>
                             <img src={logout} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-logout'>Logout</h4>

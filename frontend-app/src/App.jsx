@@ -16,7 +16,7 @@ import AlertModal from './Page-Components/Common-Components/AlertModal/AlertModa
 
 import { EndpointWebsocket } from '../src/Environment/Endpoint.js';
 import { Environment } from '../src/Environment/Environment.js';
-import { logout, redirect_to_login } from './Common/Utils.js';
+import { do_logout, redirect_to_login } from './Common/Utils.js';
 
 import './App.css';
 
@@ -55,7 +55,7 @@ function App() {
 
             loadAlertModal = setTimeout(() => {
               closeAlertModal();
-              logout(navigate);
+              do_logout(navigate);
             }, 5000);
           }
         });
@@ -100,7 +100,7 @@ function App() {
 
     clearTimeout(loadAlertModal);
     loadAlertModal = null;
-    logout(navigate);
+    do_logout(navigate);
   }
 
   return (

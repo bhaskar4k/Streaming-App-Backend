@@ -14,7 +14,7 @@ export async function get_ip_address() {
     return null;
 }
 
-export function logout(navigate) {
+export function do_logout(navigate) {
     localStorage.removeItem("JWT");
     redirect_to_login(navigate);
 }
