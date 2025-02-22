@@ -4,13 +4,13 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import bars from '../../public/Images/bars.svg';
 import home from '../../public/Images/home.svg';
 import dashboard from '../../public/Images/dashboard.svg';
 import upload from '../../public/Images/upload.svg';
 import profile from '../../public/Images/profile.svg';
 import logout from '../../public/Images/logout.svg';
-import bars from '../../public/Images/bars.svg';
-import video from '../../public/Images/video.svg';
+import manage_video from '../../public/Images/manage_video.svg';
 
 function Layout() {
     const navigate = useNavigate();
@@ -40,6 +40,7 @@ function Layout() {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
+
 
     useEffect(() => {
         const menubar = document.getElementById("menubar");
@@ -139,7 +140,7 @@ function Layout() {
 
                     <div className='a-menu-item' onClick={() => navigate("/manage-video")}>
                         <div className='menu-item'>
-                            <img src={video} className='menu-icons'></img>
+                            <img src={manage_video} className='menu-icons'></img>
                             <h4 className='menu-item-text' id='menu-item-text-manage-ideo'>Manage Video</h4>
                         </div>
                     </div>
