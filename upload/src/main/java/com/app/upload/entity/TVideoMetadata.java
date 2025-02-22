@@ -22,6 +22,10 @@ public class TVideoMetadata {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
+    public TVideoMetadata(){
+
+    }
+
     public TVideoMetadata(Long t_video_info_id, String video_title, String video_description, int is_public, int thumbnail_uploaded) {
         this.t_video_info_id = t_video_info_id;
         this.video_title = video_title;
