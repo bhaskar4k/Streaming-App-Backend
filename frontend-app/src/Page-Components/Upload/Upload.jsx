@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Environment } from '../../Environment/Environment';
 import AlertModal from '../Common-Components/AlertModal/AlertModal';
 import './Upload.css';
+import removeFile from '../../../public/Images/remove-file.svg';
 import { UploadService } from '../../Service/UploadService';
+import { remove } from 'welcome-ui/Toast';
+import { th } from '@xstyled/styled-components';
 
 
 let loadAlertModal = null;
@@ -12,6 +15,7 @@ function Upload() {
     const [video_upload_success, set_video_upload_success] = useState(false);
     const [progress, setProgress] = useState(0);
     const [thumbnail, set_thumbnail] = useState(null);
+    const [thumbnail_name, set_thumbnail_name] = useState("");
     const [video_info, set_video_info] = useState(null);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
@@ -63,8 +67,19 @@ function Upload() {
     }
 
 
-    function thumbnailUpload(event) {
-        set_thumbnail(event.target.files[0]);
+    function thumbnailSave(event) {
+        const file = event.target.files[0];
+        if (file) {
+            set_thumbnail_name(file.name);
+            set_thumbnail(file);
+        }
+    }
+
+
+    function removeThumbnail(){
+        event.preventDefault();
+        set_thumbnail(null);
+        set_thumbnail_name("");
     }
 
 
@@ -130,8 +145,8 @@ function Upload() {
 
                 <form className='file-upload-form'>
                     <label className="drop-container" id="dropcontainer">
-                        {file_not_uploaded && <span className="drop-title">Drop files here</span>}
-                        {file_not_uploaded && <h3 className="drop-or-text">or</h3>}
+                        {file_not_uploaded && <span className="drop-title">Drop video files here</span>}
+                        {file_not_uploaded && <span className="drop-or-text">or</span>}
                         {file_not_uploaded && <input type="file" accept="video/*" onChange={handleVideoUpload} required />}
 
                         {!file_not_uploaded &&
@@ -151,7 +166,7 @@ function Upload() {
                         )}
                     </label>
                 </form>
-
+                           
                 <div className='title'>
                     <span>Title<span className="required_color">*</span></span>
                     <input type="text" className="upload_input upload_normal_input" id="video_title" />
@@ -164,9 +179,11 @@ function Upload() {
 
                 <div className='thumbnail_and_save'>
                     <label className="drop-container-thumbnail" id="dropcontainer">
-                        <span className="drop-title">Drop thumbnail here</span>
-                        or
-                        <input type="file" accept="image/*" onChange={thumbnailUpload} required />
+                        {!thumbnail && <span className="drop-title">Drop thumbnail here</span>}
+                        {!thumbnail && <span className="drop-or-text">or</span>}
+                        {!thumbnail && <input type="file" accept="image/*" onChange={thumbnailSave} required />}
+                        {thumbnail && <span className="drop-filename-text">{thumbnail_name}</span>}
+                        {thumbnail && <span className='remove_thumbnail_btn'><img src={removeFile} className='menu-icons' onClick={removeThumbnail}></img></span>}
                     </label>
 
                     <div className='video_right_side_buttons'>

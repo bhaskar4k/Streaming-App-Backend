@@ -1,7 +1,7 @@
 package com.app.upload.service;
 
 import com.app.authentication.common.DbWorker;
-import com.app.authentication.entity.TMstUser;
+import com.app.upload.common.CommonReturn;
 import com.app.upload.common.Util;
 import com.app.upload.common.VideoUtil;
 import com.app.upload.entity.TEncodedVideoInfo;
@@ -27,24 +27,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.io.File;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 
 @Service
 @Component
@@ -144,7 +133,7 @@ public class UploadService {
     }
 
     @Transactional
-    public boolean saveVideoMetadata(TVideoInfo video_info, String title, String description, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+    public CommonReturn<Boolean> saveVideoMetadata(TVideoInfo video_info, String title, String description, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
             TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
 
@@ -167,17 +156,19 @@ public class UploadService {
                 }
             }
 
+            String return_message = "Video metadata has been uploaded successfully.";
             TVideoMetadata existingInfo = existingVideoMetadata(video_info.getId(), post_validated_request);
             if(existingInfo == null){
                 tVideoMetadataRepository.save(tVideoMetadata);
             }else{
                 updateVideoMetadata(existingInfo.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
+                return_message = "Video metadata has been updated successfully.";
             }
 
-            return true;
+            return CommonReturn.success(return_message,true);
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(),"saveVideoMetadata()",e.getMessage());
-            return false;
+            return CommonReturn.error(400,"Internal Server Error.");
         }
     }
 

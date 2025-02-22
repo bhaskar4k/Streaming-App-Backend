@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.DataInput;
 
 
 @RestController
@@ -63,9 +62,7 @@ public class UploadController {
             objectMapper.findAndRegisterModules();
             TVideoInfo video_info = objectMapper.readValue(video_info_json, TVideoInfo.class);
 
-            boolean isVideoMetadataUploadDoneAndSuccessful = uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
-
-            return CommonReturn.success("Video has been uploaded successfully", isVideoMetadataUploadDoneAndSuccessful);
+            return uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
         } catch (Exception e) {
             log("upload()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");

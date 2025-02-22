@@ -45,8 +45,16 @@
   transition: color .2s ease-in-out;
 }
 
-.drop-or-text {
-  margin: 0;
+.drop-filename-text{
+  font-size: 16px;
+  background-color: #ececec;
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 45px;
+}
+
+.drop-or-text{
+  font-size: 16px;
 }
 
 .drop-container input {
@@ -140,15 +148,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 180px;
   padding: 20px;
   border-radius: 10px;
   border: 2px dashed #555;
   color: #444;
   cursor: pointer;
-  transition: background .2s ease-in-out, border .2s ease-in-out;
+  height: auto;
+  transition: 0.2s all ease-in-out;
   overflow: hidden;
-  width: 600px;
+  width: 30%;
 }
 
 .drop-container-thumbnail input {
@@ -342,4 +350,13 @@
 .title,
 .description {
   margin-top: 20px;
+}
+
+.remove_thumbnail_btn{
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding-top: 3px;
 }

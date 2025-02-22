@@ -15,7 +15,7 @@ public class TVideoMetadata {
     private Long t_video_info_id;
     @Column(length = 1000)
     private String video_title;
-    @Column(length = 100000)
+    @Column(length = 1000000000)
     private String video_description;
     private int is_public;
     private int thumbnail_uploaded;
