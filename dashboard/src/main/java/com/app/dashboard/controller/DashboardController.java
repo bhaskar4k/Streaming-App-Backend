@@ -2,6 +2,9 @@ package com.app.dashboard.controller;
 
 import com.app.authentication.common.CommonReturn;
 import com.app.dashboard.entity.TLogExceptions;
+import com.app.dashboard.environment.Environment;
+import com.app.dashboard.model.JwtUserDetails;
+import com.app.dashboard.service.AuthService;
 import com.app.dashboard.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dashboard")
 public class DashboardController {
     @Autowired
+    public AuthService authService;
+    @Autowired
     private LogExceptionsService logExceptionsService;
 
+    public Environment environment;
+
+    public DashboardController(){
+        this.environment = new Environment();
+    }
+
     @GetMapping("/menu")
-    public CommonReturn<String> get_layout_menu(){
-        return CommonReturn.success("Baler menu le bara","menuuuu");
+    public CommonReturn<JwtUserDetails> get_layout_menu(){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        return CommonReturn.success("Baler menu le bara",post_validated_request);
     }
 
 
