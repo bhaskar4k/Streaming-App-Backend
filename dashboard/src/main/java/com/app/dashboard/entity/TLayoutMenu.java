@@ -21,6 +21,10 @@ public class TLayoutMenu {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
+    public TLayoutMenu(){
+
+    }
+
     public TLayoutMenu(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence, LocalDateTime trans_datetime) {
         this.id = id;
         this.route_name = route_name;

@@ -1,15 +1,19 @@
 package com.app.dashboard.controller;
 
 import com.app.authentication.common.CommonReturn;
+import com.app.dashboard.entity.TLayoutMenu;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
 import com.app.dashboard.service.AuthService;
+import com.app.dashboard.service.DashboardService;
 import com.app.dashboard.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/dashboard")
@@ -18,6 +22,8 @@ public class DashboardController {
     public AuthService authService;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    @Autowired
+    private DashboardService dashboardService;
 
     public Environment environment;
 
@@ -26,9 +32,19 @@ public class DashboardController {
     }
 
     @GetMapping("/menu")
-    public CommonReturn<JwtUserDetails> get_layout_menu(){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
-        return CommonReturn.success("Baler menu le bara",post_validated_request);
+    public CommonReturn<List<TLayoutMenu>> get_layout_menu(){
+        try {
+            JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+            List<TLayoutMenu> menus = dashboardService.getLayoutMenu(post_validated_request);
+
+            if(menus!=null){
+                return CommonReturn.success("Layout menu has fetched successfully for the user", menus);
+            }
+            return CommonReturn.error(400,"Internal Server Error.");
+        } catch (Exception e) {
+            log("validateToken()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
     }
 
 

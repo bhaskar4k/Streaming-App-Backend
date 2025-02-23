@@ -7,6 +7,8 @@
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/controller/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/entity/TLayoutMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/entity/TLayoutMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +19,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -175,5 +177,60 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/controller/DashboardController.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/service/DashboardService.java</url>
+          <line>44</line>
+          <properties class="com.app.dashboard.service.DashboardService" method="getLayoutMenu">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
