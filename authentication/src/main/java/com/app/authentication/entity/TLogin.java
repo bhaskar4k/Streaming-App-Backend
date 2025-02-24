@@ -18,6 +18,7 @@ public class TLogin {
     private String jwt_token;
     private String ip_address;
     private Long device_count;
+    private int is_active;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
@@ -30,6 +31,14 @@ public class TLogin {
         this.jwt_token = jwt_token;
         this.ip_address = ip_address;
         this.device_count = device_count;
+    }
+
+    public TLogin(Long t_mst_user_id, String jwt_token, String ip_address, Long device_count, int is_active) {
+        this.t_mst_user_id = t_mst_user_id;
+        this.jwt_token = jwt_token;
+        this.ip_address = ip_address;
+        this.device_count = device_count;
+        this.is_active = is_active;
     }
 
     public Long getId() {
@@ -78,6 +87,14 @@ public class TLogin {
 
     public void setTrans_datetime(LocalDateTime trans_datetime) {
         this.trans_datetime = trans_datetime;
+    }
+
+    public int getIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(int is_active) {
+        this.is_active = is_active;
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.app.authentication.service.LoginSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -47,6 +48,21 @@ public class AuthenticationController {
             return loginSignUpService.validateUser(cur_user);
         } catch (Exception e) {
             log("do_login()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @Transactional
+    @PostMapping("/logout")
+    public CommonReturn<Boolean> logout() {
+        try {
+            Boolean res = authService.do_logout();
+            if(res){
+                return CommonReturn.success("Successfully logged out.", true);
+            }
+            return CommonReturn.error(400,"Internal Server Error.");
+        } catch (Exception e) {
+            log("logout()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

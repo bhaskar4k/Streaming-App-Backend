@@ -3,7 +3,6 @@ import './Layout.css';
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { do_logout } from '../Common/Utils';
 import { DashboardService } from '../Service/DashboardService';
 
 import bars from '../../public/Images/bars.svg';

@@ -1,3 +1,5 @@
+import {AuthenticationService} from '../Service/AuthenticationService';
+
 export async function get_ip_address() {
     try {
         let response = await fetch("https://api.ipify.org/?format=json", {
@@ -15,6 +17,8 @@ export async function get_ip_address() {
 }
 
 export function do_logout(navigate) {
+    const authenticationService = new AuthenticationService();
+    authenticationService.DoLogout();
     localStorage.removeItem("JWT");
     redirect_to_login(navigate);
 }

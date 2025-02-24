@@ -9,10 +9,12 @@ import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
+import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -64,40 +67,54 @@ public class AuthService {
         }
     }
 
+    public TLogin getLoggedInUser() {
+        try {
+            sql_string = "SELECT * FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
+
+            return (TLogin)dbWorker.getQuery(sql_string, entityManager, params, TLogin.class).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            log("getLoggedInUser()",e.getMessage());
+            return null;
+        }
+    }
+
     @Transactional
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user){
         try {
-            sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1";
+            sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1 and is_active = 1";
             params = List.of(validated_user.getId());
             Long loggedin_device_number = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult() + 1;
 
-            if(loggedin_device_number>environment.getMaximumLoginDevice()){
+            if(loggedin_device_number > environment.getMaximumLoginDevice()){
                 // Generate random integers in range 1 to environment.getMaximum_login_device()
                 Random rand = new Random();
                 Long removed_device_number = rand.nextLong(environment.getMaximumLoginDevice())+1;
 
                 params = List.of(validated_user.getId(),removed_device_number);
-                sql_string = "DELETE FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2";
-                int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+                TLogin loggedInUser = getLoggedInUser();
 
-                if(deleted==0) return null;
+                sql_string = "UPDATE t_login set is_active = 0 WHERE id = :value1";
+                params = List.of(loggedInUser.getId());
+                int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+                if(updated == 0) return null;
 
                 loggedin_device_number = removed_device_number;
-
-                emitLogoutMessageIntoWebsocket(validated_user.getId(),removed_device_number);
+                emitLogoutMessageIntoWebsocket(validated_user.getId(), removed_device_number);
             }
 
-            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(),validated_user.getEmail(),validated_user.getIs_subscribed(),new_user.getIp_address(),loggedin_device_number);
+            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(), validated_user.getEmail(), validated_user.getIs_subscribed(), new_user.getIp_address(), loggedin_device_number);
             String jwt_token = jwt.generateToken(jwt_user_details);
 
-            if(jwt_token!=null){
-                TLogin login_entity = new TLogin(validated_user.getId(),jwt_token,new_user.getIp_address(),loggedin_device_number);
+            if(jwt_token != null){
+                TLogin login_entity = new TLogin(validated_user.getId(), jwt_token, new_user.getIp_address(), loggedin_device_number, 1);
                 tLoginRepository.save(login_entity);
             }
 
             return jwt_token;
         } catch (Exception e) {
-            log("generateTokenAndUpdateDB()",e.getMessage());
+            log("generateTokenAndUpdateDB()", e.getMessage());
             return null;
         }
     }
@@ -139,6 +156,23 @@ public class AuthService {
             log("getAuthenticatedUserFromContext()",e.getMessage());
             return null;
         }
+    }
+
+    @Transactional
+    public Boolean do_logout(){
+        try {
+            JwtUserDetails details = getAuthenticatedUserFromContext();
+            params = List.of(details.getT_mst_user_id(),details.getDevice_count());
+            sql_string = "UPDATE t_login set is_active = 0 WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
+            int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+
+            if(deleted==1) return true;
+        } catch (Exception e) {
+            log("getAuthenticatedUserFromContext()",e.getMessage());
+            return false;
+        }
+
+        return false;
     }
 
 

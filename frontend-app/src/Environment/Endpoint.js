@@ -8,7 +8,8 @@ let EndpointMicroservice = {
 let EndpointAuthentication = {
     do_signup: "/authentication/do_signup",
     do_login: "/authentication/do_login",
-    get_userid_from_jwt: "/authentication/get_userid_from_jwt"
+    get_userid_from_jwt: "/authentication/get_userid_from_jwt",
+    logout: "/authentication/logout",
 }
 
 let EndpointDashboard = {

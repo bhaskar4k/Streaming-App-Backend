@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="" />
+    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/entity/TLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/entity/TLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Common/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Common/Utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Layout/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Layout/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

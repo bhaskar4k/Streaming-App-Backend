@@ -12,11 +12,12 @@ import Profile from './Page-Components/Profile/Profile.jsx';
 import Upload from './Page-Components/Upload/Upload.jsx';
 import ManageVideo from './Page-Components/Manage-Video/Manage-Video.jsx';
 import Error from './Error.jsx';
+import Logout from './Logout/Logout.jsx';
 import AlertModal from './Page-Components/Common-Components/AlertModal/AlertModal.jsx';
 
 import { EndpointWebsocket } from '../src/Environment/Endpoint.js';
 import { Environment } from '../src/Environment/Environment.js';
-import { do_logout, redirect_to_login } from './Common/Utils.js';
+import { redirect_to_login } from './Common/Utils.js';
 
 import './App.css';
 
@@ -55,7 +56,10 @@ function App() {
 
             loadAlertModal = setTimeout(() => {
               closeAlertModal();
-              do_logout(navigate);
+              localStorage.removeItem("JWT");
+              setTimeout(() => {
+                navigate(`/login`);
+              }, 500);
             }, 5000);
           }
         });
@@ -100,7 +104,10 @@ function App() {
 
     clearTimeout(loadAlertModal);
     loadAlertModal = null;
-    do_logout(navigate);
+    localStorage.removeItem("JWT");
+    setTimeout(() => {
+      navigate(`/login`);
+    }, 500);
   }
 
   return (
@@ -117,6 +124,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/manage-video" element={<ManageVideo />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>
 
