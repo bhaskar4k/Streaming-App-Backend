@@ -10,7 +10,7 @@ import com.app.upload.entity.TVideoInfo;
 import com.app.upload.entity.TVideoMetadata;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
-import com.app.upload.model.UIEnum;
+import com.app.upload.enums.UIEnum;
 import com.app.upload.model.Video;
 import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -33,7 +32,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.io.File;
-import java.io.*;
 
 @Service
 @Component

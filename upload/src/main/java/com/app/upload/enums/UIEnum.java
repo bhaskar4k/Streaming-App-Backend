@@ -1,4 +1,4 @@
-package com.app.upload.model;
+package com.app.upload.enums;
 
 public class UIEnum {
     public enum ProcessingStatus {

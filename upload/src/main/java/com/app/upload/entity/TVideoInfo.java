@@ -1,6 +1,6 @@
 package com.app.upload.entity;
 
-import com.app.upload.model.UIEnum;
+import com.app.upload.enums.UIEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

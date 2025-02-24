@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/UIEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/enums/UIEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,9 +19,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
-        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -55,6 +59,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Streaming-App\rabbitmq\src\main\java\com\app\rabbitmq\common" />
       <recent name="E:\Project\Streaming-App\upload\src\main\java\com\app\upload\common" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.app.upload.enums" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.app.dashboard.service" />

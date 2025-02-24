@@ -5,6 +5,7 @@ import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.entity.TLogin;
 import com.app.authentication.entity.TMstUser;
+import com.app.authentication.enums.UIEnum;
 import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
@@ -92,7 +93,7 @@ public class AuthService {
             String jwt_token = jwt.generateToken(jwt_user_details);
 
             if(jwt_token != null){
-                TLogin login_entity = new TLogin(validated_user.getId(), jwt_token, new_user.getIp_address(), loggedin_device_number, 1);
+                TLogin login_entity = new TLogin(validated_user.getId(), jwt_token, new_user.getIp_address(), loggedin_device_number, UIEnum.IsActive.ACTIVE.getValue());
                 tLoginRepository.save(login_entity);
             }
 
