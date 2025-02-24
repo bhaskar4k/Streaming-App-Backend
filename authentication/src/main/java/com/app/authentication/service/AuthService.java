@@ -148,9 +148,9 @@ public class AuthService {
             JwtUserDetails details = getAuthenticatedUserFromContext();
             params = List.of(details.getT_mst_user_id(),details.getDevice_count());
             sql_string = "UPDATE t_login set is_active = 0 WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
-            int deleted = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+            int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
 
-            if(deleted==1) return true;
+            if(updated==1) return true;
         } catch (Exception e) {
             log("getAuthenticatedUserFromContext()",e.getMessage());
             return false;
