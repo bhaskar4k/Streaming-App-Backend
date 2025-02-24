@@ -86,7 +86,16 @@ public class AuthService {
                 loggedin_device_number = removed_device_number;
                 emitLogoutMessageIntoWebsocket(validated_user.getId(), removed_device_number);
             }else{
-                
+                for(Long cur_device_no=1L; cur_device_no<=environment.getMaximumLoginDevice(); cur_device_no++){
+                    sql_string = "select count(id) as count from t_login where device_count = :value1 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
+                    params = List.of(cur_device_no);
+                    Long count = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult();
+
+                    if(count==0){
+                        loggedin_device_number = cur_device_no;
+                        break;
+                    }
+                }
             }
 
             JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(), validated_user.getEmail(), validated_user.getIs_subscribed(), new_user.getIp_address(), loggedin_device_number);
