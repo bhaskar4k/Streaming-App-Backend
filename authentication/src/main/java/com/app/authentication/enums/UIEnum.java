@@ -1,13 +1,13 @@
 package com.app.authentication.enums;
 
 public class UIEnum {
-    public enum IsActive {
+    public enum ActivityStatus {
         ACTIVE(1),
         IN_ACTIVE(0);
 
         private final int value;
 
-        IsActive(int value) {
+        ActivityStatus(int value) {
             this.value = value;
         }
 

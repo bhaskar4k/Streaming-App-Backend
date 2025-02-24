@@ -10,12 +10,10 @@ import com.app.authentication.environment.Environment;
 import com.app.authentication.jwt.Jwt;
 import com.app.authentication.model.JwtUserDetails;
 import com.app.authentication.model.TMstUserModel;
-import com.app.authentication.model.ValidatedUserDetails;
 import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -71,7 +68,7 @@ public class AuthService {
     @Transactional
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user){
         try {
-            sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1 and is_active = 1";
+            sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
             params = List.of(validated_user.getId());
             Long loggedin_device_number = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult() + 1;
 
@@ -81,19 +78,22 @@ public class AuthService {
                 Long removed_device_number = rand.nextLong(environment.getMaximumLoginDevice())+1;
 
                 params = List.of(validated_user.getId(),removed_device_number);
-                sql_string = "UPDATE t_login set is_active = 0 WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
+                sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +
+                             " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
                 int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
                 if(updated == 0) return null;
 
                 loggedin_device_number = removed_device_number;
                 emitLogoutMessageIntoWebsocket(validated_user.getId(), removed_device_number);
+            }else{
+                
             }
 
             JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(), validated_user.getEmail(), validated_user.getIs_subscribed(), new_user.getIp_address(), loggedin_device_number);
             String jwt_token = jwt.generateToken(jwt_user_details);
 
             if(jwt_token != null){
-                TLogin login_entity = new TLogin(validated_user.getId(), jwt_token, new_user.getIp_address(), loggedin_device_number, UIEnum.IsActive.ACTIVE.getValue());
+                TLogin login_entity = new TLogin(validated_user.getId(), jwt_token, new_user.getIp_address(), loggedin_device_number, UIEnum.ActivityStatus.ACTIVE.getValue());
                 tLoginRepository.save(login_entity);
             }
 
@@ -148,7 +148,8 @@ public class AuthService {
         try {
             JwtUserDetails details = getAuthenticatedUserFromContext();
             params = List.of(details.getT_mst_user_id(),details.getDevice_count());
-            sql_string = "UPDATE t_login set is_active = 0 WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
+            sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +
+                         " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
             int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
 
             if(updated==1) return true;
