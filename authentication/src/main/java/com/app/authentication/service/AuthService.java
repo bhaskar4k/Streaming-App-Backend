@@ -67,19 +67,6 @@ public class AuthService {
         }
     }
 
-    public TLogin getLoggedInUser() {
-        try {
-            sql_string = "SELECT * FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
-
-            return (TLogin)dbWorker.getQuery(sql_string, entityManager, params, TLogin.class).getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } catch (Exception e) {
-            log("getLoggedInUser()",e.getMessage());
-            return null;
-        }
-    }
-
     @Transactional
     public String generateTokenAndUpdateDB(TMstUserModel new_user, TMstUser validated_user){
         try {
@@ -93,10 +80,7 @@ public class AuthService {
                 Long removed_device_number = rand.nextLong(environment.getMaximumLoginDevice())+1;
 
                 params = List.of(validated_user.getId(),removed_device_number);
-                TLogin loggedInUser = getLoggedInUser();
-
-                sql_string = "UPDATE t_login set is_active = 0 WHERE id = :value1";
-                params = List.of(loggedInUser.getId());
+                sql_string = "UPDATE t_login set is_active = 0 WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = 1";
                 int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
                 if(updated == 0) return null;
 
