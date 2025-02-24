@@ -87,8 +87,8 @@ public class AuthService {
                 emitLogoutMessageIntoWebsocket(validated_user.getId(), removed_device_number);
             }else{
                 for(Long cur_device_no=1L; cur_device_no<=environment.getMaximumLoginDevice(); cur_device_no++){
-                    sql_string = "select count(id) as count from t_login where device_count = :value1 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
-                    params = List.of(cur_device_no);
+                    sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
+                    params = List.of(validated_user.getId(),cur_device_no);
                     Long count = (Long)dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult();
 
                     if(count==0){
