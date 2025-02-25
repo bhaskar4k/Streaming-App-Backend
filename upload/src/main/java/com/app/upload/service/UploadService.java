@@ -11,6 +11,7 @@ import com.app.upload.entity.TVideoMetadata;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.enums.UIEnum;
+import com.app.upload.model.ProcesingStatusInputModel;
 import com.app.upload.model.Video;
 import com.app.upload.rabbitmq.RabbitQueuePublish;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
@@ -30,6 +31,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.io.File;
 
@@ -109,7 +111,7 @@ public class UploadService {
     }
 
     @Transactional
-    public boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
+    private boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
         try {
             tVideoInfoRepository.save(video);
             encodedVideoInfo.setT_video_info_id(video.getId());
@@ -121,7 +123,7 @@ public class UploadService {
         }
     }
 
-    public void deleteVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
+    private void deleteVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
         try {
             tVideoInfoRepository.deleteById(video.getId());
             tEncodedVideoInfoRepository.deleteById(encodedVideoInfo.getId());
@@ -170,7 +172,7 @@ public class UploadService {
         }
     }
 
-    public TVideoMetadata existingVideoMetadata(Long t_video_info_id,  JwtUserDetails post_validated_request) {
+    private TVideoMetadata existingVideoMetadata(Long t_video_info_id,  JwtUserDetails post_validated_request) {
         try {
             sql_string = "SELECT * FROM t_video_metadata WHERE t_video_info_id = :value1";
             params = List.of(t_video_info_id);
@@ -187,8 +189,8 @@ public class UploadService {
     @Transactional
     public int updateVideoMetadata(Long id,  String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
-            String sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE id = :value5";
-            List<Object> params = List.of(title, description, is_public, thumbnail_uploaded, id);
+            sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE id = :value5";
+            params = List.of(title, description, is_public, thumbnail_uploaded, id);
 
             return dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
         } catch (Exception e) {
@@ -197,7 +199,7 @@ public class UploadService {
         }
     }
 
-    public boolean convertImageToJPGFormatAndSave(String inputFilePath, String outputFilePath, JwtUserDetails post_validated_request) {
+    private boolean convertImageToJPGFormatAndSave(String inputFilePath, String outputFilePath, JwtUserDetails post_validated_request) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
                     environment.getFfmpegPath(),
@@ -229,6 +231,22 @@ public class UploadService {
             return true;
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(), "convertImageToJPGFormatAndSave()", e.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public Boolean do_update_video_processing_status(ProcesingStatusInputModel procesingStatusInputModel){
+        try {
+            sql_string = "UPDATE t_encoded_video_info a JOIN t_video_info b ON a.t_video_info_id = b.id " +
+                         "SET a.processing_status = :value1, a.processed_at = :value2 " +
+                         "WHERE b.guid = :value3";
+
+            params = List.of(procesingStatusInputModel.getProcessing_status(), LocalDateTime.now(), procesingStatusInputModel.getVideo().getVIDEO_GUID());
+            dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+            return true;
+        } catch (Exception e) {
+            log(0L,"do_update_video_processing_status()",e.getMessage());
             return false;
         }
     }

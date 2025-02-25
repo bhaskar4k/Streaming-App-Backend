@@ -5,6 +5,8 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
+import com.app.upload.model.ProcesingStatusInputModel;
+import com.app.upload.model.Video;
 import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.UploadService;
@@ -65,6 +67,20 @@ public class UploadController {
             return uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
         } catch (Exception e) {
             log("upload()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+
+    @PostMapping("/update_video_processing_status")
+    public CommonReturn<Boolean> update_video_processing_status(@RequestBody ProcesingStatusInputModel procesingStatusInputModel){
+        try {
+            Boolean res = uploadService.do_update_video_processing_status(procesingStatusInputModel);
+
+            if(res) return CommonReturn.success("Video processing status has been updated successfully.",true);
+            return CommonReturn.error(400,"Internal Server Error.");
+        } catch (Exception e) {
+            log("update_video_processing_status()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

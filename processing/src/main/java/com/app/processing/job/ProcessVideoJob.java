@@ -1,10 +1,12 @@
 package com.app.processing.job;
+import com.app.processing.Enums.UIEnum;
 import com.app.processing.common.CommonReturn;
 import com.app.processing.entity.TLogExceptions;
 import com.app.processing.environment.Environment;
 import com.app.processing.model.Video;
 import com.app.processing.service.LogExceptionsService;
 import com.app.processing.service.ProcessingService;
+import com.app.processing.service.ProcessingToUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -25,6 +27,8 @@ public class ProcessVideoJob {
     private ProcessingService processingService;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    @Autowired
+    private ProcessingToUploadService processingToUploadService;
     private Environment environment;
 
     private final int MAX_CONCURRENT_JOBS = 4;
@@ -90,12 +94,16 @@ public class ProcessVideoJob {
     private void executeJob(Video video) {
         try {
             System.out.println(Thread.currentThread().getName() + " is executing video ID - " + video.getVIDEO_GUID());
+            processingToUploadService.update_processing_status_in_db(video, UIEnum.ProcessingStatus.PROCESSING.getValue());
+
             Future<Boolean> future = processingService.encodeVideo(video,workerPool);
             Boolean processing_done = future.get();
 
             if(processing_done){
+                processingToUploadService.update_processing_status_in_db(video, UIEnum.ProcessingStatus.PROCESSED.getValue());
                 System.out.println(Thread.currentThread().getName() + " has executed video ID - " + video.getVIDEO_GUID());
             }else{
+                processingToUploadService.update_processing_status_in_db(video, UIEnum.ProcessingStatus.PROCESSING_FAILED.getValue());
                 System.out.println(Thread.currentThread().getName() + " has failed to execute video ID - " + video.getVIDEO_GUID());
             }
         } catch (Exception e) {

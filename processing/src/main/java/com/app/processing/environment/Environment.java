@@ -8,6 +8,7 @@ import java.util.Map;
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
     private String rabbitMQConsumerURL = "http://localhost:8095/consumer/pull";
+    private String updateVideoProcessingStatus = "http://localhost:8093/upload/update_video_processing_status";
 
     // Desktop
     private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
@@ -72,5 +73,9 @@ public class Environment {
 
     public String getRabbitMQConsumerURL() {
         return rabbitMQConsumerURL;
+    }
+
+    public String getUpdateVideoProcessingStatus() {
+        return updateVideoProcessingStatus;
     }
 }
