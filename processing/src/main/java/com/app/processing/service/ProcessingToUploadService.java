@@ -31,7 +31,7 @@ public class ProcessingToUploadService {
         ProcessingStatusInputModel processingStatusInputModel =
                 new ProcessingStatusInputModel(video, UIEnum.ProcessingStatus.PROCESSED.getValue());
 
-        String UPDATE_VIDEO_PROCESSING_STATUS_URL = environment.getUpdateVideoProcessingStatus();
+        String UPDATE_VIDEO_PROCESSING_STATUS_URL = environment.getUpdateVideoProcessingStatusURL();
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
