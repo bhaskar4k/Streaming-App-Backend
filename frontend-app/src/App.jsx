@@ -125,7 +125,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/manage-video" element={<Manage />} />
-          <Route path="/manage-video/edit/:video_id" element={<EditVideo />} />
+          <Route path="/manage-video/edit/:video_guid" element={<EditVideo />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>

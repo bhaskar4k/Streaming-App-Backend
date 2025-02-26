@@ -95,8 +95,9 @@ public class UploadService {
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
             TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(String.join(",", validResolutions),
                                                                         UIEnum.ProcessingStatus.TO_BE_PROCESSED.getValue());
+            TVideoMetadata tVideoMetadata = new TVideoMetadata(UIEnum.YesNo.NO.getValue());
 
-            if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo)){
+            if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo,tVideoMetadata)){
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
                 rabbitQueuePublish.publishIntoRabbitMQ(video).getData();
                 return tVideoInfo;
@@ -111,11 +112,13 @@ public class UploadService {
     }
 
     @Transactional
-    private boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo) {
+    private boolean saveVideoDetails(TVideoInfo video, TEncodedVideoInfo encodedVideoInfo, TVideoMetadata tVideoMetadata) {
         try {
             tVideoInfoRepository.save(video);
             encodedVideoInfo.setT_video_info_id(video.getId());
             tEncodedVideoInfoRepository.save(encodedVideoInfo);
+            tVideoMetadata.setT_video_info_id(video.getId());
+            tVideoMetadataRepository.save(tVideoMetadata);
             return true;
         } catch (Exception e) {
             log(video.getT_mst_user_id(),"saveVideoDetails()",e.getMessage());
@@ -156,16 +159,9 @@ public class UploadService {
                 }
             }
 
-            String return_message = "Video metadata has been uploaded successfully.";
-            TVideoMetadata existingInfo = existingVideoMetadata(video_info.getId(), post_validated_request);
-            if(existingInfo == null){
-                tVideoMetadataRepository.save(tVideoMetadata);
-            }else{
-                updateVideoMetadata(existingInfo.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
-                return_message = "Video metadata has been updated successfully.";
-            }
+            updateVideoMetadata(video_info.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
 
-            return CommonReturn.success(return_message,true);
+            return CommonReturn.success("Video metadata has been updated successfully.",true);
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(),"saveVideoMetadata()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
@@ -187,10 +183,10 @@ public class UploadService {
     }
 
     @Transactional
-    public int updateVideoMetadata(Long id,  String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
+    public int updateVideoMetadata(Long t_video_info_id,  String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
-            sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE id = :value5";
-            params = List.of(title, description, is_public, thumbnail_uploaded, id);
+            sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE t_video_info_id = :value5";
+            params = List.of(title, description, is_public, thumbnail_uploaded, t_video_info_id);
 
             return dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
         } catch (Exception e) {
