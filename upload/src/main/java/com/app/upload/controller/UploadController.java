@@ -5,16 +5,19 @@ import com.app.upload.entity.TLogExceptions;
 import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
+import com.app.upload.model.ManageVideoDetails;
 import com.app.upload.model.ProcesingStatusInputModel;
 import com.app.upload.model.Video;
 import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
+import com.app.upload.service.ManageVideeService;
 import com.app.upload.service.UploadService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 
 
 @RestController
@@ -26,6 +29,8 @@ public class UploadController {
     private UploadService uploadService;
     @Autowired
     private LogExceptionsService logExceptionsService;
+    @Autowired
+    private ManageVideeService manageVideeService;
     public Environment environment;
 
     public UploadController(){

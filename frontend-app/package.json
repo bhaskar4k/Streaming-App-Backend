@@ -19,6 +19,7 @@
     "@mui/icons-material": "^6.4.6",
     "@mui/material": "^6.4.6",
     "@mui/styled-engine-sc": "^6.4.6",
+    "@mui/x-data-grid": "^7.27.1",
     "@stomp/stompjs": "^7.0.0",
     "@welcome-ui/core": "^6.4.0",
     "@xstyled/styled-components": "3.7.3",
