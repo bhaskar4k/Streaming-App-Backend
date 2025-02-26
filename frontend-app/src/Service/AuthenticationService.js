@@ -57,7 +57,6 @@ export class AuthenticationService {
 
     async DoLogout() {
         try {
-            console.log(this.JWT_TOKEN_INFO)
             let url = this.BASE_URL.concat(EndpointAuthentication.logout);
             let response = await fetch(url, {
                 method: 'POST',

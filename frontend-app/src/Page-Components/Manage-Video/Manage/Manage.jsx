@@ -1,30 +1,54 @@
 import './Manage.css';
 import { useState, useEffect } from 'react';
+import { ManageVideoService } from '../../../Service/ManageVideoService';
+import { DateFormat } from '../../../Common/CommonConts';
 
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
-const paginationModel = { page: 0, pageSize: 5 };
 
 function Manage() {
-    const columns = [
-        { field: 'firstName', headerName: 'First name', flex: 1, headerAlign: 'center', align: 'center' },
-        { field: 'lastName', headerName: 'Last name', flex: 1, headerAlign: 'center', align: 'center' },
-        { field: 'age', headerName: 'Age', type: 'number', flex: 1, headerAlign: 'center', align: 'center' },
+    const [uploaded_video_list, set_uploaded_video_list] = useState([]);
+    const paginationModel = { page: 0, pageSize: 5 };
+    const manageVideoService = new ManageVideoService();
+
+    const columns_name = [
+        { field: 'video_title', headerName: 'Title', flex: 1, headerAlign: 'center', align: 'center' },
+        { field: 'visibility', headerName: 'Visibility', flex: 1, headerAlign: 'center', align: 'center' },
+        { field: 'uploaded_at', headerName: 'Uploaded At', type: 'number', flex: 1, headerAlign: 'center', align: 'center' },
+        { field: 'processing_status', headerName: 'Processing Status', type: 'number', flex: 1, headerAlign: 'center', align: 'center' },
     ];
 
-    const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    ];
+    useEffect(() => {
+        getVideoInfo();
+    }, []);
+
+    async function getVideoInfo() {
+        try {
+            let response = await manageVideoService.GetUploadeVideoList();
+            console.log(response.data);
+
+            let data = response.data;
+
+            let rows = data.map((item) => {
+                return {
+                    id: item.t_video_info_id,
+                    visibility: (item.is_public === 1) ? "Public" : "Private",
+                    video_title: item.video_title,
+                    uploaded_at: new Intl.DateTimeFormat('en-US', DateFormat).format(new Date(item.trans_datetime)),
+                    processing_status: (item.processing_status === 1) ? "In Queue" :
+                        (item.processing_status === 2) ? "Processing" :
+                            (item.processing_status === 3) ? "Processed" : "Processing Failed"
+                };
+            });
+
+            set_uploaded_video_list(rows);
+        } catch (error) {
+            console.error("Error:", error);
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to fetch video info.");
+        }
+    }
 
     return (
         <>
@@ -33,8 +57,8 @@ function Manage() {
 
                 <Paper sx={{ maxHeight: 700, width: '100%' }}>
                     <DataGrid
-                        rows={rows}
-                        columns={columns}
+                        rows={uploaded_video_list}
+                        columns={columns_name}
                         initialState={{ pagination: { paginationModel } }}
                         pageSizeOptions={[5, 10, 20, 50, 100]}
                         checkboxSelection
@@ -42,7 +66,7 @@ function Manage() {
                             border: 0,
                             '& .MuiTablePagination-root': {
                                 alignItems: 'center',
-                                
+
                             },
                             '& .MuiSelect-select': {
                                 backgroundColor: '#e0e0e0',

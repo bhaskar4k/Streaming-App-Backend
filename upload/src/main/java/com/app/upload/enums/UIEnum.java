@@ -6,7 +6,6 @@ public class UIEnum {
         PROCESSING(2),
         PROCESSED(3),
         PROCESSING_FAILED(4);
-
         private final int value;
 
         ProcessingStatus(int value) {

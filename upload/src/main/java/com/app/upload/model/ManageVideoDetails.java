@@ -3,7 +3,7 @@ package com.app.upload.model;
 import java.time.LocalDateTime;
 
 public class ManageVideoDetails {
-    private Long t_video_info;
+    private Long t_video_info_id;
     private String GUID;
     private String video_title;
     private int is_public;
@@ -16,7 +16,7 @@ public class ManageVideoDetails {
     }
 
     public ManageVideoDetails(Long t_video_info, String GUID, String video_title, int is_public, int thumbnail_uploaded, LocalDateTime trans_datetime, int processing_status) {
-        this.t_video_info = t_video_info;
+        this.t_video_info_id = t_video_info;
         this.GUID = GUID;
         this.video_title = video_title;
         this.is_public = is_public;
@@ -25,12 +25,12 @@ public class ManageVideoDetails {
         this.processing_status = processing_status;
     }
 
-    public Long getT_video_info() {
-        return t_video_info;
+    public Long getT_video_info_id() {
+        return t_video_info_id;
     }
 
-    public void setT_video_info(Long t_video_info) {
-        this.t_video_info = t_video_info;
+    public void setT_video_info_id(Long t_video_info_id) {
+        this.t_video_info_id = t_video_info_id;
     }
 
     public String getGUID() {
