@@ -168,20 +168,6 @@ public class UploadService {
         }
     }
 
-    private TVideoMetadata existingVideoMetadata(Long t_video_info_id,  JwtUserDetails post_validated_request) {
-        try {
-            sql_string = "SELECT * FROM t_video_metadata WHERE t_video_info_id = :value1";
-            params = List.of(t_video_info_id);
-
-            return (TVideoMetadata)dbWorker.getQuery(sql_string, entityManager, params, TVideoMetadata.class).getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } catch (Exception e) {
-            log(post_validated_request.getT_mst_user_id(),"existingVideoMetadata()",e.getMessage());
-            return null;
-        }
-    }
-
     @Transactional
     public int updateVideoMetadata(Long t_video_info_id,  String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
