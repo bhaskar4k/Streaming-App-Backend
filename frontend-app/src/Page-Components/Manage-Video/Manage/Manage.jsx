@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './Manage-Video.css';
+import './Manage.css';
 
-function Home() {
+function Manage() {
     return (
         <>
             <h1>Manage Video</h1>
@@ -9,4 +9,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Manage;

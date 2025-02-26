@@ -10,7 +10,8 @@ import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';
 import Login from './Page-Components/Login/Login.jsx';
 import Profile from './Page-Components/Profile/Profile.jsx';
 import Upload from './Page-Components/Upload/Upload.jsx';
-import ManageVideo from './Page-Components/Manage-Video/Manage-Video.jsx';
+import Manage from './Page-Components/Manage-Video/Manage/Manage.jsx';
+import EditVideo from './Page-Components/Manage-Video/Edit-Video/EditVideo.jsx';
 import Error from './Error.jsx';
 import Logout from './Logout/Logout.jsx';
 import AlertModal from './Page-Components/Common-Components/AlertModal/AlertModal.jsx';
@@ -123,7 +124,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
-          <Route path="/manage-video" element={<ManageVideo />} />
+          <Route path="/manage-video" element={<Manage />} />
+          <Route path="/manage-video/edit/:video_id" element={<EditVideo />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>
