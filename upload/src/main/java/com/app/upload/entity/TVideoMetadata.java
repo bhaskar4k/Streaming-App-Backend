@@ -26,8 +26,9 @@ public class TVideoMetadata {
 
     }
 
-    public TVideoMetadata(int is_public) {
+    public TVideoMetadata(int is_public, int thumbnail_uploaded) {
         this.is_public = is_public;
+        this.thumbnail_uploaded = thumbnail_uploaded;
     }
 
     public TVideoMetadata(Long t_video_info_id, String video_title, String video_description, int is_public, int thumbnail_uploaded) {

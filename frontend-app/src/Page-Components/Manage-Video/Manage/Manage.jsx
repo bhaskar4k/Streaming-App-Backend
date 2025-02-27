@@ -82,7 +82,7 @@ function Manage() {
                             '& .MuiTablePagination-select': {
                                 paddingTop: '6px',
                                 paddingBottom: '6px',
-                            }
+                            },
                         }}
                     />
                 </Paper>

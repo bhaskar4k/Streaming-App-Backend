@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Manage/Manage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Manage/Manage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/AuthenticationService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/ManageVideoDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/ManageVideoDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoMetadata.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/entity/TVideoMetadata.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

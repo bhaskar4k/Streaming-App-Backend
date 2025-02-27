@@ -95,7 +95,7 @@ public class UploadService {
             TVideoInfo tVideoInfo = new TVideoInfo(VIDEO_GUID, originalFilenameWithoutExtension, fileSize, fileExtension, sourceResolution, duration, no_of_chunks, userDetails.getT_mst_user_id());
             TEncodedVideoInfo tEncodedVideoInfo = new TEncodedVideoInfo(String.join(",", validResolutions),
                                                                         UIEnum.ProcessingStatus.TO_BE_PROCESSED.getValue());
-            TVideoMetadata tVideoMetadata = new TVideoMetadata(UIEnum.YesNo.NO.getValue());
+            TVideoMetadata tVideoMetadata = new TVideoMetadata(UIEnum.YesNo.NO.getValue(),UIEnum.YesNo.NO.getValue());
 
             if(saveVideoDetails(tVideoInfo,tEncodedVideoInfo,tVideoMetadata)){
                 Video video = new Video(VIDEO_GUID,originalFilePath.toString(),encodedFileName,userDetails.getT_mst_user_id());
