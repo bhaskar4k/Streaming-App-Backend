@@ -1,5 +1,6 @@
 import './Manage.css';
 import { useState, useEffect } from 'react';
+import CustomTable from '../../Common-Components/Custom-Video-Table/CustomVideoTable';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 import { DateFormat } from '../../../Common/CommonConts';
 
@@ -11,15 +12,9 @@ import { background, backgroundColor } from '@xstyled/styled-components';
 
 function Manage() {
     const [uploaded_video_list, set_uploaded_video_list] = useState([]);
-    const paginationModel = { page: 0, pageSize: 5 };
+    const [column_name_mapper, set_column_name_mapper] = useState([]);
+    const [column_name, set_column_name] = useState([]);
     const manageVideoService = new ManageVideoService();
-
-    const columns_name = [
-        { field: 'video_title', headerName: 'Title', flex: 1, headerAlign: 'center', align: 'center' },
-        { field: 'visibility', headerName: 'Visibility', flex: 1, headerAlign: 'center', align: 'center' },
-        { field: 'uploaded_at', headerName: 'Uploaded At', type: 'number', flex: 1, headerAlign: 'center', align: 'center' },
-        { field: 'processing_status', headerName: 'Processing Status', type: 'number', flex: 1, headerAlign: 'center', align: 'center' },
-    ];
 
     useEffect(() => {
         getVideoInfo();
@@ -28,13 +23,14 @@ function Manage() {
     async function getVideoInfo() {
         try {
             let response = await manageVideoService.GetUploadeVideoList();
-            console.log(response.data);
+            set_column_name_mapper(["video", "video_title", "visibility", "uploaded_at", "processing_status"]);
+            set_column_name(["Video", "Video Title", "Visibility", "Uploaded At", "Processing Status"]);
 
-            let data = response.data;
-
-            let rows = data.map((item) => {
+            let i=1;
+            let rows = response.data.map((item) => {
                 return {
-                    id: item.t_video_info_id,
+                    id: i++,
+                    t_video_info_id: item.t_video_info_id,
                     visibility: (item.is_public === 1) ? "Public" : "Private",
                     video_title: item.video_title,
                     uploaded_at: new Intl.DateTimeFormat('en-US', DateFormat).format(new Date(item.trans_datetime)),
@@ -56,39 +52,7 @@ function Manage() {
             <div id="manage_video_container">
                 <h1 className='page_title'>Manage Video</h1>
 
-                <div className='manage_video_table'>
-                    <Paper sx={{ maxHeight: 700, width: '100%' }}>
-                        <DataGrid
-                            rows={uploaded_video_list}
-                            columns={columns_name}
-                            initialState={{ pagination: { paginationModel } }}
-                            pageSizeOptions={[5, 10, 20, 50, 100]}
-                            checkboxSelection
-                            sx={{
-                                border: 0,
-                                '& .MuiTablePagination-root': {
-                                    alignItems: 'center',
-
-                                },
-                                '& .MuiSelect-select': {
-                                    backgroundColor: '#e0e0e0',
-                                    borderRadius: '5px',
-                                    padding: '6px 12px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                },
-                                '& .MuiSelect-icon': {
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                },
-                                '& .MuiTablePagination-select': {
-                                    paddingTop: '6px',
-                                    paddingBottom: '6px',
-                                }
-                            }}
-                        />
-                    </Paper>
-                </div>
+                <CustomTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name}/>
             </div>
         </>
     );
