@@ -6,6 +6,7 @@ import { DateFormat } from '../../../Common/CommonConts';
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import { background, backgroundColor } from '@xstyled/styled-components';
 
 
 function Manage() {
@@ -53,39 +54,41 @@ function Manage() {
     return (
         <>
             <div id="manage_video_container">
-                <h1>Manage Video</h1>
+                <h1 className='page_title'>Manage Video</h1>
 
-                <Paper sx={{ maxHeight: 700, width: '100%' }}>
-                    <DataGrid
-                        rows={uploaded_video_list}
-                        columns={columns_name}
-                        initialState={{ pagination: { paginationModel } }}
-                        pageSizeOptions={[5, 10, 20, 50, 100]}
-                        checkboxSelection
-                        sx={{
-                            border: 0,
-                            '& .MuiTablePagination-root': {
-                                alignItems: 'center',
+                <div className='manage_video_table'>
+                    <Paper sx={{ maxHeight: 700, width: '100%' }}>
+                        <DataGrid
+                            rows={uploaded_video_list}
+                            columns={columns_name}
+                            initialState={{ pagination: { paginationModel } }}
+                            pageSizeOptions={[5, 10, 20, 50, 100]}
+                            checkboxSelection
+                            sx={{
+                                border: 0,
+                                '& .MuiTablePagination-root': {
+                                    alignItems: 'center',
 
-                            },
-                            '& .MuiSelect-select': {
-                                backgroundColor: '#e0e0e0',
-                                borderRadius: '5px',
-                                padding: '6px 12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                            },
-                            '& .MuiSelect-icon': {
-                                top: '50%',
-                                transform: 'translateY(-50%)',
-                            },
-                            '& .MuiTablePagination-select': {
-                                paddingTop: '6px',
-                                paddingBottom: '6px',
-                            },
-                        }}
-                    />
-                </Paper>
+                                },
+                                '& .MuiSelect-select': {
+                                    backgroundColor: '#e0e0e0',
+                                    borderRadius: '5px',
+                                    padding: '6px 12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                },
+                                '& .MuiSelect-icon': {
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                },
+                                '& .MuiTablePagination-select': {
+                                    paddingTop: '6px',
+                                    paddingBottom: '6px',
+                                }
+                            }}
+                        />
+                    </Paper>
+                </div>
             </div>
         </>
     );
