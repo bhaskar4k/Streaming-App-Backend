@@ -4,43 +4,40 @@ import TestThumbnail from '../../../../public/Images/TestThumbnail.png';
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
 
-
 function CustomTable(props) {
+    const max_element_per_page = 5;
     const [video_list, set_video_list] = useState([]);
     const [filtered_video_list, set_filtered_video_list] = useState([]);
     const [total_video, set_total_video] = useState(0);
-    const [element_starting_id, set_element_starting_id] = useState(1);
-    const [max_element_per_page, set_max_element_per_page] = useState(5);
-
-    function update_max_element_per_page() {
-        const selectElement = document.getElementById('pagination_limit');
-        set_max_element_per_page(selectElement.value);
-
-        const filteredList = video_list.slice(0, max_element_per_page);
-        set_filtered_video_list(filteredList);
-    }
+    const [element_starting_id, set_element_starting_id] = useState(0);
 
     useEffect(() => {
         set_video_list(props.video_list);
-        set_filtered_video_list(props.video_list);
         set_total_video(props.video_list.length);
+        set_element_starting_id(0);
+    }, [props.video_list]);
 
-        update_max_element_per_page();
-    }, [props.video_list, total_video]);
+    useEffect(() => {
+        update_filtered_list();
+    }, [element_starting_id, max_element_per_page, video_list]);
 
+    function update_filtered_list() {
+        const filteredList = video_list.slice(element_starting_id, element_starting_id + max_element_per_page);
+        set_filtered_video_list(filteredList);
+    }
 
-    function apply_pagination(direction){
-        if(direction === 1){
-            let left_bound = Math.max(1, element_starting_id - max_element_per_page);
-            const filteredList = video_list.slice(left_bound - 1, left_bound + max_element_per_page - 1);
-            set_filtered_video_list(filteredList);
-            set_element_starting_id(left_bound);
-        }else{
-            let right_bound = Math.min(total_video, element_starting_id + max_element_per_page);
-            const filteredList = video_list.slice(right_bound - 1, right_bound + max_element_per_page - 1);
-            set_filtered_video_list(filteredList);
-            set_element_starting_id(right_bound);
+    function apply_pagination(direction) {
+        let new_starting_id = element_starting_id;
+
+        if (direction === 1) {
+            new_starting_id = Math.max(0, element_starting_id - max_element_per_page);
+        } else {
+            if (element_starting_id + max_element_per_page < total_video) {
+                new_starting_id = element_starting_id + max_element_per_page;
+            }
         }
+
+        set_element_starting_id(new_starting_id);
     }
 
     return (
@@ -71,17 +68,7 @@ function CustomTable(props) {
                 <img src={left_arrow} className='custom_table_pagination_arrow' onClick={() => apply_pagination(1)} />
                 <img src={right_arrow} className='custom_table_pagination_arrow' onClick={() => apply_pagination(2)} />
 
-                <span>Results per page : {element_starting_id} - {element_starting_id + Math.min(max_element_per_page, total_video) - 1} of {total_video}</span>
-
-                <div className="select-dropdown">
-                    <select id="pagination_limit" onClick={update_max_element_per_page}>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
+                <span>Showing results: {element_starting_id + 1} - {Math.min(element_starting_id + max_element_per_page, total_video)} of {total_video}</span>
             </div>
         </>
     );

@@ -1,13 +1,9 @@
+import * as React from 'react';
 import './Manage.css';
 import { useState, useEffect } from 'react';
 import CustomTable from '../../Common-Components/Custom-Video-Table/CustomVideoTable';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 import { DateFormat } from '../../../Common/CommonConts';
-
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
-import { background, backgroundColor } from '@xstyled/styled-components';
 
 
 function Manage() {
