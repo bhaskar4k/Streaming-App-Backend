@@ -21,7 +21,7 @@ export class ManageVideoService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-
+            
             let res = await response.json();
             return res;
         } catch (ex) {

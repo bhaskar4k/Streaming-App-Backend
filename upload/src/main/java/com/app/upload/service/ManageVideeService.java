@@ -11,15 +11,22 @@ import com.app.upload.model.ManageVideoDetails;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
 import com.app.upload.repository.TVideoMetadataRepository;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -66,7 +73,19 @@ public class ManageVideeService {
                 LocalDateTime transDatetime = (row[5] != null) ? ((Timestamp) row[5]).toLocalDateTime() : null;
                 int processingStatus = (row[6] != null) ? ((Number) row[6]).intValue() : 0;
 
-                ManageVideoDetails video = new ManageVideoDetails(id, guid, videoTitle, isPublic, thumbnailUploaded, transDatetime, processingStatus);
+                String thumbnailPath = environment.getOriginalThumbnailPath() +
+                        util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id()) +
+                        File.separator + guid + ".jpg";
+
+                File file = new File(thumbnailPath);
+                String base64EncodedImage = null;
+
+                if (file.exists()) {
+                    byte[] fileContent = Files.readAllBytes(file.toPath());
+                    base64EncodedImage = Base64.getEncoder().encodeToString(fileContent);
+                }
+
+                ManageVideoDetails video = new ManageVideoDetails(id, guid, videoTitle, isPublic, thumbnailUploaded, base64EncodedImage, transDatetime, processingStatus);
                 manageVideos.add(video);
             }
 

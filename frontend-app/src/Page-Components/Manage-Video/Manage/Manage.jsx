@@ -22,10 +22,13 @@ function Manage() {
             set_column_name_mapper(["video", "video_title", "visibility", "uploaded_at", "processing_status"]);
             set_column_name(["Video", "Video Title", "Visibility", "Uploaded At", "Processing Status"]);
 
+            console.log(response.data)
+
             let i=1;
             let rows = response.data.map((item) => {
                 return {
                     id: i++,
+                    thumbnail: `data:image/jpeg;base64,${item.base64EncodedImage}`,
                     t_video_info_id: item.t_video_info_id,
                     visibility: (item.is_public === 1) ? "Public" : "Private",
                     video_title: item.video_title,

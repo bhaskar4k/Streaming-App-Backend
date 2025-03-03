@@ -54,7 +54,7 @@ function CustomTable(props) {
                 <tbody className='custom_tablebody'>
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
-                            <td className='custom_tablebody_cell video_cell'><img src={TestThumbnail} className='custom_table_video_thumbnail' /></td>
+                            <td className='custom_tablebody_cell video_cell'><img src={row.thumbnail} className='custom_table_video_thumbnail' /></td>
                             <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>

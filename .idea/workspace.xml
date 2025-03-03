@@ -8,6 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Video-Table/CustomVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Video-Table/CustomVideoTable.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Manage/Manage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Manage/Manage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/ManageVideoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/ManageVideoService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/ManageVideoDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/ManageVideoDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideeService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
