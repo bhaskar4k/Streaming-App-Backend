@@ -15,6 +15,7 @@ function CustomTable(props) {
         set_video_list(props.video_list);
         set_total_video(props.video_list.length);
         set_element_starting_id(0);
+        console.log(props.video_list)
     }, [props.video_list]);
 
     useEffect(() => {
@@ -54,7 +55,9 @@ function CustomTable(props) {
                 <tbody className='custom_tablebody'>
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
-                            <td className='custom_tablebody_cell video_cell'><img src={row.thumbnail} className='custom_table_video_thumbnail' /></td>
+                            <td className='custom_tablebody_cell video_cell'>
+                                <img src={row.thumbnail ? row.thumbnail : TestThumbnail} className='custom_table_video_thumbnail' />
+                            </td>
                             <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
