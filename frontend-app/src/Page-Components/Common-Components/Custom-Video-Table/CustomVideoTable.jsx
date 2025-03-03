@@ -15,7 +15,6 @@ function CustomTable(props) {
         set_video_list(props.video_list);
         set_total_video(props.video_list.length);
         set_element_starting_id(0);
-        console.log(props.video_list)
     }, [props.video_list]);
 
     useEffect(() => {

@@ -28,7 +28,7 @@ function Manage() {
             let rows = response.data.map((item) => {
                 return {
                     id: i++,
-                    thumbnail: (item.base64EncodedImage ? `data:image/jpeg;base64,${item.base64EncodedImage}` : null),
+                    thumbnail: (item.thumbnail_uploaded === 1 ? `data:image/jpeg;base64,${item.base64EncodedImage}` : null),
                     t_video_info_id: item.t_video_info_id,
                     visibility: (item.is_public === 1) ? "Public" : "Private",
                     video_title: item.video_title,
