@@ -31,4 +31,19 @@ public class UIEnum {
             return value;
         }
     }
+
+    public enum Activity {
+        IS_ACTIVE(1),
+        INACTIVE(0);
+
+        private final int value;
+
+        Activity(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

@@ -5,9 +5,11 @@ import com.app.upload.common.CommonReturn;
 import com.app.upload.common.Util;
 import com.app.upload.common.VideoUtil;
 import com.app.upload.entity.TLogExceptions;
+import com.app.upload.enums.UIEnum;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.ManageVideoDetails;
+import com.app.upload.model.ProcesingStatusInputModel;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
 import com.app.upload.repository.TVideoMetadataRepository;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -57,9 +60,9 @@ public class ManageVideeService {
             sql_string = "select a.id, a.guid, b.video_title, b.is_public, b.thumbnail_uploaded, a.trans_datetime, c.processing_status " +
                     "from t_video_info a left join t_video_metadata b on a.id = b.t_video_info_id " +
                     "left join t_encoded_video_info c on c.t_video_info_id = b.t_video_info_id " +
-                    "where a.t_mst_user_id = :value1";
+                    "where a.t_mst_user_id = :value1 and a.is_active = :value2 ";
 
-            params = List.of(post_validated_request.getT_mst_user_id());
+            params = List.of(post_validated_request.getT_mst_user_id(), UIEnum.Activity.IS_ACTIVE.getValue());
 
             List<Object[]> results = dbWorker.getQuery(sql_string, entityManager, params, null).getResultList();
             List<ManageVideoDetails> manageVideos = new ArrayList<>();
@@ -93,6 +96,20 @@ public class ManageVideeService {
         } catch (Exception e) {
             log(post_validated_request.getT_mst_user_id(),"do_get_uploaded_video_list()",e.getMessage());
             return null;
+        }
+    }
+
+    @Transactional
+    public Boolean do_delete_video(Long t_video_info_id, JwtUserDetails post_validated_request){
+        try {
+            sql_string = "UPDATE t_video_info set is_active = :value1 where id = :value2";
+
+            params = List.of(UIEnum.Activity.INACTIVE.getValue(), t_video_info_id);
+            dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+            return true;
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(),"do_delete_video()",e.getMessage());
+            return false;
         }
     }
 

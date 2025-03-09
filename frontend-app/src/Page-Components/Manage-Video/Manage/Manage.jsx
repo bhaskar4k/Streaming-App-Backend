@@ -19,15 +19,15 @@ function Manage() {
     async function getVideoInfo() {
         try {
             let response = await manageVideoService.GetUploadeVideoList();
-            set_column_name_mapper(["video", "video_title", "visibility", "uploaded_at", "processing_status"]);
-            set_column_name(["Video", "Video Title", "Visibility", "Uploaded At", "Processing Status"]);
+            set_column_name_mapper(["video", "video_title", "visibility", "uploaded_at", "processing_status", "action"]);
+            set_column_name(["Video", "Video Title", "Visibility", "Uploaded At", "Processing Status", "Action"]);
 
             console.log(response.data)
 
             let i=1;
             let rows = response.data.map((item) => {
                 return {
-                    id: i++,
+                    t_video_info_id: item.t_video_info_id,
                     thumbnail: (item.thumbnail_uploaded === 1 ? `data:image/jpeg;base64,${item.base64EncodedImage}` : null),
                     t_video_info_id: item.t_video_info_id,
                     visibility: (item.is_public === 1) ? "Public" : "Private",

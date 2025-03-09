@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manage_video")
@@ -46,7 +44,36 @@ public class ManageVideoController {
 
             return CommonReturn.success("Video details have been fetched.", details);
         } catch (Exception e) {
-            log("update_video_processing_status()",e.getMessage());
+            log("get_uploaded_video_list()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @PostMapping("/edit_video")
+    public CommonReturn<List<ManageVideoDetails>> edit_video(@RequestBody ManageVideoDetails video){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+
+            return CommonReturn.success("Video detail has been edited successfully.", null);
+        } catch (Exception e) {
+            log("edit_video()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+    @PostMapping("/delete_video")
+    public CommonReturn<Boolean> delete_video(@RequestBody Map<String, Long> requestBody){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            Long t_video_info_id = requestBody.get("t_video_info_id");
+            Boolean res = manageVideeService.do_delete_video(t_video_info_id, post_validated_request);
+            if(res) return CommonReturn.success("Video has been deleted successfully.", true);
+
+            return CommonReturn.error(400,"Failed to delete video.");
+        } catch (Exception e) {
+            log("delete_video()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }

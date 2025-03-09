@@ -1,8 +1,10 @@
 import './CustomVideoTable.css';
 import { useState, useEffect } from 'react';
-import TestThumbnail from '../../../../public/Images/TestThumbnail.png';
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
+import edit_logo from '../../../../public/Images/edit.svg';
+import delete_logo from '../../../../public/Images/delete.svg';
+import { ManageVideoService } from '../../../Service/ManageVideoService';
 
 function CustomTable(props) {
     const max_element_per_page = 5;
@@ -10,6 +12,7 @@ function CustomTable(props) {
     const [filtered_video_list, set_filtered_video_list] = useState([]);
     const [total_video, set_total_video] = useState(0);
     const [element_starting_id, set_element_starting_id] = useState(0);
+    const manageVideoService = new ManageVideoService();
 
     useEffect(() => {
         set_video_list(props.video_list);
@@ -40,6 +43,16 @@ function CustomTable(props) {
         set_element_starting_id(new_starting_id);
     }
 
+    function edit_video(t_video_info_id){
+        console.log("t_video_info_id", t_video_info_id)
+    }
+
+    async function delete_video(t_video_info_id){
+        console.log("t_video_info_id", t_video_info_id)
+        let response = await manageVideoService.DoDeleteVideo(t_video_info_id);
+        console.log(response);
+    }
+
     return (
         <>
             <table className='custom_table'>
@@ -55,12 +68,16 @@ function CustomTable(props) {
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
                             <td className='custom_tablebody_cell video_cell'>
-                                <img src={row.thumbnail ? row.thumbnail : TestThumbnail} className='custom_table_video_thumbnail' />
+                                <img src={row.thumbnail ? row.thumbnail : null} className='custom_table_video_thumbnail' />
                             </td>
                             <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
+                            <td className='custom_tablebody_cell video_action_cell'>
+                                <img src={edit_logo} onClick={() => edit_video(row.t_video_info_id)} className='edit_logo'/>
+                                <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
+                            </td>
                         </tr>
                     ))}
                 </tbody>

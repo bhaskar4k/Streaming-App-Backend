@@ -35,10 +35,15 @@
 
 .video_cell {
     width: 10%;
+    background-image: url("../../../../public/Images/default_thumbnail.png");
+}
+
+.custom_table_video_thumbnail {
+    width: 100%;
 }
 
 .video_title_cell {
-    width: 60%;
+    width: 55%;
     text-align: left;
 }
 
@@ -54,8 +59,22 @@
     width: 10%;
 }
 
-.custom_table_video_thumbnail {
+.video_action_cell{
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.edit_logo{
+    width: 20px;
+    cursor: pointer;
+}
+
+.delete_logo{
+    width: 25px;
+    cursor: pointer;
 }
 
 .pagination{
@@ -68,52 +87,6 @@
 .pagination span{
     font-size:0.9rem;
     margin-right: 10px;
-}
-
-.select-dropdown,
-.select-dropdown * {
-    margin: 0;
-    padding: 0;
-    width: 80px;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-.select-dropdown {
-    position: relative;
-    background-color: #E6E6E6;
-    border-radius: 4px;
-}
-
-.select-dropdown select {
-    font-size: 1rem;
-    font-weight: normal;
-    max-width: 100%;
-    padding: 8px 24px 8px 10px;
-    border: none;
-    background-color: transparent;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.select-dropdown select:active,
-.select-dropdown select:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-.select-dropdown:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    width: 0;
-    height: 0;
-    margin-top: -2px;
-    border-top: 5px solid #aaa;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
 }
 
 .custom_table_pagination_arrow{

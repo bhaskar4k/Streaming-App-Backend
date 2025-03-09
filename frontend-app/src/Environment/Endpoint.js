@@ -24,6 +24,7 @@ let EndpointUpload = {
     upload_video: "/upload/upload_video",
     upload_video_info: "/upload/upload_video_info",
     get_uploaded_video_list: "/manage_video/get_uploaded_video_list",
+    delete_video: "/manage_video/delete_video",
 }
 
 let EndpointWebsocket = {
