@@ -48,8 +48,12 @@ function CustomTable(props) {
     }
 
     async function delete_video(t_video_info_id){
-        console.log("t_video_info_id", t_video_info_id)
         let response = await manageVideoService.DoDeleteVideo(t_video_info_id);
+
+        if(response.status === 200){
+            location.reload();
+        }
+
         console.log(response);
     }
 
