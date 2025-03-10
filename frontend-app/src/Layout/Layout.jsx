@@ -11,7 +11,7 @@ import dashboard from '../../public/Images/dashboard.svg';
 import upload from '../../public/Images/upload.svg';
 import profile from '../../public/Images/profile.svg';
 import logout from '../../public/Images/logout.svg';
-import manage_video from '../../public/Images/manage_video.svg';
+import manage from '../../public/Images/manage.svg';
 
 function Layout() {
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function Layout() {
         upload: upload,
         profile: profile,
         logout: logout,
-        manage_video: manage_video
+        manage: manage
     };
 
     useEffect(() => {
