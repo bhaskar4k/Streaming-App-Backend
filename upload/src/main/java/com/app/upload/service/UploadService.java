@@ -169,7 +169,7 @@ public class UploadService {
     }
 
     @Transactional
-    public int updateVideoMetadata(Long t_video_info_id,  String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
+    public int updateVideoMetadata(Long t_video_info_id, String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
             sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE t_video_info_id = :value5";
             params = List.of(title, description, is_public, thumbnail_uploaded, t_video_info_id);

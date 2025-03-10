@@ -32,3 +32,7 @@ export function redirect_to_login(navigate){
 export function redirect_to_home(navigate){
     navigate(`/home`);
 }
+
+export function go_back(navigate){
+    navigate(-1);
+}

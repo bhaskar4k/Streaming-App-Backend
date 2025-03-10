@@ -1,5 +1,7 @@
 import './CustomVideoTable.css';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
 import edit_logo from '../../../../public/Images/edit.svg';
@@ -7,6 +9,7 @@ import delete_logo from '../../../../public/Images/delete.svg';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 
 function CustomTable(props) {
+    const navigate = useNavigate();
     const max_element_per_page = 5;
     const [video_list, set_video_list] = useState([]);
     const [filtered_video_list, set_filtered_video_list] = useState([]);
@@ -43,8 +46,16 @@ function CustomTable(props) {
         set_element_starting_id(new_starting_id);
     }
 
-    function edit_video(t_video_info_id){
-        console.log("t_video_info_id", t_video_info_id)
+    function edit_video(video_title, video_description, is_public, uploaded_at, processing_status){
+        navigate(`/manage-video/edit`, {
+            state: {
+                video_title: video_title,
+                video_description: video_description,
+                is_public: is_public,
+                uploaded_at: uploaded_at,
+                processing_status: processing_status
+            }
+        });
     }
 
     async function delete_video(t_video_info_id){
@@ -79,7 +90,7 @@ function CustomTable(props) {
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
                             <td className='custom_tablebody_cell video_action_cell'>
-                                <img src={edit_logo} onClick={() => edit_video(row.t_video_info_id)} className='edit_logo'/>
+                                <img src={edit_logo} onClick={() => edit_video(row.video_title, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo'/>
                                 <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
                             </td>
                         </tr>

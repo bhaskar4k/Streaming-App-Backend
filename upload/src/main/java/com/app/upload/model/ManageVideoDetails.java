@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 public class ManageVideoDetails {
     private Long t_video_info_id;
-    private String GUID;
     private String video_title;
+    private String video_description;
     private int is_public;
     private int thumbnail_uploaded;
     private String base64EncodedImage;
@@ -18,10 +18,10 @@ public class ManageVideoDetails {
 
     }
 
-    public ManageVideoDetails(Long t_video_info, String GUID, String video_title, int is_public, int thumbnail_uploaded, String base64EncodedImage, LocalDateTime trans_datetime, int processing_status) {
+    public ManageVideoDetails(Long t_video_info, String video_title, String video_description, int is_public, int thumbnail_uploaded, String base64EncodedImage, LocalDateTime trans_datetime, int processing_status) {
         this.t_video_info_id = t_video_info;
-        this.GUID = GUID;
         this.video_title = video_title;
+        this.video_description = video_description;
         this.is_public = is_public;
         this.thumbnail_uploaded = thumbnail_uploaded;
         this.base64EncodedImage = base64EncodedImage;
@@ -37,20 +37,20 @@ public class ManageVideoDetails {
         this.t_video_info_id = t_video_info_id;
     }
 
-    public String getGUID() {
-        return GUID;
-    }
-
-    public void setGUID(String GUID) {
-        this.GUID = GUID;
-    }
-
     public String getVideo_title() {
         return video_title;
     }
 
     public void setVideo_title(String video_title) {
         this.video_title = video_title;
+    }
+
+    public String getVideo_description() {
+        return video_description;
+    }
+
+    public void setVideo_description(String video_description) {
+        this.video_description = video_description;
     }
 
     public int getIs_public() {

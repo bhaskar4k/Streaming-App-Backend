@@ -30,8 +30,10 @@ function Manage() {
                     t_video_info_id: item.t_video_info_id,
                     thumbnail: (item.thumbnail_uploaded === 1 ? `data:image/jpeg;base64,${item.base64EncodedImage}` : null),
                     t_video_info_id: item.t_video_info_id,
+                    is_public: item.is_public,
                     visibility: (item.is_public === 1) ? "Public" : "Private",
                     video_title: item.video_title,
+                    video_description: item.video_description,
                     uploaded_at: new Intl.DateTimeFormat('en-US', DateFormat).format(new Date(item.trans_datetime)),
                     processing_status: (item.processing_status === 1) ? "In Queue" :
                         (item.processing_status === 2) ? "Processing" :
