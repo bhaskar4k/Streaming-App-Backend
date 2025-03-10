@@ -18,6 +18,7 @@ public class TLayoutMenu {
     private String menu_icon;
     private int parent_id;
     private int sequence;
+    private int is_active;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
@@ -25,7 +26,7 @@ public class TLayoutMenu {
 
     }
 
-    public TLayoutMenu(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence, LocalDateTime trans_datetime) {
+    public TLayoutMenu(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence, int is_active, LocalDateTime trans_datetime) {
         this.id = id;
         this.route_name = route_name;
         this.menu_name = menu_name;
@@ -33,6 +34,7 @@ public class TLayoutMenu {
         this.menu_icon = menu_icon;
         this.parent_id = parent_id;
         this.sequence = sequence;
+        this.is_active = is_active;
         this.trans_datetime = trans_datetime;
     }
 
@@ -90,6 +92,14 @@ public class TLayoutMenu {
 
     public void setSequence(int sequence) {
         this.sequence = sequence;
+    }
+
+    public int getIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(int is_active) {
+        this.is_active = is_active;
     }
 
     public LocalDateTime getTrans_datetime() {
