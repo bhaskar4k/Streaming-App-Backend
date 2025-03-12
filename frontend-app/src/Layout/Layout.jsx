@@ -46,15 +46,63 @@ function Layout() {
         try {
             let response = await dashboardService.DoGetMenu();
             setLayout(response.data);
+            console.log("layout", response.data);
 
             const newElements = response.data.map(item => item.menu_name_id);
             setElements(newElements);
+
+            GenerateMenu(response.data);
         } catch (error) {
             console.error("Error:", error);
             Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
         }
     }
 
+    window.toggleSubmenu = function (parentId, route) {
+        if(route !== 'null') navigate(route);
+        
+        const submenu = document.getElementById(`submenu-${parentId}`);
+        submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+    }
+
+    window.navigateTo = function (route) {
+        navigate(route);
+    }
+    
+
+
+    function GenerateMenu(res) {
+        let output = "";
+    
+        res.forEach((parent) => {
+            if (parent.parent_id === 0) {
+                output += `<div class="a-menu-item" onclick="toggleSubmenu(${parent.id},'${parent.route_name}')">
+                                <div class="menu-item">
+                                    <img src="${iconMap[parent.menu_icon]}" class="menu-icons" alt="${parent.menu_icon}" />
+                                    <h4 class="menu-item-text" id="${parent.menu_name_id}">${parent.menu_name}</h4>
+                                </div>
+                            </div>`;
+    
+                output += `<div class="submenu" id="submenu-${parent.id}" style="display: none;">`;
+    
+                res.forEach((child) => {
+                    if (child.parent_id === parent.id) {
+                        output += `<div class="a-menu-item-child" onclick="navigateTo('${child.route_name}')">
+                                        <div class="menu-item">
+                                            <img src="${iconMap[child.menu_icon]}" class="menu-icons" alt="${child.menu_icon}" />
+                                            <h4 class="menu-item-text" id="${child.menu_name_id}">${child.menu_name}</h4>
+                                        </div>
+                                   </div>`;
+                    }
+                });
+    
+                output += `</div>`;
+            }
+        });
+    
+        document.getElementById("root_menu").innerHTML = output;
+    }
+    
 
     function toggleSidebar() {
         if (windowWidth < 1200) return;
@@ -144,15 +192,7 @@ function Layout() {
 
             <div className='mainBody' id='mainBody'>
                 <div className='menubar' id='menubar'>
-
-                    {layout.map((item) => (
-                        <div key={item.id} className="a-menu-item" onClick={() => navigate(item.route_name)}>
-                            <div className="menu-item">
-                                <img src={iconMap[item.menu_icon]} className="menu-icons" alt={item.menu_icon} />
-                                <h4 className="menu-item-text" id={item.menu_name_id}>{item.menu_name}</h4>
-                            </div>
-                        </div>
-                    ))}
+                    <div id="root_menu"></div>
                 </div>
 
                 <div id='mainContent' className='mainContent'>

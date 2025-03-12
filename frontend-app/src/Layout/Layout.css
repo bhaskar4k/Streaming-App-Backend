@@ -58,6 +58,18 @@
     background-color: rgb(219, 219, 219);
 }
 
+.a-menu-item-child {
+    height: 50px;
+    position: relative;
+    transition: 0.3s all ease-in-out;
+    border-radius: 15px;
+    padding: 10px;
+    margin-left: 20px;
+    background-color: rgb(212, 212, 212);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .menu-item {
     display: flex;
     position: absolute;

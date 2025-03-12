@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Manage.css';
+import './UploadedVideo.css';
 import { useState, useEffect } from 'react';
 import CustomTable from '../../Common-Components/Custom-Video-Table/CustomVideoTable';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
