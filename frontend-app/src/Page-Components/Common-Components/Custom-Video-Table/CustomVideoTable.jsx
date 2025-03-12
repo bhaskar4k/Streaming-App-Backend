@@ -46,14 +46,16 @@ function CustomTable(props) {
         set_element_starting_id(new_starting_id);
     }
 
-    function edit_video(video_title, video_description, is_public, uploaded_at, processing_status){
+    function edit_video(video_title, thumbnail, video_description, is_public, uploaded_at, processing_status){
+        console.log(thumbnail)
         navigate(`/manage-video/edit`, {
             state: {
                 video_title: video_title,
                 video_description: video_description,
                 is_public: is_public,
                 uploaded_at: uploaded_at,
-                processing_status: processing_status
+                processing_status: processing_status,
+                old_thumbnail: thumbnail
             }
         });
     }
@@ -90,7 +92,7 @@ function CustomTable(props) {
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
                             <td className='custom_tablebody_cell video_action_cell'>
-                                <img src={edit_logo} onClick={() => edit_video(row.video_title, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo'/>
+                                <img src={edit_logo} onClick={() => edit_video(row.video_title, row.thumbnail, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo'/>
                                 <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
                             </td>
                         </tr>

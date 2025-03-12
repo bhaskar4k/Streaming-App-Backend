@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { go_back } from '../../../Common/Utils'
+import { go_back } from '../../../Common/Utils';
+import removeFile from '../../../../public/Images/remove-file.svg';
 import './EditVideo.css';
 import AlertModal from '../../Common-Components/AlertModal/AlertModal';
 
@@ -10,9 +11,9 @@ let loadAlertModal = null;
 function EditVideo() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { video_title, video_description, is_public, uploaded_at, processing_status } = location.state;
+    const { video_title, old_thumbnail, video_description, is_public, uploaded_at, processing_status } = location.state;
 
-    const [thumbnail, set_thumbnail] = useState(null);
+    const [new_thumbnail, set_new_thumbnail] = useState(null);
     const [thumbnail_name, set_thumbnail_name] = useState("");
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
     const [edited_video_title, set_edited_video_title] = useState("");
@@ -46,14 +47,14 @@ function EditVideo() {
         const file = event.target.files[0];
         if (file) {
             set_thumbnail_name(file.name);
-            set_thumbnail(file);
+            set_new_thumbnail(file);
         }
     }
 
 
     function removeThumbnail() {
         event.preventDefault();
-        set_thumbnail(null);
+        set_new_thumbnail(null);
         set_thumbnail_name("");
     }
 
@@ -95,20 +96,7 @@ function EditVideo() {
         formData.append("title", title);
         formData.append("description", description);
         formData.append("is_public", parseInt(video_pubblicity_status));
-        formData.append("thumbnail", thumbnail);
-
-        // try {
-        //     let response = await uploadService.DoUploadVideoInfo(formData);
-
-        //     if (response.status == 200) {
-        //         Alert(Environment.alert_modal_header_video_info_upload, Environment.colorSuccess, response.message);
-        //     } else {
-        //         Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, response.message);
-        //     }
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
-        // }
+        formData.append("thumbnail", new_thumbnail);
     }
 
     return (
@@ -132,11 +120,18 @@ function EditVideo() {
 
                 <div className='thumbnail_and_save'>
                     <label className="drop-container-thumbnail" id="dropcontainer">
-                        {!thumbnail && <span className="drop-title">Drop thumbnail here</span>}
-                        {!thumbnail && <span className="drop-or-text">or</span>}
-                        {!thumbnail && <input type="file" accept="image/*" onChange={thumbnailSave} required />}
-                        {thumbnail && <span className="drop-filename-text">{thumbnail_name}</span>}
-                        {thumbnail && <span className='remove_thumbnail_btn'><img src={removeFile} className='menu-icons' onClick={removeThumbnail}></img></span>}
+                        <div className='drop-container-info'>
+                            <div className='drop-container-info-text'>
+                                {!new_thumbnail && <span className="drop-title">Drop thumbnail here</span>}
+                                {!new_thumbnail && <span className="drop-or-text">or</span>}
+                            </div>
+                            {!new_thumbnail && old_thumbnail && <div className='old_thumbnail'>
+                                <img src={old_thumbnail}/>
+                            </div>}                                              
+                        </div>
+                        {!new_thumbnail && <input type="file" accept="image/*" onChange={thumbnailSave} required />}
+                        {new_thumbnail && <span className="drop-filename-text">{thumbnail_name}</span>}
+                        {new_thumbnail && <span className='remove_thumbnail_btn'><img src={removeFile} className='menu-icons' onClick={removeThumbnail}></img></span>}  
                     </label>
 
                     <div className='video_right_side_buttons'>
