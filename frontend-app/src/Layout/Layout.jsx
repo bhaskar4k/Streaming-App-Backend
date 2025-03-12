@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardService } from '../Service/DashboardService';
+import { GenerateMenu } from '../Common/MenuGenerator';
 
 import bars from '../../public/Images/bars.svg';
 import home from '../../public/Images/home.svg';
@@ -26,6 +27,7 @@ function Layout() {
 
     const dashboardService = new DashboardService();
 
+
     const iconMap = {
         home: home,
         dashboard: dashboard,
@@ -37,6 +39,7 @@ function Layout() {
         deleted_video
     };
 
+
     useEffect(() => {
         getLeftSideMenu();
     }, []);
@@ -46,12 +49,11 @@ function Layout() {
         try {
             let response = await dashboardService.DoGetMenu();
             setLayout(response.data);
-            console.log("layout", response.data);
 
             const newElements = response.data.map(item => item.menu_name_id);
             setElements(newElements);
 
-            GenerateMenu(response.data);
+            document.getElementById("root_menu").innerHTML = GenerateMenu(response.data, iconMap);
         } catch (error) {
             console.error("Error:", error);
             Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
@@ -60,61 +62,29 @@ function Layout() {
 
 
     window.toggleSubmenu = function (parentId, route) {
-        if(route !== 'null') navigate(route);
-        
-        const submenu = document.getElementById(`submenu-${parentId}`);
-        submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+        if (route !== 'null') navigate(route);
 
-        var subMenus = document.getElementsByClassName('a-menu-item-child');
-        if(document.getElementById('menubar').style.width === '70px'){   
-            for(let i=0; i<subMenus.length; i++){
-                subMenus[i].style.marginLeft = "0px";
-            }
-        }else{
-            for(let i=0; i<subMenus.length; i++){
-                subMenus[i].style.marginLeft = "20px";
-            }
+        const subMenuParent = document.getElementById(`submenu-${parentId}`);
+        const subMenus = document.getElementsByClassName('a-menu-item-child');
+
+        if (subMenuParent.style.maxHeight && subMenuParent.style.maxHeight !== "0px") {
+            subMenuParent.style.maxHeight = "0px";
+        } else {
+            subMenuParent.style.maxHeight = subMenuParent.scrollHeight + "px";
         }
-    }
+
+        let subMenuMarginLeft = (document.getElementById('menubar').style.width === '70px') ? "0px" : "20px";
+
+        for (let i = 0; i < subMenus.length; i++) {
+            subMenus[i].style.marginLeft = subMenuMarginLeft;
+        }
+    };
 
 
     window.navigateTo = function (route) {
         navigate(route);
     }
-    
 
-    function GenerateMenu(res) {
-        let output = "";
-    
-        res.forEach((parent) => {
-            if (parent.parent_id === 0) {
-                output += `<div class="a-menu-item" onclick="toggleSubmenu(${parent.id},'${parent.route_name}')">
-                                <div class="menu-item">
-                                    <img src="${iconMap[parent.menu_icon]}" class="menu-icons" alt="${parent.menu_icon}" />
-                                    <h4 class="menu-item-text" id="${parent.menu_name_id}">${parent.menu_name}</h4>
-                                </div>
-                            </div>`;
-    
-                output += `<div class="submenu" id="submenu-${parent.id}" style="display: none;">`;
-    
-                res.forEach((child) => {
-                    if (child.parent_id === parent.id) {
-                        output += `<div class="a-menu-item-child" onclick="navigateTo('${child.route_name}')">
-                                        <div class="menu-item">
-                                            <img src="${iconMap[child.menu_icon]}" class="menu-icons" alt="${child.menu_icon}" />
-                                            <h4 class="menu-item-text" id="${child.menu_name_id}">${child.menu_name}</h4>
-                                        </div>
-                                   </div>`;
-                    }
-                });
-    
-                output += `</div>`;
-            }
-        });
-    
-        document.getElementById("root_menu").innerHTML = output;
-    }
-    
 
     function toggleSidebar() {
         if (windowWidth < 1200) return;
@@ -122,23 +92,19 @@ function Layout() {
         const menubar = document.getElementById('menubar');
         var subMenus = document.getElementsByClassName('a-menu-item-child');
 
-        let newWidthMenubar, newWidthMainContent, newDisplay;
+        let newWidthMenubar, newWidthMainContent, newDisplay, marginLeftSubmenu;
         if (document.getElementById('menubar').style.width === '70px') {
             newWidthMenubar = '13%';
             newWidthMainContent = '86%';
             newDisplay = 'block';
+            marginLeftSubmenu = "20px";
             setToogleStatus(1);
-            for(let i=0; i<subMenus.length; i++){
-                subMenus[i].style.marginLeft = "20px";
-            }
         } else {
             newWidthMenubar = '70px';
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
-            setToogleStatus(0);
-            for(let i=0; i<subMenus.length; i++){
-                subMenus[i].style.marginLeft = "0px";
-            }
+            marginLeftSubmenu = "0px";
+            setToogleStatus(0);           
         }
 
         menubar.style.width = newWidthMenubar;
@@ -150,6 +116,10 @@ function Layout() {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = newDisplay;
         });
+
+        for (let i = 0; i < subMenus.length; i++) {
+            subMenus[i].style.marginLeft = marginLeftSubmenu;
+        }
     }
 
 

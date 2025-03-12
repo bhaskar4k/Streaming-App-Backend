@@ -58,6 +58,12 @@
     background-color: rgb(219, 219, 219);
 }
 
+.submenu {
+    max-height: 0; /* Start closed */
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out; /* Smooth transition */
+}
+
 .a-menu-item-child {
     height: 50px;
     position: relative;
