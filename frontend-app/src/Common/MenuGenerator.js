@@ -1,6 +1,4 @@
 export function GenerateMenu(res, iconMap) {
-    
-
     let output = "";
 
     res.forEach((parent) => {
