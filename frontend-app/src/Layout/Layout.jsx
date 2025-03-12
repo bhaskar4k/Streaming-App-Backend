@@ -58,18 +58,30 @@ function Layout() {
         }
     }
 
+
     window.toggleSubmenu = function (parentId, route) {
         if(route !== 'null') navigate(route);
         
         const submenu = document.getElementById(`submenu-${parentId}`);
         submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+
+        var subMenus = document.getElementsByClassName('a-menu-item-child');
+        if(document.getElementById('menubar').style.width === '70px'){   
+            for(let i=0; i<subMenus.length; i++){
+                subMenus[i].style.marginLeft = "0px";
+            }
+        }else{
+            for(let i=0; i<subMenus.length; i++){
+                subMenus[i].style.marginLeft = "20px";
+            }
+        }
     }
+
 
     window.navigateTo = function (route) {
         navigate(route);
     }
     
-
 
     function GenerateMenu(res) {
         let output = "";
@@ -108,6 +120,7 @@ function Layout() {
         if (windowWidth < 1200) return;
 
         const menubar = document.getElementById('menubar');
+        var subMenus = document.getElementsByClassName('a-menu-item-child');
 
         let newWidthMenubar, newWidthMainContent, newDisplay;
         if (document.getElementById('menubar').style.width === '70px') {
@@ -115,11 +128,22 @@ function Layout() {
             newWidthMainContent = '86%';
             newDisplay = 'block';
             setToogleStatus(1);
+            for(let i=0; i<subMenus.length; i++){
+                subMenus[i].style.marginLeft = "20px";
+            }
         } else {
+            // for(let parentId=1; parentId<=layout.length; parentId++){
+            //     const submenu = document.getElementById(`submenu-${parentId}`);
+            //     if(submenu) submenu.style.display = "none";
+            // }
+            
             newWidthMenubar = '70px';
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
             setToogleStatus(0);
+            for(let i=0; i<subMenus.length; i++){
+                subMenus[i].style.marginLeft = "0px";
+            }
         }
 
         menubar.style.width = newWidthMenubar;
