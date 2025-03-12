@@ -65,9 +65,13 @@
     border-radius: 15px;
     padding: 10px;
     margin-left: 20px;
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(228, 228, 228);
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.a-menu-item-child:hover {
+    background-color: rgb(180, 180, 180);
 }
 
 .menu-item {

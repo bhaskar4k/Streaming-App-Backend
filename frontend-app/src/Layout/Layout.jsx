@@ -132,11 +132,6 @@ function Layout() {
                 subMenus[i].style.marginLeft = "20px";
             }
         } else {
-            // for(let parentId=1; parentId<=layout.length; parentId++){
-            //     const submenu = document.getElementById(`submenu-${parentId}`);
-            //     if(submenu) submenu.style.display = "none";
-            // }
-            
             newWidthMenubar = '70px';
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
