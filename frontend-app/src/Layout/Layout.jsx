@@ -61,10 +61,10 @@ function Layout() {
     }
 
 
-    window.toggleSubmenu = function (parentId, route) {
-        if (route !== 'null') navigate(route);
+    window.toggleSubmenu = function (id, parent_id, route) {
+        if (parent_id !== -1) navigate(route);
 
-        const subMenuParent = document.getElementById(`submenu-${parentId}`);
+        const subMenuParent = document.getElementById(`submenu-${id}`);
         const subMenus = document.getElementsByClassName('a-menu-item-child');
 
         if (subMenuParent.style.maxHeight && subMenuParent.style.maxHeight !== "0px") {
@@ -104,7 +104,7 @@ function Layout() {
             newWidthMainContent = 'calc(100% - 85px)';
             newDisplay = 'none';
             marginLeftSubmenu = "0px";
-            setToogleStatus(0);           
+            setToogleStatus(0);
         }
 
         menubar.style.width = newWidthMenubar;
