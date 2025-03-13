@@ -51,7 +51,7 @@ function Manage() {
     return (
         <>
             <div id="manage_video_container">
-                <h1 className='page_title'>Manage Video</h1>
+                <h1 className='page_title'>Uploaded Video</h1>
 
                 <CustomTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name}/>
             </div>
