@@ -15,6 +15,11 @@ function Upload() {
     const [thumbnail, set_thumbnail] = useState(null);
     const [thumbnail_name, set_thumbnail_name] = useState("");
     const [video_info, set_video_info] = useState(null);
+    const [new_video_title, set_new_video_title] = useState("");
+    const [new_video_description, set_new_video_description] = useState("");
+
+    const [max_character_title, set_max_character_title] = useState(200);
+    const [max_character_description, set_max_character_description] = useState(5000);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
     const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
@@ -82,12 +87,9 @@ function Upload() {
 
 
     async function saveVideoInfo() {
-        let title = document.getElementById("video_title").value;
-        let description = document.getElementById("video_description").value;
-
         let formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
+        formData.append("title", new_video_title);
+        formData.append("description", new_video_description);
         formData.append("is_public", parseInt(video_pubblicity_status));
         formData.append("thumbnail", thumbnail);
         formData.append("video_info", JSON.stringify(video_info));
@@ -167,12 +169,34 @@ function Upload() {
 
                 <div className='title'>
                     <span>Title<span className="required_color">*</span></span>
-                    <input type="text" className="upload_input upload_normal_input" id="video_title" />
+
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            className="upload_input upload_normal_input"
+                            id="video_title"
+                            maxLength={max_character_title}
+                            value={new_video_title}
+                            onChange={(e) => set_new_video_title(e.target.value)}
+                        />
+                        <span id="charCountTitle">{new_video_title.length}/{max_character_title}</span>
+                    </div>
                 </div>
 
                 <div className='description'>
                     <span>Description<span className="required_color">*</span></span>
-                    <textarea className="upload_input upload_textarea" rows="10" id="video_description"></textarea>
+
+                    <div className="input-container">
+                        <textarea
+                            className="upload_input upload_textarea"
+                            rows="10"
+                            id="video_description"
+                            maxLength={max_character_description}
+                            value={new_video_description}
+                            onChange={(e) => set_new_video_description(e.target.value)}>                            
+                        </textarea>
+                        <span id="charCountDescription">{new_video_description.length}/{max_character_description}</span>
+                    </div>
                 </div>
 
                 <div className='thumbnail_and_save'>

@@ -15,6 +15,9 @@ function EditVideo() {
     const navigate = useNavigate();
     const { t_video_info_id, guid, video_title, old_thumbnail, video_description, is_public, uploaded_at, processing_status } = location.state;
 
+    const [max_character_title, set_max_character_title] = useState(200);
+    const [max_character_description, set_max_character_description] = useState(5000);
+
     const [new_thumbnail, set_new_thumbnail] = useState(null);
     const [thumbnail_name, set_thumbnail_name] = useState("");
     const [video_pubblicity_status, set_video_pubblicity_status] = useState(0);
@@ -31,7 +34,7 @@ function EditVideo() {
     useEffect(() => {
         set_edited_video_title(video_title);
         set_edited_video_description(video_description);
-        if(is_public === 1) handleVideoStatusToggleSwitch();
+        if (is_public === 1) handleVideoStatusToggleSwitch();
     }, [])
 
 
@@ -65,7 +68,7 @@ function EditVideo() {
 
 
     function Alert(header, color, message) {
-        if(loadAlertModal) closeAlertModal();
+        if (loadAlertModal) closeAlertModal();
 
         setColorOfAlertModal(color);
         openAlertModal(header, message);
@@ -122,7 +125,7 @@ function EditVideo() {
         }
     }
 
-    
+
     return (
         <>
             <div className='container-upload '>
@@ -132,14 +135,33 @@ function EditVideo() {
 
                 <div className='title'>
                     <span>Title<span className="required_color">*</span></span>
-                    <input type="text" className="upload_input upload_normal_input" id="video_title" 
-                        value={edited_video_title} onChange={(e) => set_edited_video_title(e.target.value)}/>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            className="upload_input upload_normal_input"
+                            id="video_title"
+                            maxLength={max_character_title}
+                            value={edited_video_title}
+                            onChange={(e) => set_edited_video_title(e.target.value)}
+                        />
+                        <span id="charCountTitle">{edited_video_title.length}/{max_character_title}</span>
+                    </div>
                 </div>
 
                 <div className='description'>
                     <span>Description<span className="required_color">*</span></span>
-                    <textarea className="upload_input upload_textarea" rows="10" id="video_description" 
-                        value={edited_video_description} onChange={(e) => set_edited_video_description(e.target.value)}></textarea>
+                    <div className="input-container">
+                        <textarea
+                            className="upload_input upload_textarea"
+                            rows="10"
+                            id="video_description"
+                            value={edited_video_description}
+                            onChange={(e) => set_edited_video_description(e.target.value)}>
+                            maxLength={max_character_description}
+                        </textarea>
+                        <span id="charCountDescription">{edited_video_description.length}/{max_character_description}</span>
+                    </div>
+
                 </div>
 
                 <div className='thumbnail_and_save'>
@@ -150,12 +172,12 @@ function EditVideo() {
                                 {!new_thumbnail && <span className="drop-or-text">or</span>}
                             </div>
                             {!new_thumbnail && old_thumbnail && <div className='old_thumbnail'>
-                                <img src={old_thumbnail}/>
-                            </div>}                                              
+                                <img src={old_thumbnail} />
+                            </div>}
                         </div>
                         {!new_thumbnail && <input type="file" accept="image/*" onChange={thumbnailSave} required />}
                         {new_thumbnail && <span className="drop-filename-text">{thumbnail_name}</span>}
-                        {new_thumbnail && <span className='remove_thumbnail_btn'><img src={removeFile} className='menu-icons' onClick={removeThumbnail}></img></span>}  
+                        {new_thumbnail && <span className='remove_thumbnail_btn'><img src={removeFile} className='menu-icons' onClick={removeThumbnail}></img></span>}
                     </label>
 
                     <div className='video_right_side_buttons'>

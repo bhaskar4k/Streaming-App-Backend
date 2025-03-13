@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Edit-Video/EditVideo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Edit-Video/EditVideo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Edit-Video/EditVideo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Edit-Video/EditVideo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Upload/Upload.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,100 +181,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>175</line>
-          <properties class="com.app.upload.service.UploadService" method="alreadyHasThumbnail">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>176</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>177</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>178</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>180</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>181</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>182</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>184</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>183</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>185</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>186</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>160</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>161</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>162</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>163</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>166</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/UploadService.java</url>
-          <line>164</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
