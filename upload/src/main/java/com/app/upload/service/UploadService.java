@@ -1,6 +1,7 @@
 package com.app.upload.service;
 
 import com.app.authentication.common.DbWorker;
+import com.app.authentication.entity.TMstUser;
 import com.app.upload.common.CommonReturn;
 import com.app.upload.common.Util;
 import com.app.upload.common.VideoUtil;
@@ -157,6 +158,10 @@ public class UploadService {
                     tempUploadedThumbnailFile.delete();
                     tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.YES.getValue());
                 }
+            } else {
+                if (alreadyHasThumbnail(video_info.getId(),post_validated_request)){
+                    tVideoMetadata.setThumbnail_uploaded(UIEnum.YesNo.YES.getValue());
+                }
             }
 
             updateVideoMetadata(video_info.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
@@ -168,8 +173,22 @@ public class UploadService {
         }
     }
 
+    private Boolean alreadyHasThumbnail(Long id, JwtUserDetails post_validated_request){
+        try {
+            sql_string = "select * from t_video_metadata where t_video_info_id = :value1 and thumbnail_uploaded = :value2";
+            params = List.of(id,UIEnum.YesNo.YES.getValue());
+
+            return (TVideoMetadata) dbWorker.getQuery(sql_string, entityManager, params, TVideoMetadata.class).getSingleResult() != null;
+        } catch (NoResultException e) {
+            return false;
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(), "alreadyHasThumbnail()", e.getMessage());
+            return false;
+        }
+    }
+
     @Transactional
-    public int updateVideoMetadata(Long t_video_info_id, String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
+    private int updateVideoMetadata(Long t_video_info_id, String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
             sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE t_video_info_id = :value5";
             params = List.of(title, description, is_public, thumbnail_uploaded, t_video_info_id);
