@@ -34,6 +34,7 @@ function EditVideo() {
         if(is_public === 1) handleVideoStatusToggleSwitch();
     }, [])
 
+
     function handleVideoStatusToggleSwitch() {
         const toggle = document.getElementById('video_status_toggle');
 
@@ -64,13 +65,14 @@ function EditVideo() {
 
 
     function Alert(header, color, message) {
-        closeAlertModal();
+        if(loadAlertModal) closeAlertModal();
 
         setColorOfAlertModal(color);
         openAlertModal(header, message);
 
         loadAlertModal = setTimeout(() => {
             closeAlertModal();
+            navigate("/manage/uploaded-video");
         }, 5000);
     }
 
@@ -89,6 +91,7 @@ function EditVideo() {
 
         clearTimeout(loadAlertModal);
         loadAlertModal = null;
+        navigate("/manage/uploaded-video");
     }
 
 
@@ -109,16 +112,17 @@ function EditVideo() {
             console.log(response)
 
             if (response.status == 200) {
-                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorSuccess, response.message);
+                Alert(Environment.alert_modal_header_video_info_update, Environment.colorSuccess, response.message);
             } else {
-                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, response.message);
+                Alert(Environment.alert_modal_header_video_info_update, Environment.colorError, response.message);
             }
         } catch (error) {
             console.error("Error:", error);
-            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
+            Alert(Environment.alert_modal_header_video_info_update, Environment.colorError, "Failed to upload video info.");
         }
     }
 
+    
     return (
         <>
             <div className='container-upload '>

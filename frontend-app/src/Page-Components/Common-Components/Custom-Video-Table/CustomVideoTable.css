@@ -54,6 +54,9 @@
 .video_title_cell {
     width: 55%;
     text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .video_visibility_cell {
@@ -73,16 +76,22 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+}
+
+.download_logo{
+    width: 20px;
+    cursor: pointer;
 }
 
 .edit_logo{
     width: 20px;
     cursor: pointer;
+    margin: 0 5px;
 }
 
 .delete_logo{
-    width: 25px;
+    width: 18px;
     cursor: pointer;
 }
 

@@ -6,6 +6,7 @@ import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
 import edit_logo from '../../../../public/Images/edit.svg';
 import delete_logo from '../../../../public/Images/delete.svg';
+import download from '../../../../public/Images/download.svg';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 
 function CustomTable(props) {
@@ -94,6 +95,7 @@ function CustomTable(props) {
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
                             <td className='custom_tablebody_cell video_action_cell'>
+                                <img src={download} className='download_logo' />
                                 <img src={edit_logo} onClick={() => edit_video(row.t_video_info_id, row.guid, row.video_title, row.thumbnail, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo'/>
                                 <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
                             </td>
