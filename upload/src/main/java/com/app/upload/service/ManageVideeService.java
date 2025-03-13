@@ -89,7 +89,7 @@ public class ManageVideeService {
                     base64EncodedImage = Base64.getEncoder().encodeToString(fileContent);
                 }
 
-                ManageVideoDetails video = new ManageVideoDetails(id, videoTitle, videoDescription, isPublic, thumbnailUploaded, base64EncodedImage, transDatetime, processingStatus);
+                ManageVideoDetails video = new ManageVideoDetails(id, guid, videoTitle, videoDescription, isPublic, thumbnailUploaded, base64EncodedImage, transDatetime, processingStatus);
                 manageVideos.add(video);
             }
 

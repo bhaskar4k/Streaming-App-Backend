@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class ManageVideoDetails {
     private Long t_video_info_id;
+    private String guid;
     private String video_title;
     private String video_description;
     private int is_public;
@@ -18,8 +19,9 @@ public class ManageVideoDetails {
 
     }
 
-    public ManageVideoDetails(Long t_video_info, String video_title, String video_description, int is_public, int thumbnail_uploaded, String base64EncodedImage, LocalDateTime trans_datetime, int processing_status) {
+    public ManageVideoDetails(Long t_video_info, String guid, String video_title, String video_description, int is_public, int thumbnail_uploaded, String base64EncodedImage, LocalDateTime trans_datetime, int processing_status) {
         this.t_video_info_id = t_video_info;
+        this.guid = guid;
         this.video_title = video_title;
         this.video_description = video_description;
         this.is_public = is_public;
@@ -35,6 +37,14 @@ public class ManageVideoDetails {
 
     public void setT_video_info_id(Long t_video_info_id) {
         this.t_video_info_id = t_video_info_id;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     public String getVideo_title() {

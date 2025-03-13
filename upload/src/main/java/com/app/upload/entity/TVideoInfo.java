@@ -29,6 +29,11 @@ public class TVideoInfo {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime trans_datetime = LocalDateTime.now();
 
+    public TVideoInfo(Long id, String guid) {
+        this.id = id;
+        this.guid = guid;
+    }
+
     public TVideoInfo(String guid, String original_filename, Long size, String extension, String source_resolution, Double duration, Long no_of_chunks, Long t_mst_user_id) {
         this.guid = guid;
         this.original_filename = original_filename;

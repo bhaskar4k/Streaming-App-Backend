@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { go_back } from '../../../Common/Utils';
 import removeFile from '../../../../public/Images/remove-file.svg';
 import './EditVideo.css';
+import { UploadService } from '../../../Service/UploadService';
+import { Environment } from '../../../Environment/Environment';
 import AlertModal from '../../Common-Components/AlertModal/AlertModal';
 
 
@@ -11,7 +13,7 @@ let loadAlertModal = null;
 function EditVideo() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { video_title, old_thumbnail, video_description, is_public, uploaded_at, processing_status } = location.state;
+    const { t_video_info_id, guid, video_title, old_thumbnail, video_description, is_public, uploaded_at, processing_status } = location.state;
 
     const [new_thumbnail, set_new_thumbnail] = useState(null);
     const [thumbnail_name, set_thumbnail_name] = useState("");
@@ -23,6 +25,8 @@ function EditVideo() {
     const [headerTextOfAlertModal, setHeaderTextOfAlertModal] = useState(null);
     const [bodyTextOfAlertModal, setBodyTextOfAlertModal] = useState(null);
     const [colorOfAlertModal, setColorOfAlertModal] = useState('green');
+
+    const uploadService = new UploadService();
 
     useEffect(() => {
         set_edited_video_title(video_title);
@@ -93,10 +97,26 @@ function EditVideo() {
         let description = document.getElementById("video_description").value;
 
         let formData = new FormData();
+        formData.append("t_video_info_id", t_video_info_id);
+        formData.append("guid", guid);
         formData.append("title", title);
         formData.append("description", description);
         formData.append("is_public", parseInt(video_pubblicity_status));
         formData.append("thumbnail", new_thumbnail);
+
+        try {
+            let response = await uploadService.DoUpdateVideoInfo(formData);
+            console.log(response)
+
+            if (response.status == 200) {
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorSuccess, response.message);
+            } else {
+                Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, response.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            Alert(Environment.alert_modal_header_video_info_upload, Environment.colorError, "Failed to upload video info.");
+        }
     }
 
     return (

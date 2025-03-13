@@ -77,6 +77,28 @@ public class UploadController {
     }
 
 
+    @PostMapping("/update_video_info")
+    public CommonReturn<Boolean> update_video_info(@RequestParam(value = "t_video_info_id") Long t_video_info_id,
+                                                   @RequestParam(value = "guid") String guid,
+                                                   @RequestParam(value = "title", required = false) String title,
+                                                   @RequestParam(value = "description", required = false) String description,
+                                                   @RequestParam(value = "is_public") int is_public,
+                                                   @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
+            TVideoInfo video_info = new TVideoInfo(t_video_info_id, guid);
+
+            return uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
+        } catch (Exception e) {
+            log("upload()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
+
     @PostMapping("/update_video_processing_status")
     public CommonReturn<Boolean> update_video_processing_status(@RequestBody ProcesingStatusInputModel procesingStatusInputModel){
         try {
