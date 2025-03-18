@@ -71,6 +71,20 @@ public class ManageVideoController {
         }
     }
 
+    @GetMapping("/get_deleted_video_list")
+    public CommonReturn<List<ManageVideoDetails>> get_deleted_video_list(){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            List<ManageVideoDetails> details = manageVideoService.do_get_deleted_video_list(post_validated_request);
+
+            return CommonReturn.success("Video details have been fetched.", details);
+        } catch (Exception e) {
+            log("get_uploaded_video_list()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
 
     private void log(String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
 import edit_logo from '../../../../public/Images/edit.svg';
+import restore_logo from '../../../../public/Images/restore.svg';
 import delete_logo from '../../../../public/Images/delete.svg';
 import download from '../../../../public/Images/download.svg';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
@@ -47,23 +48,7 @@ function CustomDeletedVideoTable(props) {
         set_element_starting_id(new_starting_id);
     }
 
-    function edit_video(t_video_info_id, guid, video_title, thumbnail, video_description, is_public, uploaded_at, processing_status) {
-        console.log(thumbnail)
-        navigate(`/manage/uploaded-video/edit`, {
-            state: {
-                t_video_info_id: t_video_info_id,
-                guid: guid,
-                video_title: video_title,
-                video_description: video_description,
-                is_public: is_public,
-                uploaded_at: uploaded_at,
-                processing_status: processing_status,
-                old_thumbnail: thumbnail
-            }
-        });
-    }
-
-    async function delete_video(t_video_info_id) {
+    async function restore_video(t_video_info_id) {
         try {
             let response = await manageVideoService.DoDeleteVideo(t_video_info_id);
 
@@ -72,26 +57,6 @@ function CustomDeletedVideoTable(props) {
             }
         } catch (error) {
             console.error('Delete failed:', error);
-        }
-    }
-
-    async function download_video(guid) {
-        try {
-            const response = await manageVideoService.DoDownloadVideo(guid);
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', guid + ".mp4");
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.parentNode.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Download failed:', error);
         }
     }
 
@@ -117,9 +82,7 @@ function CustomDeletedVideoTable(props) {
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
                             <td className='custom_tablebody_cell video_action_cell'>
-                                <img src={download} onClick={() => download_video(row.guid)} className='download_logo' />
-                                <img src={edit_logo} onClick={() => edit_video(row.t_video_info_id, row.guid, row.video_title, row.thumbnail, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo' />
-                                <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
+                                <img src={restore_logo} title='Restore Video' onClick={() => restore_video(row.t_video_info_id)} className='restore_logo' />
                             </td>
                         </tr>
                     ))}

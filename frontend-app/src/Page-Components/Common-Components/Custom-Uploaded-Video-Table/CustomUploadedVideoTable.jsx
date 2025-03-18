@@ -117,9 +117,9 @@ function CustomUploadedVideoTable(props) {
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>
                             <td className='custom_tablebody_cell video_action_cell'>
-                                <img src={download} onClick={() => download_video(row.guid)} className='download_logo' />
-                                <img src={edit_logo} onClick={() => edit_video(row.t_video_info_id, row.guid, row.video_title, row.thumbnail, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo' />
-                                <img src={delete_logo} onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
+                                <img src={download} title='Download Video' onClick={() => download_video(row.guid)} className='download_logo' />
+                                <img src={edit_logo} title='Edit Video' onClick={() => edit_video(row.t_video_info_id, row.guid, row.video_title, row.thumbnail, row.video_description, row.is_public, row.uploaded_at, row.processing_status)} className='edit_logo' />
+                                <img src={delete_logo} title='Delete Video' onClick={() => delete_video(row.t_video_info_id)} className='delete_logo' />
                             </td>
                         </tr>
                     ))}

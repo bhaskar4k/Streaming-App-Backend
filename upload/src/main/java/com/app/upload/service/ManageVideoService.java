@@ -57,7 +57,7 @@ public class ManageVideoService {
             sql_string = "select a.id, a.guid, b.video_title, b.video_description, b.is_public, b.thumbnail_uploaded, a.trans_datetime, c.processing_status " +
                     "from t_video_info a left join t_video_metadata b on a.id = b.t_video_info_id " +
                     "left join t_encoded_video_info c on c.t_video_info_id = b.t_video_info_id " +
-                    "where a.t_mst_user_id = :value1 and a.is_active = :value2 ";
+                    "where a.t_mst_user_id = :value1 and a.is_active = :value2 order by a.id desc";
 
             params = List.of(post_validated_request.getT_mst_user_id(), UIEnum.Activity.IS_ACTIVE.getValue());
 
@@ -132,6 +132,52 @@ public class ManageVideoService {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    public List<ManageVideoDetails> do_get_deleted_video_list(JwtUserDetails post_validated_request){
+        try {
+            sql_string = "select a.id, a.guid, b.video_title, b.video_description, b.is_public, b.thumbnail_uploaded, a.trans_datetime, c.processing_status " +
+                    "from t_video_info a left join t_video_metadata b on a.id = b.t_video_info_id " +
+                    "left join t_encoded_video_info c on c.t_video_info_id = b.t_video_info_id " +
+                    "where a.t_mst_user_id = :value1 and a.is_active = :value2 order by a.id desc";
+
+            params = List.of(post_validated_request.getT_mst_user_id(), UIEnum.Activity.INACTIVE.getValue());
+
+            List<Object[]> results = dbWorker.getQuery(sql_string, entityManager, params, null).getResultList();
+            List<ManageVideoDetails> manageVideos = new ArrayList<>();
+
+            for (Object[] row : results) {
+                Long id = (row[0] != null) ? ((Number) row[0]).longValue() : null;
+                String guid = (row[1] != null) ? (String) row[1] : "";
+                String videoTitle = (row[2] != null) ? (String) row[2] : "";
+                String videoDescription = (row[3] != null) ? (String) row[3] : "";
+                int isPublic = (row[4] != null) ? ((Number) row[4]).intValue() : 0;
+                int thumbnailUploaded = (row[5] != null) ? ((Number) row[5]).intValue() : 0;
+                LocalDateTime transDatetime = (row[6] != null) ? ((Timestamp) row[6]).toLocalDateTime() : null;
+                int processingStatus = (row[7] != null) ? ((Number) row[7]).intValue() : 0;
+
+                String thumbnailPath = environment.getOriginalThumbnailPath() +
+                        util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id()) +
+                        File.separator + guid + ".jpg";
+
+                File file = new File(thumbnailPath);
+                String base64EncodedImage = null;
+
+                if (file.exists()) {
+                    byte[] fileContent = Files.readAllBytes(file.toPath());
+                    base64EncodedImage = Base64.getEncoder().encodeToString(fileContent);
+                }
+
+                ManageVideoDetails video = new ManageVideoDetails(id, guid, videoTitle, videoDescription, isPublic, thumbnailUploaded, base64EncodedImage, transDatetime, processingStatus);
+                manageVideos.add(video);
+            }
+
+            return manageVideos;
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(),"do_get_uploaded_video_list()",e.getMessage());
+            return null;
+        }
+    }
+
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

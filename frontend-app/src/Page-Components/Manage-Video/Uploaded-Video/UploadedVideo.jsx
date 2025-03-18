@@ -18,7 +18,7 @@ function UploadedVideo() {
 
     async function getVideoInfo() {
         try {
-            let response = await manageVideoService.GetUploadeVideoList();
+            let response = await manageVideoService.GetUploadedVideoList();
             set_column_name_mapper(["video", "video_title", "visibility", "uploaded_at", "processing_status", "action"]);
             set_column_name(["Video", "Video Title", "Visibility", "Uploaded At", "Processing Status", "Action"]);
 

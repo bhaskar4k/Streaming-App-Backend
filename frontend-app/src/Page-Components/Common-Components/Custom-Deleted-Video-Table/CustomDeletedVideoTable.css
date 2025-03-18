@@ -39,7 +39,7 @@
     position: relative;
 }
 
-.video_cell img{
+.video_cell img {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -71,43 +71,32 @@
     width: 10%;
 }
 
-.video_action_cell{
+.video_action_cell {
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-.download_logo{
-    width: 20px;
+.restore_logo {
+    width: 30px;
     cursor: pointer;
 }
 
-.edit_logo{
-    width: 20px;
-    cursor: pointer;
-    margin: 0 5px;
-}
-
-.delete_logo{
-    width: 18px;
-    cursor: pointer;
-}
-
-.pagination{
+.pagination {
     display: flex;
     align-items: center;
     padding: 20px 0px;
     float: right;
 }
 
-.pagination span{
-    font-size:0.9rem;
+.pagination span {
+    font-size: 0.9rem;
     margin-right: 10px;
 }
 
-.custom_table_pagination_arrow{
+.custom_table_pagination_arrow {
     margin: 0 10px;
     cursor: pointer;
 }
