@@ -95,6 +95,8 @@ function CustomDeletedVideoTable(props) {
 
                 <span>Showing results: {Math.min(element_starting_id + 1, total_video)} - {Math.min(element_starting_id + max_element_per_page, total_video)} of {total_video}</span>
             </div>
+
+            {total_video === 0 && <span className='nothing_to_show'>Nothing to show</span>}
         </>
     );
 }

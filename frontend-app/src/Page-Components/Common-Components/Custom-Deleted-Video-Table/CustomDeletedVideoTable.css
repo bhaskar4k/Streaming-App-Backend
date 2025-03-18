@@ -100,3 +100,11 @@
     margin: 0 10px;
     cursor: pointer;
 }
+
+.nothing_to_show {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    font-size: 1rem;
+}
