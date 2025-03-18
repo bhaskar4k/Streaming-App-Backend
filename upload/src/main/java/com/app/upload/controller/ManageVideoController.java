@@ -85,6 +85,22 @@ public class ManageVideoController {
         }
     }
 
+    @PostMapping("/restore_video")
+    public CommonReturn<Boolean> restore_video(@RequestBody Map<String, Long> requestBody){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            Long t_video_info_id = requestBody.get("t_video_info_id");
+            Boolean res = manageVideoService.do_restore_video(t_video_info_id, post_validated_request);
+            if(res) return CommonReturn.success("Video has been restored successfully.", true);
+
+            return CommonReturn.error(400,"Failed to restore video.");
+        } catch (Exception e) {
+            log("restore_video()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
+
 
     private void log(String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

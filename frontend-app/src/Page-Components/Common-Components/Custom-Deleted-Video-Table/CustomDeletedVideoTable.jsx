@@ -50,7 +50,7 @@ function CustomDeletedVideoTable(props) {
 
     async function restore_video(t_video_info_id) {
         try {
-            let response = await manageVideoService.DoDeleteVideo(t_video_info_id);
+            let response = await manageVideoService.DoRestoreVideo(t_video_info_id);
 
             if (response.status === 200) {
                 location.reload();

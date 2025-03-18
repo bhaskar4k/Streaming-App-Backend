@@ -178,6 +178,20 @@ public class ManageVideoService {
         }
     }
 
+    @Transactional
+    public Boolean do_restore_video(Long t_video_info_id, JwtUserDetails post_validated_request){
+        try {
+            sql_string = "UPDATE t_video_info set is_active = :value1 where id = :value2";
+
+            params = List.of(UIEnum.Activity.IS_ACTIVE.getValue(), t_video_info_id);
+            dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+            return true;
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(),"do_restore_video()",e.getMessage());
+            return false;
+        }
+    }
+
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

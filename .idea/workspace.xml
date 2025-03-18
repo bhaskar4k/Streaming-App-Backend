@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Environment/Endpoint.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Deleted-Video-Table/CustomDeletedVideoTable.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Deleted-Video-Table/CustomDeletedVideoTable.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Deleted-Video-Table/CustomDeletedVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Deleted-Video-Table/CustomDeletedVideoTable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Deleted-Video/DeletedVideo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Deleted-Video/DeletedVideo.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Uploaded-Video/UploadedVideo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Manage-Video/Uploaded-Video/UploadedVideo.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/ManageVideoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/ManageVideoService.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" afterDir="false" />
     </list>
@@ -186,69 +179,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>135</line>
-          <properties class="com.app.upload.service.ManageVideoService" method="do_get_deleted_video_list">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java</url>
-          <line>74</line>
-          <properties class="com.app.upload.controller.ManageVideoController" method="get_deleted_video_list">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>137</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>142</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>144</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>145</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java</url>
-          <line>78</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/controller/ManageVideoController.java</url>
-          <line>80</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
