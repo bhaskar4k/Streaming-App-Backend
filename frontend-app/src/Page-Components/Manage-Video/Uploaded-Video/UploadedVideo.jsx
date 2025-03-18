@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './UploadedVideo.css';
 import { useState, useEffect } from 'react';
-import CustomTable from '../../Common-Components/Custom-Video-Table/CustomVideoTable';
+import CustomUploadedVideoTable from '../../Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 import { DateFormat } from '../../../Common/CommonConts';
 
 
-function Manage() {
+function UploadedVideo() {
     const [uploaded_video_list, set_uploaded_video_list] = useState([]);
     const [column_name_mapper, set_column_name_mapper] = useState([]);
     const [column_name, set_column_name] = useState([]);
@@ -24,7 +24,7 @@ function Manage() {
 
             console.log(response.data)
 
-            let i=1;
+            let i = 1;
             let rows = response.data.map((item) => {
                 return {
                     t_video_info_id: item.t_video_info_id,
@@ -53,10 +53,10 @@ function Manage() {
             <div id="manage_video_container">
                 <h1 className='page_title'>Uploaded Video</h1>
 
-                <CustomTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name}/>
+                <CustomUploadedVideoTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name} />
             </div>
         </>
     );
 }
 
-export default Manage;
+export default UploadedVideo;

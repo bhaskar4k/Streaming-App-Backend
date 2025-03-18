@@ -1,7 +1,6 @@
-import './CustomVideoTable.css';
+import './CustomUploadedVideoTable.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
@@ -10,7 +9,7 @@ import delete_logo from '../../../../public/Images/delete.svg';
 import download from '../../../../public/Images/download.svg';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 
-function CustomTable(props) {
+function CustomUploadedVideoTable(props) {
     const navigate = useNavigate();
     const max_element_per_page = 5;
     const [video_list, set_video_list] = useState([]);
@@ -137,4 +136,4 @@ function CustomTable(props) {
     );
 }
 
-export default CustomTable;
+export default CustomUploadedVideoTable;
