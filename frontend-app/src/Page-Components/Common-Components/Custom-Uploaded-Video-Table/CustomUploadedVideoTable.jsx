@@ -48,7 +48,6 @@ function CustomUploadedVideoTable(props) {
     }
 
     function edit_video(t_video_info_id, guid, video_title, thumbnail, video_description, is_public, uploaded_at, processing_status) {
-        console.log(thumbnail)
         navigate(`/manage/uploaded-video/edit`, {
             state: {
                 t_video_info_id: t_video_info_id,
@@ -95,6 +94,10 @@ function CustomUploadedVideoTable(props) {
         }
     }
 
+    function watch_video(guid) {
+        navigate(`/watch/${guid}`);
+    }
+
     return (
         <>
             <table className='custom_table'>
@@ -109,10 +112,10 @@ function CustomUploadedVideoTable(props) {
                 <tbody className='custom_tablebody'>
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
-                            <td className='custom_tablebody_cell video_cell'>
+                            <td className='custom_tablebody_cell video_cell' onClick={() => watch_video(row.guid)}>
                                 {row.thumbnail && <img src={row.thumbnail} className='custom_table_video_thumbnail' />}
                             </td>
-                            <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
+                            <td className='custom_tablebody_cell video_title_cell' onClick={() => watch_video(row.guid)}>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>
                             <td className='custom_tablebody_cell video_uploaded_at_cell'>{row.uploaded_at}</td>
                             <td className='custom_tablebody_cell video_processing_status_cell'>{row.processing_status}</td>

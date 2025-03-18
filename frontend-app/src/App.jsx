@@ -10,6 +10,7 @@ import Dashboard from './Page-Components/Dashboard/Dashboard.jsx';
 import Login from './Page-Components/Login/Login.jsx';
 import Profile from './Page-Components/Profile/Profile.jsx';
 import Upload from './Page-Components/Upload/Upload.jsx';
+import WatchVideo from './Page-Components/Watch-Video/WatchVideo.jsx';
 import UploadedVideo from './Page-Components/Manage-Video/Uploaded-Video/UploadedVideo.jsx';
 import EditVideo from './Page-Components/Manage-Video/Edit-Video/EditVideo.jsx';
 import DeletedVideo from './Page-Components/Manage-Video/Deleted-Video/DeletedVideo.jsx';
@@ -128,6 +129,7 @@ function App() {
           <Route path="/manage/uploaded-video" element={<UploadedVideo />} />
           <Route path="/manage/deleted-video" element={<DeletedVideo />} />
           <Route path="/manage/uploaded-video/edit" element={<EditVideo />} />
+          <Route path="/watch/:guid" element={<WatchVideo />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>
