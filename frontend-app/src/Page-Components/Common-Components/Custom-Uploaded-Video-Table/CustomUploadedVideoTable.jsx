@@ -95,7 +95,7 @@ function CustomUploadedVideoTable(props) {
     }
 
     function watch_video(guid) {
-        navigate(`/watch/${guid}`);
+        navigate(`/watch?v=${guid}&playback=0`);
     }
 
     return (

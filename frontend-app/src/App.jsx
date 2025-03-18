@@ -129,7 +129,7 @@ function App() {
           <Route path="/manage/uploaded-video" element={<UploadedVideo />} />
           <Route path="/manage/deleted-video" element={<DeletedVideo />} />
           <Route path="/manage/uploaded-video/edit" element={<EditVideo />} />
-          <Route path="/watch/:guid" element={<WatchVideo />} />
+          <Route path="/watch" element={<WatchVideo />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>

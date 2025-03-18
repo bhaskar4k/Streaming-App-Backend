@@ -1,12 +1,15 @@
 import './WatchVideo.css';
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function WatchVideo() {
-    const { guid } = useParams();
+    const [searchParams] = useSearchParams();
+
+    const guid = searchParams.get("v");
+    const playback = searchParams.get("playback") || "default";
 
     return (
         <>
-            <h1>Watch Video {guid}</h1>
+            <h1>Watch Video {guid} {playback}</h1>
         </>
     )
 }
