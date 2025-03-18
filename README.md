@@ -1,13 +1,13 @@
 <h1 style="text-align: center; margin: 0; background-color: #e6e6e6; border-radius: 10px; padding: 20px;">Streaming-App</h1>
 
 
-<h4 style="border-bottom: 2px solid black;">Versions</h4>
+<h3 style="border-bottom: 2px solid black;">Versions</h3>
 <b>Java :</b> v23.0.1 <br>
 <b>Python :</b> v3.13.1 <br>
 <b>Node :</b> v22.12.0 <br>
 <b>NPM :</b> v10.9.0 <br>
 
-<h4 style="border-bottom: 2px solid black;">Get Started</h4>
+<h3 style="border-bottom: 2px solid black;">Get Started</h3>
 <ul>
     <li>Clone the repo.</li>
     <li><code><b>$ cd frontend-app</b></code></li>
@@ -18,7 +18,7 @@
     <li>Change tomcat ports (if conflicts in your PC) from application.properties file of all microservices.</li>
 </ul>
 
-<h4 style="border-bottom: 2px solid black;">Docker Setup</h4>
+<h3 style="border-bottom: 2px solid black;">Docker Setup</h3>
 Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop/">here</a>.
 
 <ul>
@@ -29,7 +29,7 @@ Download Docker Desktop from <a href="https://www.docker.com/products/docker-des
     <li>Start the docker container.</li>
 </ul>
 
-<h4 style="border-bottom: 2px solid black;">FFmpeg Setup</h4>
+<h3 style="border-bottom: 2px solid black;">FFmpeg Setup</h3>
 Download FFmpeg from <a href="https://drive.google.com/file/d/1iUe5nacH7ZJNpK8MJrom2VPskTnurFOi/view?usp=sharing">here</a>.
 
 <ul>
@@ -41,10 +41,12 @@ Download FFmpeg from <a href="https://drive.google.com/file/d/1iUe5nacH7ZJNpK8MJ
     </ul>
 </ul>
 
-<h4 style="border-bottom: 2px solid black;">Update Env Filepath</h4>
+<h3 style="border-bottom: 2px solid black;">Update Env Filepath</h3>
 <ul>
     <li>Update the originalVideoPath, encodedVideoPath and pythonScriptPath in Environment.java file of Processing microservice. (pythonScript present in the python folder under Processing microservice.)</li>
     <li>Update the originalVideoPath, originalThumbnailPath in Environment.java file of Upload microservice.</li>
 </ul>
 
-<h4>Import the DB Dump from the repo</h4>
+<h3>Import the DB Dump from the repo</h3>
+
+And you're done..... :)
