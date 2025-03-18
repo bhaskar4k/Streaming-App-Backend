@@ -1,4 +1,5 @@
 import { EndpointMicroservice, EndpointUpload } from '../Environment/Endpoint';
+import axios from "axios";
 
 export class ManageVideoService {
     constructor() {
@@ -21,7 +22,7 @@ export class ManageVideoService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-            
+
             let res = await response.json();
             return res;
         } catch (ex) {
@@ -46,7 +47,7 @@ export class ManageVideoService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-            
+
             let res = await response.json();
             return res;
         } catch (ex) {
@@ -71,9 +72,32 @@ export class ManageVideoService {
                 const errorData = await response.json();
                 console.error('Error Message:', errorData.message);
             }
-            
+
             let res = await response.json();
             return res;
+        } catch (ex) {
+            console.log(ex);
+            return { status: 404, message: 'Internal Server Error.', data: null };
+        }
+    }
+
+    async DoDownloadVideo(guid) {
+        try {
+            let url = this.BASE_URL.concat(EndpointUpload.download_video);
+            const response = await axios({
+                url: url + `/${guid}`,
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
+                },
+                responseType: 'blob',
+            });
+
+            if (response.status !== 200) {
+                console.error('Error Message:', response.message);
+            }
+
+            return response;
         } catch (ex) {
             console.log(ex);
             return { status: 404, message: 'Internal Server Error.', data: null };

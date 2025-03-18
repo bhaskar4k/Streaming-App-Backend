@@ -13,12 +13,15 @@ import com.app.upload.model.ProcesingStatusInputModel;
 import com.app.upload.repository.TEncodedVideoInfoRepository;
 import com.app.upload.repository.TVideoInfoRepository;
 import com.app.upload.repository.TVideoMetadataRepository;
-import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -114,6 +118,27 @@ public class ManageVideeService {
         }
     }
 
+    public ResponseEntity<Resource> do_download_video(String guid, JwtUserDetails post_validated_request) {
+        try {
+            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(post_validated_request.getT_mst_user_id(),guid);
+            String FILENAME = File.separator + guid + ".mp4";
+
+            Path filePath = Paths.get(ORIGINAL_FILE_DIR, FILENAME);
+            org.springframework.core.io.Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType("video/mp4"))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            log(post_validated_request.getT_mst_user_id(),"download_video()",e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     private void log(Long t_mst_user_id, String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();

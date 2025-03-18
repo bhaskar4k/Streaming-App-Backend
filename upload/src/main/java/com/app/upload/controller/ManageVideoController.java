@@ -1,6 +1,7 @@
 package com.app.upload.controller;
 
 import com.app.upload.common.CommonReturn;
+import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
@@ -9,13 +10,18 @@ import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.ManageVideeService;
 import com.app.upload.service.UploadService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +34,8 @@ public class ManageVideoController {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private ManageVideeService manageVideeService;
-    public Environment environment;
 
     public ManageVideoController(){
-        this.environment = new Environment();
     }
 
 
@@ -49,16 +53,15 @@ public class ManageVideoController {
         }
     }
 
-    @PostMapping("/edit_video")
-    public CommonReturn<List<ManageVideoDetails>> edit_video(@RequestBody ManageVideoDetails video){
+    @GetMapping("/download_video/{guid:.+}")
+    public ResponseEntity<Resource> download_video(@PathVariable String guid){
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-
-            return CommonReturn.success("Video detail has been edited successfully.", null);
+            return manageVideeService.do_download_video(guid,post_validated_request);
         } catch (Exception e) {
-            log("edit_video()",e.getMessage());
-            return CommonReturn.error(400,"Internal Server Error.");
+            log("download_video()",e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
