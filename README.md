@@ -9,7 +9,8 @@
 
 <h3 style="border-bottom: 2px solid black;">Get Started</h3>
 <ul>
-    <li>Clone the repo.</li>
+    <li><code><b>$ git clone https://github.com/bhaskar4k/Streaming-App.git</b></code></li>
+    <li><code><b>$ cd Streaming-App</b></code></li>
     <li><code><b>$ cd frontend-app</b></code></li>
     <li><code><b>$ npm i</b></code></li>
     <li><code><b>$ npm run dev</b></code></li>
@@ -49,4 +50,4 @@ Download FFmpeg from <a href="https://drive.google.com/file/d/1iUe5nacH7ZJNpK8MJ
 
 <h3>Import the DB Dump from the repo</h3>
 
-And you're done..... :)
+<p>And you're done..... 😉</p>
