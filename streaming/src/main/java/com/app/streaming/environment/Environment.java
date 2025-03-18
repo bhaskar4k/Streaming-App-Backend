@@ -8,7 +8,6 @@ import java.util.Map;
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
-    private String rabbitMQPublishURL = "http://localhost:8095/publish/put_in_queue";
 
 //    Desktop
 //    private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
@@ -47,10 +46,6 @@ public class Environment {
 
     public String getAuthServiceUrl() {
         return authServiceUrl;
-    }
-
-    public String getRabbitMQPublishURL() {
-        return rabbitMQPublishURL;
     }
 
     public String getFfmpegPath() {
