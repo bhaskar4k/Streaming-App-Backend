@@ -88,4 +88,24 @@ export class UploadService {
             return { status: 404, message: 'Internal Server Error.', data: null };
         }
     }
+
+
+
+    async Temp(start) {
+        try {
+            let url = this.BASE_URL.concat(EndpointUpload.upload_video_info);
+
+            const response = await fetch(`http://localhost:8093/manage_video/video?start=${start}&count=2`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
+                },
+            });
+
+            return response;
+        } catch (ex) {
+            console.error(ex);
+            return { status: 404, message: 'Internal Server Error.', data: null };
+        }
+    }
 }
