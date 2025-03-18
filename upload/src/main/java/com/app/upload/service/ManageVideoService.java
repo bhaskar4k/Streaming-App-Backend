@@ -1,23 +1,16 @@
 package com.app.upload.service;
 
 import com.app.authentication.common.DbWorker;
-import com.app.upload.common.CommonReturn;
 import com.app.upload.common.Util;
-import com.app.upload.common.VideoUtil;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.enums.UIEnum;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.ManageVideoDetails;
-import com.app.upload.model.ProcesingStatusInputModel;
-import com.app.upload.repository.TEncodedVideoInfoRepository;
-import com.app.upload.repository.TVideoInfoRepository;
-import com.app.upload.repository.TVideoMetadataRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -38,7 +31,7 @@ import java.util.List;
 
 @Service
 @Component
-public class ManageVideeService {
+public class ManageVideoService {
     private Environment environment;
     private Util util;
     @Autowired
@@ -51,7 +44,7 @@ public class ManageVideeService {
     private String sql_string;
     List<Object> params;
 
-    public ManageVideeService(){
+    public ManageVideoService(){
         this.environment = new Environment();
         this.util = new Util();
         this.dbWorker=new DbWorker();

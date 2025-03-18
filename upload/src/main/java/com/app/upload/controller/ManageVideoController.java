@@ -1,27 +1,17 @@
 package com.app.upload.controller;
 
 import com.app.upload.common.CommonReturn;
-import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
-import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.ManageVideoDetails;
 import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
-import com.app.upload.service.ManageVideeService;
-import com.app.upload.service.UploadService;
+import com.app.upload.service.ManageVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +23,7 @@ public class ManageVideoController {
     @Autowired
     private LogExceptionsService logExceptionsService;
     @Autowired
-    private ManageVideeService manageVideeService;
+    private ManageVideoService manageVideoService;
 
     public ManageVideoController(){
     }
@@ -44,7 +34,7 @@ public class ManageVideoController {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            List<ManageVideoDetails> details = manageVideeService.do_get_uploaded_video_list(post_validated_request);
+            List<ManageVideoDetails> details = manageVideoService.do_get_uploaded_video_list(post_validated_request);
 
             return CommonReturn.success("Video details have been fetched.", details);
         } catch (Exception e) {
@@ -58,7 +48,7 @@ public class ManageVideoController {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try {
-            return manageVideeService.do_download_video(guid,post_validated_request);
+            return manageVideoService.do_download_video(guid,post_validated_request);
         } catch (Exception e) {
             log("download_video()",e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -71,7 +61,7 @@ public class ManageVideoController {
 
         try {
             Long t_video_info_id = requestBody.get("t_video_info_id");
-            Boolean res = manageVideeService.do_delete_video(t_video_info_id, post_validated_request);
+            Boolean res = manageVideoService.do_delete_video(t_video_info_id, post_validated_request);
             if(res) return CommonReturn.success("Video has been deleted successfully.", true);
 
             return CommonReturn.error(400,"Failed to delete video.");
