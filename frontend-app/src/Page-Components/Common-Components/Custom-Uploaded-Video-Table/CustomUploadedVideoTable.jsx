@@ -130,7 +130,7 @@ function CustomUploadedVideoTable(props) {
                 <img src={left_arrow} className='custom_table_pagination_arrow' onClick={() => apply_pagination(1)} />
                 <img src={right_arrow} className='custom_table_pagination_arrow' onClick={() => apply_pagination(2)} />
 
-                <span>Showing results: {element_starting_id + 1} - {Math.min(element_starting_id + max_element_per_page, total_video)} of {total_video}</span>
+                <span>Showing results: {Math.min(element_starting_id + 1, total_video)} - {Math.min(element_starting_id + max_element_per_page, total_video)} of {total_video}</span>
             </div>
         </>
     );
