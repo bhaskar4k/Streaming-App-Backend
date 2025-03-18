@@ -1,17 +1,12 @@
 import './CustomDeletedVideoTable.css';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import left_arrow from '../../../../public/Images/left_arrow.svg';
 import right_arrow from '../../../../public/Images/right_arrow.svg';
-import edit_logo from '../../../../public/Images/edit.svg';
 import restore_logo from '../../../../public/Images/restore.svg';
-import delete_logo from '../../../../public/Images/delete.svg';
-import download from '../../../../public/Images/download.svg';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 
 function CustomDeletedVideoTable(props) {
-    const navigate = useNavigate();
     const max_element_per_page = 5;
     const [video_list, set_video_list] = useState([]);
     const [filtered_video_list, set_filtered_video_list] = useState([]);
@@ -56,7 +51,7 @@ function CustomDeletedVideoTable(props) {
                 location.reload();
             }
         } catch (error) {
-            console.error('Delete failed:', error);
+            console.error('Restore failed:', error);
         }
     }
 
@@ -75,7 +70,7 @@ function CustomDeletedVideoTable(props) {
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
                             <td className='custom_tablebody_cell video_cell'>
-                                <img src={row.thumbnail ? row.thumbnail : null} className='custom_table_video_thumbnail' />
+                                {row.thumbnail && <img src={row.thumbnail} className='custom_table_video_thumbnail' />}
                             </td>
                             <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>

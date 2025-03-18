@@ -110,7 +110,7 @@ function CustomUploadedVideoTable(props) {
                     {filtered_video_list.map((row, index) => (
                         <tr className='custom_tablebody_row' key={index}>
                             <td className='custom_tablebody_cell video_cell'>
-                                <img src={row.thumbnail ? row.thumbnail : null} className='custom_table_video_thumbnail' />
+                                {row.thumbnail && <img src={row.thumbnail} className='custom_table_video_thumbnail' />}
                             </td>
                             <td className='custom_tablebody_cell video_title_cell'>{row.video_title}</td>
                             <td className='custom_tablebody_cell video_visibility_cell'>{row.visibility}</td>
