@@ -9,7 +9,7 @@
 
 
 <h4 style="border-bottom: 2px solid black;">Docker Setup</h4>
-```Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop/">here</a>.```
+Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop/">here</a>.
 
 <ul>
     <li>Download and install Docker Desktop.</li>
