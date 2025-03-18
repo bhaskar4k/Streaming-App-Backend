@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './DeletedVideo.css';
 import { useState, useEffect } from 'react';
-import CustomUploadedVideoTable from '../../Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable';
+import CustomDeletedVideoTable from '../../Common-Components/Custom-Deleted-Video-Table/CustomDeletedVideoTable';
 import { ManageVideoService } from '../../../Service/ManageVideoService';
 import { DateFormat } from '../../../Common/CommonConts';
 
@@ -53,7 +53,7 @@ function DeletedVideo() {
             <div id="manage_video_container">
                 <h1 className='page_title'>Deleted Video</h1>
 
-                <CustomUploadedVideoTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name} />
+                <CustomDeletedVideoTable video_list={uploaded_video_list} column_name_mapper={column_name_mapper} column_name={column_name} />
             </div>
         </>
     );
