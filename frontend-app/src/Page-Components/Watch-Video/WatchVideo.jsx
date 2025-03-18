@@ -5,7 +5,7 @@ function WatchVideo() {
     const [searchParams] = useSearchParams();
 
     const guid = searchParams.get("v");
-    const playback = searchParams.get("playback") || "default";
+    const playback = searchParams.get("playback") || 0;
 
     return (
         <>

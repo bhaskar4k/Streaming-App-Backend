@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

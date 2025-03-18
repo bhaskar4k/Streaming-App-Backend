@@ -52,16 +52,25 @@
     transition: 0.3s all ease-in-out;
     border-radius: 15px;
     padding: 10px;
+    cursor: pointer;
 }
 
 .a-menu-item:hover {
     background-color: rgb(219, 219, 219);
 }
 
+.a-menu-item-subitem-toggle {
+    position: absolute;
+    right: 0;
+    transition: 0.3s all ease-in-out;
+}
+
 .submenu {
-    max-height: 0; /* Start closed */
+    max-height: 0;
+    /* Start closed */
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out; /* Smooth transition */
+    transition: max-height 0.3s ease-in-out;
+    /* Smooth transition */
 }
 
 .a-menu-item-child {

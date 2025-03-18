@@ -15,6 +15,7 @@ import logout from '../../public/Images/logout.svg';
 import manage from '../../public/Images/manage.svg';
 import uploaded_video from '../../public/Images/uploaded_video.svg';
 import deleted_video from '../../public/Images/delete.svg';
+import down_arrow from '../../public/Images/down_arrow.svg';
 
 function Layout() {
     const navigate = useNavigate();
@@ -35,8 +36,9 @@ function Layout() {
         profile: profile,
         logout: logout,
         manage: manage,
-        uploaded_video,
-        deleted_video
+        uploaded_video: uploaded_video,
+        deleted_video: deleted_video,
+        down_arrow: down_arrow
     };
 
 
@@ -50,7 +52,10 @@ function Layout() {
             let response = await dashboardService.DoGetMenu();
             setLayout(response.data);
 
-            const newElements = response.data.map(item => item.menu_name_id);
+            const newElements = response.data.map(item => ({
+                id: item.id,
+                menu_name_id: item.menu_name_id
+            }));
             setElements(newElements);
 
             document.getElementById("root_menu").innerHTML = GenerateMenu(response.data, iconMap);
@@ -65,12 +70,15 @@ function Layout() {
         if (parent_id !== -1) navigate(route);
 
         const subMenuParent = document.getElementById(`submenu-${id}`);
+        const subMenuToggleIcon = document.getElementById(`toggle-${id}`);
         const subMenus = document.getElementsByClassName('a-menu-item-child');
 
         if (subMenuParent.style.maxHeight && subMenuParent.style.maxHeight !== "0px") {
             subMenuParent.style.maxHeight = "0px";
+            subMenuToggleIcon.style.transform = "rotate(0deg)";
         } else {
             subMenuParent.style.maxHeight = subMenuParent.scrollHeight + "px";
+            subMenuToggleIcon.style.transform = "rotate(180deg)";
         }
 
         let subMenuMarginLeft = (document.getElementById('menubar').style.width === '70px') ? "0px" : "20px";
@@ -112,9 +120,11 @@ function Layout() {
         const mainContent = document.getElementById("mainContent");
         if (mainContent) mainContent.style.width = newWidthMainContent;
 
-        elements.forEach((id) => {
-            const elem = document.getElementById(id);
+        elements.forEach((item) => {
+            const elem = document.getElementById(item.menu_name_id);
             if (elem) elem.style.display = newDisplay;
+            let toggleMenuIcon = document.getElementById(`toggle-${item.id}`);
+            if (toggleMenuIcon) toggleMenuIcon.style.display = newDisplay;
         });
 
         for (let i = 0; i < subMenus.length; i++) {
