@@ -15,7 +15,7 @@
     <li>Download and install Docker Desktop.</li>
     <li>Open it.</li>
     <li>Open Powershell.</li>
-    <li>```Run this command : <b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management</b>```</li>
+    <li>`Run this command : <b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management</b>`</li>
 </ul>
 
 <h4 style="border-bottom: 2px solid black;">FFmpeg Setup</h4>
