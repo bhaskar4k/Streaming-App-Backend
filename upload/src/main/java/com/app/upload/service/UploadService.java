@@ -142,7 +142,7 @@ public class UploadService {
             TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
 
             if (thumbnail != null && !thumbnail.isEmpty()) {
-                String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath();
+                String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(video_info.getGuid());
 
                 File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
                 if (!thumbnailDir.exists()) thumbnailDir.mkdirs();

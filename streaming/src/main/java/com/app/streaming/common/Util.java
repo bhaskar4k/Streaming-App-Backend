@@ -8,12 +8,12 @@ public class Util {
         return UUID.randomUUID().toString();
     }
 
-    public String getUserSpecifiedFolder(Long t_mst_user_id, String uniqueID){
-        return File.separator + "UserID-" + t_mst_user_id + File.separator + uniqueID;
+    public String getUserSpecifiedFolder(String uniqueID){
+        return File.separator + uniqueID;
     }
 
-    public String getUserSpecifiedFolderForThumbnail(Long t_mst_user_id){
-        return File.separator + "UserID-" + t_mst_user_id;
+    public String getUserSpecifiedFolderForThumbnail(String uniqueID){
+        return File.separator + uniqueID;
     }
 
     public String getFileNameWithoutExtension(String originalFilename) {

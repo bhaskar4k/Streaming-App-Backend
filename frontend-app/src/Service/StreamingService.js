@@ -1,27 +1,34 @@
-import { EndpointMicroservice, EndpointUpload } from '../Environment/Endpoint';
+import { EndpointMicroservice, EndpointStreaming } from '../Environment/Endpoint';
 import axios from "axios";
 
 export class StreamingService {
     constructor() {
         this.JWT_TOKEN_INFO = JSON.parse(localStorage.getItem("JWT"));
-        this.BASE_URL = EndpointMicroservice.upload;
+        this.BASE_URL = EndpointMicroservice.streaming;
     }
 
 
-    async Temp(start) {
+    async VideoFileInfo(guid) {
         try {
-            let url = this.BASE_URL.concat(EndpointUpload.upload_video_info);
-
-            const response = await fetch(`http://localhost:8092/fetch_video_chunk?start=${start}&count=2`, {
-                method: "GET",
+            let url = this.BASE_URL.concat(EndpointStreaming.get_video_information);
+            let response = await fetch(url, {
+                method: 'POST',
                 headers: {
-                    "Authorization": `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
+                    'Authorization': `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
+                    'Content-Type': 'application/json'
                 },
+                body: JSON.stringify({ guid: guid })
             });
 
-            return response;
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error Message:', errorData.message);
+            }
+
+            let res = await response.json();
+            return res;
         } catch (ex) {
-            console.error(ex);
+            console.log(ex);
             return { status: 404, message: 'Internal Server Error.', data: null };
         }
     }

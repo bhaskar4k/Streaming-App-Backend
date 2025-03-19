@@ -15,6 +15,7 @@ public class Environment {
 
 //    Laptop
     private String originalVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Source-Video";
+    private String encodedVideoPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Resized-Video";
     private String originalThumbnailPath = "D:" + File.separator + "Streaming-App-Data" + File.separator + "Streaming-App-Thumbnail";
 
     private String ffprobePath = "C:/ffmpeg/bin/ffprobe.exe";
@@ -38,6 +39,10 @@ public class Environment {
 
     public String getOriginalThumbnailPath() {
         return originalThumbnailPath;
+    }
+
+    public String getEncodedVideoPath() {
+        return encodedVideoPath;
     }
 
     public String getFfprobePath() {

@@ -22,8 +22,8 @@ public class Util {
         return File.separator + uniqueID;
     }
 
-    public String getUserSpecifiedFolderForThumbnail(Long t_mst_user_id){
-        return File.separator + "UserID-" + t_mst_user_id;
+    public String getUserSpecifiedFolderForThumbnail(String uniqueID){
+        return File.separator + uniqueID;
     }
 
     public String getFileNameWithoutExtension(String originalFilename) {

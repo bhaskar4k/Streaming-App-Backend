@@ -74,8 +74,8 @@ public class ManageVideoService {
                 LocalDateTime transDatetime = (row[6] != null) ? ((Timestamp) row[6]).toLocalDateTime() : null;
                 int processingStatus = (row[7] != null) ? ((Number) row[7]).intValue() : 0;
 
-                String thumbnailPath = environment.getOriginalThumbnailPath() +
-                        File.separator + guid + ".jpg";
+                String thumbnailPath = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(guid) +
+                                       File.separator + guid + ".jpg";
 
                 File file = new File(thumbnailPath);
                 String base64EncodedImage = null;
@@ -154,8 +154,8 @@ public class ManageVideoService {
                 LocalDateTime transDatetime = (row[6] != null) ? ((Timestamp) row[6]).toLocalDateTime() : null;
                 int processingStatus = (row[7] != null) ? ((Number) row[7]).intValue() : 0;
 
-                String thumbnailPath = environment.getOriginalThumbnailPath() +
-                        File.separator + guid + ".jpg";
+                String thumbnailPath = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(guid) +
+                                       File.separator + guid + ".jpg";
 
                 File file = new File(thumbnailPath);
                 String base64EncodedImage = null;

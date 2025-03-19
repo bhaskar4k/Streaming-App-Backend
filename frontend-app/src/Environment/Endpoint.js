@@ -17,7 +17,7 @@ let EndpointDashboard = {
 }
 
 let EndpointStreaming = {
-    streaming: "/streaming/temp",
+    get_video_information: "/streaming/get_video_information",
 }
 
 let EndpointUpload = {

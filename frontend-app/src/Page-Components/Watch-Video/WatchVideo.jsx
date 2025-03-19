@@ -18,32 +18,19 @@ function WatchVideo() {
     const [isLiked, setIsLiked] = useState(0);
     const [isDisliked, setIsDisliked] = useState(0);
 
-    const [videoChunks, setVideoChunks] = useState([]);
-    const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
-    const videoRef = useRef(null);
 
     useEffect(() => {
-        async function fetchChunks() {
+        const fetchVideoInfo = async () => {
             try {
-                const response = await streamingService.Temp(1);
-                console.log(response)
-                if (!response.ok) throw new Error("Failed to fetch chunks");
-                const chunks = await response.json();
-                console.log(chunks)
-                setVideoChunks(chunks);
+                const response = await streamingService.VideoFileInfo(guid);
+                console.log("response", response);
             } catch (error) {
-                console.error("Error fetching video chunks:", error);
+                console.error("Error fetching video info:", error);
             }
-        }
-        fetchChunks();
-    }, []);
+        };
 
-    const handleVideoEnd = () => {
-        if (currentChunkIndex < videoChunks.length - 1) {
-            setCurrentChunkIndex(currentChunkIndex + 1);
-        }
-    };
-
+        fetchVideoInfo();
+    }, [guid]);
 
     useEffect(() => {
         const likeButton = document.getElementById("video_player_info_action_like");
