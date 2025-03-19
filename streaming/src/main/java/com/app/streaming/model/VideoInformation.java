@@ -4,7 +4,12 @@ import java.util.List;
 
 public class VideoInformation {
     private Boolean hasVideo;
-    private int chunkCount;
+    private Boolean isProperlyProcessed;
+    private String channel;
+    private String title;
+    private String description;
+    private long chunkCount;
+    private double videoDuration;
     private List<String> videoResolutions;
 
     public Boolean getHasVideo() {
@@ -15,12 +20,52 @@ public class VideoInformation {
         this.hasVideo = hasVideo;
     }
 
-    public int getChunkCount() {
+    public Boolean getProperlyProcessed() {
+        return isProperlyProcessed;
+    }
+
+    public void setProperlyProcessed(Boolean properlyProcessed) {
+        isProperlyProcessed = properlyProcessed;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public long getChunkCount() {
         return chunkCount;
     }
 
-    public void setChunkCount(int chunkCount) {
+    public void setChunkCount(long chunkCount) {
         this.chunkCount = chunkCount;
+    }
+
+    public double getVideoDuration() {
+        return videoDuration;
+    }
+
+    public void setVideoDuration(double videoDuration) {
+        this.videoDuration = videoDuration;
     }
 
     public List<String> getVideoResolutions() {

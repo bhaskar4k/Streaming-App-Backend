@@ -17,13 +17,21 @@ function WatchVideo() {
 
     const [isLiked, setIsLiked] = useState(0);
     const [isDisliked, setIsDisliked] = useState(0);
+    const [channel_name, set_channel_name] = useState("");
+    const [video_title, set_video_title] = useState("");
+    const [video_description, set_video_description] = useState("");
 
 
     useEffect(() => {
         const fetchVideoInfo = async () => {
             try {
                 const response = await streamingService.VideoFileInfo(guid);
-                console.log("response", response);
+                let data = response.data;
+                console.log(data)
+
+                set_channel_name(data.channel);
+                set_video_title(data.title);
+                set_video_description(data.description);
             } catch (error) {
                 console.error("Error fetching video info:", error);
             }
@@ -80,12 +88,12 @@ function WatchVideo() {
 
                 <div className="video_player_info">
                     <div className="video_player_info_header">
-                        <span className="video_player_info_title">Video title</span>
+                        <span className="video_player_info_title">{video_title}</span>
 
                         <div className="video_player_info_header_action">
                             <div className="video_player_info_channel_info">
                                 <img src={profile}></img>
-                                <span className="video_player_info_channel">Channel</span>
+                                <span className="video_player_info_channel">{channel_name}</span>
                             </div>
 
                             <div className="video_player_info_action">
@@ -101,7 +109,7 @@ function WatchVideo() {
                             </div>
                         </div>
                     </div>
-                    <span className="video_player_info_description">Video description</span>
+                    <span className="video_player_info_description">{video_description}</span>
                 </div>
             </div>
 
