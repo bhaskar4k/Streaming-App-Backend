@@ -75,7 +75,7 @@ public class UploadService {
 
         try {
             String VIDEO_GUID = util.getrandomGUID();
-            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(userDetails.getT_mst_user_id(),VIDEO_GUID);
+            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(VIDEO_GUID);
             Files.createDirectories(Paths.get(ORIGINAL_FILE_DIR));
 
             long fileSize = file.getSize();
@@ -142,7 +142,7 @@ public class UploadService {
             TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
 
             if (thumbnail != null && !thumbnail.isEmpty()) {
-                String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id());
+                String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath();
 
                 File thumbnailDir = new File(THUMBNAIL_FILE_DIR);
                 if (!thumbnailDir.exists()) thumbnailDir.mkdirs();

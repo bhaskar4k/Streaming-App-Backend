@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import './WatchVideo.css';
 import { useSearchParams } from "react-router-dom";
-import { UploadService } from '../../Service/UploadService';
+import { StreamingService } from '../../Service/StreamingService';
 import like from '../../../public/Images/like.png';
 import dislike from '../../../public/Images/dislike.png';
 import share from '../../../public/Images/share.svg';
@@ -13,7 +13,7 @@ function WatchVideo() {
     const guid = searchParams.get("v");
     const playback = searchParams.get("playback") || 0;
 
-    const uploadService = new UploadService();
+    const streamingService = new StreamingService();
 
     const [isLiked, setIsLiked] = useState(0);
     const [isDisliked, setIsDisliked] = useState(0);
@@ -25,7 +25,7 @@ function WatchVideo() {
     useEffect(() => {
         async function fetchChunks() {
             try {
-                const response = await uploadService.Temp(1);
+                const response = await streamingService.Temp(1);
                 console.log(response)
                 if (!response.ok) throw new Error("Failed to fetch chunks");
                 const chunks = await response.json();

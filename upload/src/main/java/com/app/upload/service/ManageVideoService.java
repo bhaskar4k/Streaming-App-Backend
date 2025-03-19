@@ -75,7 +75,6 @@ public class ManageVideoService {
                 int processingStatus = (row[7] != null) ? ((Number) row[7]).intValue() : 0;
 
                 String thumbnailPath = environment.getOriginalThumbnailPath() +
-                        util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id()) +
                         File.separator + guid + ".jpg";
 
                 File file = new File(thumbnailPath);
@@ -113,7 +112,7 @@ public class ManageVideoService {
 
     public ResponseEntity<Resource> do_download_video(String guid, JwtUserDetails post_validated_request) {
         try {
-            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(post_validated_request.getT_mst_user_id(),guid);
+            String ORIGINAL_FILE_DIR = environment.getOriginalVideoPath() + util.getUserSpecifiedFolder(guid);
             String FILENAME = File.separator + guid + ".mp4";
 
             Path filePath = Paths.get(ORIGINAL_FILE_DIR, FILENAME);
@@ -156,7 +155,6 @@ public class ManageVideoService {
                 int processingStatus = (row[7] != null) ? ((Number) row[7]).intValue() : 0;
 
                 String thumbnailPath = environment.getOriginalThumbnailPath() +
-                        util.getUserSpecifiedFolderForThumbnail(post_validated_request.getT_mst_user_id()) +
                         File.separator + guid + ".jpg";
 
                 File file = new File(thumbnailPath);

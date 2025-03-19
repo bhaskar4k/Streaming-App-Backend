@@ -19,7 +19,7 @@ public class Util {
 
     public String getUserSpecifiedFolder(long user_id, String uniqueID){
         try {
-            return File.separator + "UserID-" + user_id + File.separator + uniqueID;
+            return File.separator + uniqueID;
         } catch (Exception e) {
             log(user_id,"getUserSpecifiedFolder()",e.getMessage());
             return null;
