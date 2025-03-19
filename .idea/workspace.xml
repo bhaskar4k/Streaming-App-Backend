@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/model/JwtUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/model/JwtUserDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/model/JwtUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/src/main/java/com/app/dashboard/model/JwtUserDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/UploadService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/UploadService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/controller/StreamingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/controller/StreamingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/model/JwtUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/model/JwtUserDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/JwtUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/model/JwtUserDetails.java" afterDir="false" />
-    </list>
+    <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

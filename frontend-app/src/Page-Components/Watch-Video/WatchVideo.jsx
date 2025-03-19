@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import './WatchVideo.css';
 import { useSearchParams } from "react-router-dom";
 import { UploadService } from '../../Service/UploadService';
+import like from '../../../public/Images/like.png';
+import dislike from '../../../public/Images/dislike.png';
+import share from '../../../public/Images/share.svg';
+import { UserAction } from '../../Common/CommonConts';
+import { use } from "react";
 
 function WatchVideo() {
     const [searchParams] = useSearchParams();
@@ -10,6 +15,9 @@ function WatchVideo() {
     const playback = searchParams.get("playback") || 0;
 
     const uploadService = new UploadService();
+
+    const [isLiked, setIsLiked] = useState(0);
+    const [isDisliked, setIsDisliked] = useState(0);
 
     const [videoChunks, setVideoChunks] = useState([]);
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
@@ -37,20 +45,74 @@ function WatchVideo() {
         }
     };
 
+
+    useEffect(() => {
+        const likeButton = document.getElementById("video_player_info_action_like");
+        const dislikeButton = document.getElementById("video_player_info_action_dislike");
+
+        const handleLikeClick = () => {
+            if (isLiked === 0) {
+                likeButton.style.backgroundColor = "rgb(255, 145, 0)";
+                dislikeButton.style.backgroundColor = "rgb(210, 210, 210)";
+                setIsLiked(1);
+            } else {
+                likeButton.style.backgroundColor = "rgb(210, 210, 210)";
+                setIsLiked(0);
+            }
+
+            setIsDisliked(0);
+        };
+
+        const handleDislikeClick = () => {
+            if (isDisliked === 0) {
+                dislikeButton.style.backgroundColor = "rgb(255, 145, 0)";
+                likeButton.style.backgroundColor = "rgb(210, 210, 210)";
+                setIsDisliked(1);
+            } else {
+                dislikeButton.style.backgroundColor = "rgb(210, 210, 210)";
+                setIsDisliked(0);
+            }
+
+            setIsLiked(0);
+        };
+
+        likeButton.addEventListener("click", handleLikeClick);
+        dislikeButton.addEventListener("click", handleDislikeClick);
+
+        return () => {
+            likeButton.removeEventListener("click", handleLikeClick);
+            dislikeButton.removeEventListener("click", handleDislikeClick);
+        };
+    }, [isLiked, isDisliked]);
+
     return (
-        <div>
-            {videoChunks.length > 0 ? (
-                <video
-                    ref={videoRef}
-                    controls
-                    autoPlay
-                    onEnded={handleVideoEnd}
-                    src={videoChunks[currentChunkIndex]}
-                />
-            ) : (
-                <p>Loading video...</p>
-            )}
-        </div>
+        <>
+            <div className="video_player_container">
+                <div id="video_player">
+
+                </div>
+
+                <div className="video_player_info">
+                    <div className="video_player_info_header">
+                        <span className="video_player_info_title">Video title</span>
+
+                        <div className="video_player_info_action">
+                            <div id="video_player_info_action_like">
+                                <img src={like}></img>
+                            </div>
+                            <div id="video_player_info_action_dislike">
+                                <img src={dislike}></img>
+                            </div>
+                            <div id="video_player_info_action_share">
+                                <img src={share}></img>
+                            </div>
+                        </div>
+                    </div>
+                    <span className="video_player_info_description">Video description</span>
+                </div>
+            </div>
+
+        </>
     );
 }
 
