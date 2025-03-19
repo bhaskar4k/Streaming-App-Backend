@@ -17,6 +17,7 @@ function WatchVideo() {
 
     const [isLiked, setIsLiked] = useState(0);
     const [isDisliked, setIsDisliked] = useState(0);
+    const [is_processed, set_is_processed] = useState(true);
     const [channel_name, set_channel_name] = useState("");
     const [video_title, set_video_title] = useState("");
     const [video_description, set_video_description] = useState("");
@@ -32,6 +33,7 @@ function WatchVideo() {
                 set_channel_name(data.channel);
                 set_video_title(data.title);
                 set_video_description(data.description);
+                set_is_processed(data.properlyProcessed);
             } catch (error) {
                 console.error("Error fetching video info:", error);
             }
@@ -83,7 +85,7 @@ function WatchVideo() {
         <>
             <div className="video_player_container">
                 <div id="video_player">
-
+                    {!is_processed && <span className="processing_error">Video is not yet processed.</span>}
                 </div>
 
                 <div className="video_player_info">
@@ -109,7 +111,7 @@ function WatchVideo() {
                             </div>
                         </div>
                     </div>
-                    <span className="video_player_info_description">{video_description}</span>
+                    {video_description !== "" && <span className="video_player_info_description">{video_description}</span>}
                 </div>
             </div>
 

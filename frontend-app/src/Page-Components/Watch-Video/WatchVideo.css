@@ -7,10 +7,20 @@
 #video_player {
     width: 80rem;
     height: 45rem;
-    background-color: antiquewhite;
+    background-color: rgb(0, 0, 0);
     margin: 0 auto;
     border-radius: 10px;
     margin-top: 20px;
+    position: relative;
+}
+
+.processing_error {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
 }
 
 .video_player_info {

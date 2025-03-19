@@ -4,7 +4,7 @@ import java.util.List;
 
 public class VideoInformation {
     private Boolean hasVideo;
-    private Boolean isProperlyProcessed;
+    private Boolean properlyProcessed;
     private String channel;
     private String title;
     private String description;
@@ -21,11 +21,11 @@ public class VideoInformation {
     }
 
     public Boolean getProperlyProcessed() {
-        return isProperlyProcessed;
+        return properlyProcessed;
     }
 
     public void setProperlyProcessed(Boolean properlyProcessed) {
-        isProperlyProcessed = properlyProcessed;
+        this.properlyProcessed = properlyProcessed;
     }
 
     public String getChannel() {
