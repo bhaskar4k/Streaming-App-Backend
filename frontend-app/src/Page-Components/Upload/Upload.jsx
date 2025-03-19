@@ -18,7 +18,7 @@ function Upload() {
     const [new_video_title, set_new_video_title] = useState("");
     const [new_video_description, set_new_video_description] = useState("");
 
-    const [max_character_title, set_max_character_title] = useState(200);
+    const [max_character_title, set_max_character_title] = useState(100);
     const [max_character_description, set_max_character_description] = useState(5000);
 
     const [showAlertModal, setShowAlertModal] = useState(false);
@@ -193,7 +193,7 @@ function Upload() {
                             id="video_description"
                             maxLength={max_character_description}
                             value={new_video_description}
-                            onChange={(e) => set_new_video_description(e.target.value)}>                            
+                            onChange={(e) => set_new_video_description(e.target.value)}>
                         </textarea>
                         <span id="charCountDescription">{new_video_description.length}/{max_character_description}</span>
                     </div>

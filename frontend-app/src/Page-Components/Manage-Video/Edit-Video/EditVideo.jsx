@@ -15,7 +15,7 @@ function EditVideo() {
     const navigate = useNavigate();
     const { t_video_info_id, guid, video_title, old_thumbnail, video_description, is_public, uploaded_at, processing_status } = location.state;
 
-    const [max_character_title, set_max_character_title] = useState(200);
+    const [max_character_title, set_max_character_title] = useState(100);
     const [max_character_description, set_max_character_description] = useState(5000);
 
     const [new_thumbnail, set_new_thumbnail] = useState(null);
