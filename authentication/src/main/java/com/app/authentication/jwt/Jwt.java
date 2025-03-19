@@ -94,7 +94,7 @@ public class Jwt {
         try {
             return extractExpiration(token).before(new Date());
         } catch (Exception e) {
-            return false;
+            return true;
         }
     }
 
