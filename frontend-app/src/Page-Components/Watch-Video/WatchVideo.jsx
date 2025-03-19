@@ -5,8 +5,7 @@ import { UploadService } from '../../Service/UploadService';
 import like from '../../../public/Images/like.png';
 import dislike from '../../../public/Images/dislike.png';
 import share from '../../../public/Images/share.svg';
-import { UserAction } from '../../Common/CommonConts';
-import { use } from "react";
+import profile from '../../../public/Images/profile.svg';
 
 function WatchVideo() {
     const [searchParams] = useSearchParams();
@@ -96,15 +95,22 @@ function WatchVideo() {
                     <div className="video_player_info_header">
                         <span className="video_player_info_title">Video title</span>
 
-                        <div className="video_player_info_action">
-                            <div id="video_player_info_action_like">
-                                <img src={like}></img>
+                        <div className="video_player_info_header_action">
+                            <div className="video_player_info_channel_info">
+                                <img src={profile}></img>
+                                <span className="video_player_info_channel">Channel</span>
                             </div>
-                            <div id="video_player_info_action_dislike">
-                                <img src={dislike}></img>
-                            </div>
-                            <div id="video_player_info_action_share">
-                                <img src={share}></img>
+
+                            <div className="video_player_info_action">
+                                <div id="video_player_info_action_like">
+                                    <img src={like}></img>
+                                </div>
+                                <div id="video_player_info_action_dislike">
+                                    <img src={dislike}></img>
+                                </div>
+                                <div id="video_player_info_action_share">
+                                    <img src={share}></img>
+                                </div>
                             </div>
                         </div>
                     </div>
