@@ -2,6 +2,7 @@ package com.app.authentication.model;
 
 public class JwtUserDetails {
     private Long t_mst_user_id;
+    private String full_name;
     private String email;
     private int is_subscribed ;
     private String ip_address;
@@ -11,8 +12,9 @@ public class JwtUserDetails {
 
     }
 
-    public JwtUserDetails(Long t_mst_user_id, String email, int is_subscribed, String ip_address, Long device_count) {
+    public JwtUserDetails(Long t_mst_user_id, String full_name, String email, int is_subscribed, String ip_address, Long device_count) {
         this.t_mst_user_id = t_mst_user_id;
+        this.full_name = full_name;
         this.email = email;
         this.is_subscribed = is_subscribed;
         this.ip_address = ip_address;
@@ -25,6 +27,14 @@ public class JwtUserDetails {
 
     public void setT_mst_user_id(Long t_mst_user_id) {
         this.t_mst_user_id = t_mst_user_id;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getEmail() {

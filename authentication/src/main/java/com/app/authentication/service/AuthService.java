@@ -98,7 +98,8 @@ public class AuthService {
                 }
             }
 
-            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(), validated_user.getEmail(), validated_user.getIs_subscribed(), new_user.getIp_address(), loggedin_device_number);
+            String full_name = validated_user.getFirst_name() + " " + validated_user.getLast_name();
+            JwtUserDetails jwt_user_details = new JwtUserDetails(validated_user.getId(), full_name,validated_user.getEmail(), validated_user.getIs_subscribed(), new_user.getIp_address(), loggedin_device_number);
             String jwt_token = jwt.generateToken(jwt_user_details);
 
             if(jwt_token != null){

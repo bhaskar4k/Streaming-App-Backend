@@ -95,7 +95,7 @@ export class UploadService {
         try {
             let url = this.BASE_URL.concat(EndpointUpload.upload_video_info);
 
-            const response = await fetch(`http://localhost:8093/manage_video/video?start=${start}&count=2`, {
+            const response = await fetch(`http://localhost:8092/fetch_video_chunk?start=${start}&count=2`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${this.JWT_TOKEN_INFO.jwt}`,
