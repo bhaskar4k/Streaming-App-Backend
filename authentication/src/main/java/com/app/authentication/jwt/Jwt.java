@@ -1,5 +1,6 @@
 package com.app.authentication.jwt;
 
+import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.environment.Environment;
 import com.app.authentication.model.JwtUserDetails;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;  // Jackson library for seri
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ import java.util.function.Function;
 
 @Component
 public class Jwt {
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     private static Environment environment = new Environment();
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -107,12 +111,45 @@ public class Jwt {
         }
     }
 
+    public static String getSubjectFromExpiredToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return claims.getSubject();
+        } catch (ExpiredJwtException ex) {
+            return ex.getClaims().getSubject();
+        } catch (SignatureException | MalformedJwtException ex) {
+            System.err.println("Invalid JWT: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.err.println("Error parsing JWT: " + ex.getMessage());
+        }
+        return null;
+    }
+
+    public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
+        try {
+            String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_number);
+            messagingTemplate.convertAndSend("/topic/logout"+device_endpoint, CommonReturn.success("Session expired. Logging out....", "logout_"+device_endpoint));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Boolean isAuthenticated(String token){
         try {
             boolean is_authenticated = true;
 
             if (StringUtils.hasText(token)) {
                 try {
+                    if(isTokenExpired(token)){
+                        String expiredSubject = getSubjectFromExpiredToken(token);
+                        JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
+                        emitLogoutMessageIntoWebsocket(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
+                        is_authenticated = false;
+                    }
                     if (validateToken(token)) {
                         String subject = extractSubject(token);
 
