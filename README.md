@@ -50,4 +50,4 @@ Download FFmpeg from <a href="https://drive.google.com/file/d/1iUe5nacH7ZJNpK8MJ
 
 <h3>Import the DB Dump from the repo</h3>
 
-<p>And you're done..... 😉</p>
+<p>And you're done....... 😉</p>
