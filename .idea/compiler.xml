@@ -9,7 +9,7 @@
         <module name="processing" />
         <module name="rabbitmq" />
       </profile>
-      <profile name="Annotation profile for upload" enabled="true">
+      <profile name="Annotation profile for streaming" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

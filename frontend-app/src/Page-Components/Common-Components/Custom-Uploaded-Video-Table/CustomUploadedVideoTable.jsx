@@ -78,11 +78,21 @@ function CustomUploadedVideoTable(props) {
         try {
             const response = await manageVideoService.DoDownloadVideo(guid);
 
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = guid;
+
+            if (contentDisposition) {
+                const match = contentDisposition.match(/filename="(.+)"/);
+                if (match && match[1]) {
+                    filename = match[1];
+                }
+            }
+
             const url = window.URL.createObjectURL(new Blob([response.data]));
 
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', guid + ".mp4");
+            link.setAttribute('download', filename + ".mp4");
             document.body.appendChild(link);
 
             link.click();

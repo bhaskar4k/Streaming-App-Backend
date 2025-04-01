@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/authentication/src/main/java/com/app/authentication/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +55,7 @@
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Streaming-App/streaming/src/main/java/com/app/streaming",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager"
@@ -78,7 +85,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Streaming">
+  <component name="RunManager" selected="Application.Upload">
     <configuration name="Authentication" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -135,11 +142,11 @@
     </configuration>
     <list>
       <item itemvalue="Application.Authentication" />
-      <item itemvalue="Application.Upload" />
-      <item itemvalue="Application.RabbitMQ" />
-      <item itemvalue="Application.Processing" />
       <item itemvalue="Application.Dashboard" />
+      <item itemvalue="Application.Processing" />
+      <item itemvalue="Application.RabbitMQ" />
       <item itemvalue="Application.Streaming" />
+      <item itemvalue="Application.Upload" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -181,5 +188,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
+          <line>135</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

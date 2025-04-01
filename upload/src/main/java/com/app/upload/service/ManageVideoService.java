@@ -119,9 +119,15 @@ public class ManageVideoService {
             org.springframework.core.io.Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists()) {
+                sql_string = "select original_filename from t_video_info where guid = :value1 ";
+                params = List.of(guid);
+                List<String> results = dbWorker.getQuery(sql_string, entityManager, params, null).getResultList();
+
+                String original_filename = results.isEmpty() ? "" : results.get(0);  // ✅ Directly extract the string
+
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType("video/mp4"))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + (original_filename != null ? original_filename : "video.mp4") + "\"")
                         .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
