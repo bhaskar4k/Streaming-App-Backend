@@ -2,7 +2,7 @@ function Profile() {
 
   return (
     <>
-      <h1>Profileeee</h1>
+      <h1>Profileeada</h1>
     </>
   )
 }
