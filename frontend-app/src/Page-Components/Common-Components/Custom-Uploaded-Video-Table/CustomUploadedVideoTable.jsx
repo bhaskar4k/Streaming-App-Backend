@@ -100,7 +100,7 @@ function CustomUploadedVideoTable(props) {
             link.parentNode.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            console.error('Download failed:', error);
+            console.error('Download failed', error);
         }
     }
 
