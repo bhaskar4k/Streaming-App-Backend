@@ -6,6 +6,7 @@ import like from '../../../public/Images/like.png';
 import dislike from '../../../public/Images/dislike.png';
 import share from '../../../public/Images/share.svg';
 import profile from '../../../public/Images/profile.svg';
+import ReactPlayer from 'react-player';
 
 function WatchVideo() {
     const [searchParams] = useSearchParams();
@@ -82,16 +83,18 @@ function WatchVideo() {
             dislikeButton.removeEventListener("click", handleDislikeClick);
         };
     }, [isLiked, isDisliked]);
-
+    
     return (
         <>
             <div className="video_player_container">
                 <div id="video_player">
                     {!is_processed && <span className="processing_error">Video is not yet processed.</span>}
-                    <video width="640" height="360" controls>
+                    {/* <video width="640" height="360" controls>
                         <source src="http://localhost:8092/streaming/video_file" type="video/mp4" />
                         Your browser does not support the video tag.
-                    </video>
+                    </video> */}
+
+                    <ReactPlayer url={`http://localhost:8092/streaming/video_file/${guid}`} controls={true} width='100%' height='100%' />
                 </div>
 
                 <div className="video_player_info">

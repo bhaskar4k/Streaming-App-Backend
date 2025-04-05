@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -77,7 +78,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isExcludedUrl(String requestUri) {
-        return EXCLUDED_URLS.stream().anyMatch(requestUri::startsWith);
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        return EXCLUDED_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestUri));
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {

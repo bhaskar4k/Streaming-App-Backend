@@ -50,10 +50,10 @@ public class StreamingController {
         }
     }
 
-    @GetMapping("/video_file")
-    public ResponseEntity<Resource> video_file() {
+    @GetMapping("/video_file/{guid}")
+    public ResponseEntity<Resource> video_file(@PathVariable("guid") String guid) {
         try {
-            String VIDEO_PATH = "E:\\Project\\Streaming-App-Resized-Video\\d4761869-b174-4a37-b159-6f99f2329f2b\\1080p\\1.mp4";
+            String VIDEO_PATH = "E:\\Project\\Streaming-App-Resized-Video\\" + guid + "\\1080p\\1.mp4";
             File videoFile = new File(VIDEO_PATH);
             Path path = videoFile.toPath();
             UrlResource video = new UrlResource(path.toUri());

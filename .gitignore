@@ -41,6 +41,9 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+/out
+out/
+out
 
 # System files
 .DS_Store
