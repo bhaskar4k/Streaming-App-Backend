@@ -14,6 +14,9 @@ function WatchVideo() {
     const guid = searchParams.get("v");
     const playback = searchParams.get("playback") || 0;
 
+    const playerURL = "http://localhost:8092/streaming/video_file/"+guid;
+    const [videoBlobUrl, setVideoBlobUrl] = useState(null);
+
     const streamingService = new StreamingService();
 
     const [isLiked, setIsLiked] = useState(0);
@@ -23,6 +26,20 @@ function WatchVideo() {
     const [video_title, set_video_title] = useState("");
     const [video_description, set_video_description] = useState("");
     const [video_upload_at, set_video_upload_at] = useState("");
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+          const response = await fetch(`http://localhost:8092/streaming/video_file/${guid}`, {
+            method: 'GET',
+          });
+    
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          setVideoBlobUrl(blobUrl);
+        };
+    
+        fetchVideo();
+      }, [guid]);
 
 
     useEffect(() => {
@@ -83,18 +100,18 @@ function WatchVideo() {
             dislikeButton.removeEventListener("click", handleDislikeClick);
         };
     }, [isLiked, isDisliked]);
-    
+
     return (
         <>
             <div className="video_player_container">
                 <div id="video_player">
                     {!is_processed && <span className="processing_error">Video is not yet processed.</span>}
-                    {/* <video width="640" height="360" controls>
-                        <source src="http://localhost:8092/streaming/video_file" type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video> */}
-
-                    <ReactPlayer url={`http://localhost:8092/streaming/video_file/${guid}`} controls={true} width='100%' height='100%' />
+                    <ReactPlayer 
+                        url={videoBlobUrl} 
+                        controls={true} 
+                        width='100%' 
+                        height='100%' 
+                    />
                 </div>
 
                 <div className="video_player_info">
