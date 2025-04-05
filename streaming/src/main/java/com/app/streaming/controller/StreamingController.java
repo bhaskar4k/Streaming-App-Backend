@@ -7,18 +7,20 @@ import com.app.streaming.model.VideoInformation;
 import com.app.streaming.service.AuthService;
 import com.app.streaming.service.LogExceptionsService;
 import com.app.streaming.service.StreamingService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,26 @@ public class StreamingController {
             log("restore_video()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
         }
+    }
 
+    @GetMapping("/video_file")
+    public ResponseEntity<Resource> video_file() {
+        try {
+            String VIDEO_PATH = "E:\\Project\\Streaming-App-Resized-Video\\d4761869-b174-4a37-b159-6f99f2329f2b\\1080p\\1.mp4";
+            File videoFile = new File(VIDEO_PATH);
+            Path path = videoFile.toPath();
+            UrlResource video = new UrlResource(path.toUri());
+
+            long fileLength = videoFile.length();
+
+            return ResponseEntity.ok()
+                    .contentType(MediaTypeFactory.getMediaType(videoFile.getName()).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                    .contentLength(fileLength)
+                    .body(video);
+        } catch (Exception e){
+            log("video_file()",e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     private void log(String function_name, String exception_msg) {

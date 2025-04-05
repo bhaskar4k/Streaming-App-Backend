@@ -1,6 +1,7 @@
 package com.app.streaming.security;
 
 
+import com.app.streaming.environment.ApiEndpointInfo;
 import com.app.streaming.environment.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,12 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final Environment environment;
     private final AuthenticationFilter authenticationFilter;
+    private final ApiEndpointInfo apiEndpointInfo;
 
     public SecurityConfig(AuthenticationFilter authenticationFilter) {
         this.environment = new Environment();
         this.authenticationFilter = authenticationFilter;
+        this.apiEndpointInfo = new ApiEndpointInfo();
     }
 
     @Bean
@@ -29,6 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(apiEndpointInfo.getUnauthenticatedEndpoints().toArray(new String[0])).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

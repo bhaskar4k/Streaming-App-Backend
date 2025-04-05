@@ -11,6 +11,7 @@ public class VideoInformation {
     private long chunkCount;
     private double videoDuration;
     private List<String> videoResolutions;
+    private String trans_datetime;
 
     public Boolean getHasVideo() {
         return hasVideo;
@@ -74,5 +75,13 @@ public class VideoInformation {
 
     public void setVideoResolutions(List<String> videoResolutions) {
         this.videoResolutions = videoResolutions;
+    }
+
+    public String getTrans_datetime() {
+        return trans_datetime;
+    }
+
+    public void setTrans_datetime(String trans_datetime) {
+        this.trans_datetime = trans_datetime;
     }
 }

@@ -15,11 +15,9 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.nio.file.*;
 import java.util.stream.Stream;
 
@@ -52,13 +50,15 @@ public class StreamingService {
             videoInfo.setHasVideo(Files.exists(filePath));
 
             if(videoInfo.getHasVideo()){
-                sql_string = "select c.video_title, c.video_description, b.encoded_resolutions, a.duration, a.no_of_chunks, b.processing_status " +
+                sql_string = "select c.video_title, c.video_description, b.encoded_resolutions, a.duration, a.no_of_chunks, b.processing_status, a.trans_datetime " +
                              "from streaming_app_upload.t_video_info a join streaming_app_upload.t_encoded_video_info b on a.id = b.t_video_info_id " +
                              "join streaming_app_upload.t_video_metadata c on a.id = c.t_video_info_id where a.guid = :value1";
 
                 params = List.of(guid);
 
                 Object result = dbWorker.getQuery(sql_string, entityManager, params, null).getSingleResult();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
                 if (result instanceof Object[] res) {
                     String video_title = (res[0] != null) ? (String) res[0] : "";
@@ -68,6 +68,9 @@ public class StreamingService {
                     int noOfChunks = (res[4] != null) ? ((Number) res[4]).intValue() : 0;
                     int processingStatus = (res[5] != null) ? ((Number) res[5]).intValue() : 0;
 
+                    Date date = (Date) res[6];
+                    String trans_datetime = sdf.format(date);
+
                     if(processingStatus == UIEnum.ProcessingStatus.PROCESSED.getValue()){
                         videoInfo.setProperlyProcessed(true);
                         videoInfo.setChunkCount(noOfChunks);
@@ -76,6 +79,7 @@ public class StreamingService {
                         videoInfo.setDescription(video_description);
                         videoInfo.setVideoResolutions(Arrays.asList(resolutions.split(",")));
                         videoInfo.setChannel(post_validated_request.getFull_name());
+                        videoInfo.setTrans_datetime(trans_datetime);
                     } else {
                         videoInfo.setProperlyProcessed(false);
                     }

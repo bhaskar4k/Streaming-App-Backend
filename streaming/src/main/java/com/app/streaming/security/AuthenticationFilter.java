@@ -1,6 +1,7 @@
 package com.app.streaming.security;
 
 import com.app.streaming.common.CommonReturn;
+import com.app.streaming.environment.ApiEndpointInfo;
 import com.app.streaming.model.JwtUserDetails;
 import com.app.streaming.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,20 +18,30 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     public AuthService authService;
     private final ObjectMapper objectMapper;
+    private final ApiEndpointInfo apiEndpointInfo;
+    private final List<String> EXCLUDED_URLS;
 
     public AuthenticationFilter() {
         this.objectMapper = new ObjectMapper();
+        this.apiEndpointInfo = new ApiEndpointInfo();
+        this.EXCLUDED_URLS = apiEndpointInfo.getUnauthenticatedEndpoints();
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            if (isExcludedUrl(request.getRequestURI())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String token = getTokenFromRequest(request);
 
             if(token == null) {
@@ -63,6 +74,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             handleUnauthorized(response);
         }
+    }
+
+    private boolean isExcludedUrl(String requestUri) {
+        return EXCLUDED_URLS.stream().anyMatch(requestUri::startsWith);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {

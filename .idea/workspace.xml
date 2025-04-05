@@ -5,14 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe991334-578b-479b-8039-150a05c9572f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Common-Components/Custom-Uploaded-Video-Table/CustomUploadedVideoTable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/processing/src/main/java/com/app/processing/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/environment/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Page-Components/Watch-Video/WatchVideo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-app/src/Service/StreamingService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-app/src/Service/StreamingService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/controller/StreamingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/controller/StreamingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/model/VideoInformation.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/model/VideoInformation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/security/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/security/AuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/service/StreamingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/streaming/src/main/java/com/app/streaming/service/StreamingService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,25 +45,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Authentication.executor": "Debug",
-    "Application.Dashboard.executor": "Debug",
-    "Application.Processing.executor": "Debug",
-    "Application.RabbitMQ.executor": "Debug",
-    "Application.Streaming.executor": "Debug",
-    "Application.Upload.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Streaming-App/streaming/src/main/java/com/app/streaming",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Authentication.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Dashboard.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Processing.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.RabbitMQ.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Streaming.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Upload.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Streaming-App/streaming/src/main/java/com/app/streaming&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Streaming-App\streaming\src\main\java\com\app\streaming" />
@@ -71,11 +74,11 @@
       <recent name="com.app.upload.enums" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.app.streaming.environment" />
       <recent name="com.app.streaming.repository" />
       <recent name="com.app.streaming.service" />
       <recent name="com.app.streaming.entity" />
       <recent name="com.app.streaming.model" />
-      <recent name="com.app.upload.environment" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -188,16 +191,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/upload/src/main/java/com/app/upload/service/ManageVideoService.java</url>
-          <line>135</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

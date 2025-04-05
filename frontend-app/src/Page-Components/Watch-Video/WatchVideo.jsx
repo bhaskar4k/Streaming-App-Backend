@@ -21,6 +21,7 @@ function WatchVideo() {
     const [channel_name, set_channel_name] = useState("");
     const [video_title, set_video_title] = useState("");
     const [video_description, set_video_description] = useState("");
+    const [video_upload_at, set_video_upload_at] = useState("");
 
 
     useEffect(() => {
@@ -34,6 +35,7 @@ function WatchVideo() {
                 set_video_title(data.title);
                 set_video_description(data.description);
                 set_is_processed(data.properlyProcessed);
+                set_video_upload_at(data.trans_datetime);
             } catch (error) {
                 console.error("Error fetching video info:", error);
             }
@@ -86,6 +88,10 @@ function WatchVideo() {
             <div className="video_player_container">
                 <div id="video_player">
                     {!is_processed && <span className="processing_error">Video is not yet processed.</span>}
+                    <video width="640" height="360" controls>
+                        <source src="http://localhost:8092/streaming/video_file" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
 
                 <div className="video_player_info">
@@ -111,7 +117,15 @@ function WatchVideo() {
                             </div>
                         </div>
                     </div>
-                    {video_description !== "" && <span className="video_player_info_description">{video_description}</span>}
+
+                    <span className="video_player_info_description">
+                        {video_upload_at}
+
+                        {video_description !== "" && <div>
+                            <br></br>
+                            {video_description}
+                        </div>}
+                    </span>
                 </div>
             </div>
 
