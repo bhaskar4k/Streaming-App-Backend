@@ -26,6 +26,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.authentication.AuthenticationApplication.temp;
+
 @Service
 @Component
 public class LoginSignUpService {
@@ -107,6 +109,8 @@ public class LoginSignUpService {
 
     public CommonReturn<ValidatedUserDetails> validateUser(TMstUserModel new_user){
         try {
+            System.out.println(temp());
+
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1 and password = :value2";
             params = List.of(new_user.getEmail(), new_user.getPassword());
 

@@ -9,9 +9,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(scanBasePackages = "com.app.authentication")
 public class AuthenticationApplication {
-
+	static String data = "";
 	public static void main(String[] args) {
+		data = "MKC";
 		SpringApplication.run(AuthenticationApplication.class, args);
 	}
 
+	public static String temp(){
+		return data;
+	}
 }
