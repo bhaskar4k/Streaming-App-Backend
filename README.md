@@ -2,7 +2,7 @@
 
 
 <h3 style="border-bottom: 2px solid black;">Versions</h3>
-<b>Java :</b> v23.0.1 <br>
+<b>Java :</b> v21.0.6 <br>
 <b>Python :</b> v3.13.1 <br>
 <b>Node :</b> v22.12.0 <br>
 <b>NPM :</b> v10.9.0 <br>
