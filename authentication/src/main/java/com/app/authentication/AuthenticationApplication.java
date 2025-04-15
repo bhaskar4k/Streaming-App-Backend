@@ -34,7 +34,8 @@ public class AuthenticationApplication {
 	@PostConstruct
 	public void initBloomFilter() {
 		try {
-			System.out.println("Seeding Bloom Filter");
+			System.out.println("\n======================================================================");
+			System.out.println("\nSeeding Bloom Filter\n");
 
 			String sql_string = "select email from t_mst_user limit 1000000 offset 0";
 			List<Object[]> results = dbWorker.getQuery(sql_string, entityManager, params, null).getResultList();
@@ -48,7 +49,8 @@ public class AuthenticationApplication {
 				bloom.add(emailId);
 			}
 
-			System.out.println("Done Seeding Bloom Filter");
+			System.out.println("\nDone Seeding Bloom Filter\n");
+			System.out.println("======================================================================\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
