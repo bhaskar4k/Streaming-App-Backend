@@ -51,7 +51,7 @@ public class DashboardService {
 
     public List<TLayoutMenu> getLayoutMenu(JwtUserDetails user){
         try {
-            String json = Redis.opsForValue().get("menu");
+            String json = Redis.opsForValue().get(environment.getDashboardMenuKey());
             if (json != null) {
                 return objectMapper.readValue(json, new TypeReference<List<TLayoutMenu>>() {});
             }
@@ -59,8 +59,8 @@ public class DashboardService {
             List<TLayoutMenu> menu = tLayoutMenuRepository.findAll();
             String json_menu = objectMapper.writeValueAsString(menu);
 
-            if (Boolean.FALSE.equals(Redis.hasKey("menu"))){
-                Redis.opsForValue().set("menu", json_menu);
+            if (Boolean.FALSE.equals(Redis.hasKey(environment.getDashboardMenuKey()))){
+                Redis.opsForValue().set(environment.getDashboardMenuKey(), json_menu);
             }
 
             return menu;
