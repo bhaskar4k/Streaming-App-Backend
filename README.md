@@ -21,8 +21,10 @@ Download Docker Desktop from <a href="https://www.docker.com/products/docker-des
     <li>Download and install Docker Desktop.</li>
     <li>Open it.</li>
     <li>Open Powershell.</li>
-    <li>Run this command : <code><b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq</b></code></li>
-    <li>Start the docker container.</li>
+    <li>Setup RabbitMQ: <code><b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq</b></code></li>
+    <li>Setup Redis : <code><b>docker run --name redis-server -p 6379:6379 -d redis</b></code></li>
+    <li>Start both the docker containers.</li>
+    <li>Important* : Once both docker images are up and running, then you can start microservices.</li>
 </ul>
 
 <h3 style="border-bottom: 2px solid black;">FFmpeg Setup</h3>
