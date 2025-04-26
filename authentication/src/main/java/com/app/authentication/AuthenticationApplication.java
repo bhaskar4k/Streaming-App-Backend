@@ -25,7 +25,7 @@ public class AuthenticationApplication {
 	private final DbWorker dbWorker = new DbWorker();
 	List<Object> params = new ArrayList<>();
 
-	public static BloomFilter<String> bloom;
+	public static BloomFilter<String> BloomFilter;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AuthenticationApplication.class, args);
@@ -40,13 +40,13 @@ public class AuthenticationApplication {
 			String sql_string = "select email from t_mst_user limit 1000000 offset 0";
 			List<Object[]> results = dbWorker.getQuery(sql_string, entityManager, params, null).getResultList();
 
-			bloom = new BloomFilter<>(1000000, 0.01);
+			BloomFilter = new BloomFilter<>(1000000, 0.01);
 
 			for (Object row : results) {
 				String emailId = (row != null) ? (String) row : "";
 				if(emailId.isEmpty() || emailId == "") continue;
 
-				bloom.add(emailId);
+				BloomFilter.add(emailId);
 			}
 
 			System.out.println("\nDone Seeding Bloom Filter\n");

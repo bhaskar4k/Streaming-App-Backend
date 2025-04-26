@@ -1,5 +1,6 @@
 package com.app.authentication.service;
 
+import com.app.authentication.bloomfilter.BloomFilter;
 import com.app.authentication.common.CommonReturn;
 import com.app.authentication.common.DbWorker;
 import com.app.authentication.entity.TLogExceptions;
@@ -25,6 +26,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Optional;
+
+import static com.app.authentication.AuthenticationApplication.BloomFilter;
 
 
 @Service
@@ -74,6 +77,9 @@ public class LoginSignUpService {
 
     public int alreadyRegistered(String email) {
         try {
+            boolean mightContain = BloomFilter.mightContain(email);
+            if(!mightContain) return 0;
+
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1";
             params = List.of(email);
 
