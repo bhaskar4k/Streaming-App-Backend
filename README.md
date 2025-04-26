@@ -4,16 +4,11 @@
 <h3 style="border-bottom: 2px solid black;">Versions</h3>
 <b>Java :</b> v21.0.6 <br>
 <b>Python :</b> v3.13.1 <br>
-<b>Node :</b> v22.12.0 <br>
-<b>NPM :</b> v10.9.0 <br>
 
 <h3 style="border-bottom: 2px solid black;">Get Started</h3>
 <ul>
-    <li><code><b>$ git clone https://github.com/bhaskar4k/Streaming-App.git</b></code></li>
-    <li><code><b>$ cd Streaming-App</b></code></li>
-    <li><code><b>$ cd frontend-app</b></code></li>
-    <li><code><b>$ npm i</b></code></li>
-    <li><code><b>$ npm run dev</b></code></li>
+    <li><code><b>$ git clone https://github.com/bhaskar4k/Streaming-App-Backend.git</b></code></li>
+    <li><code><b>$ cd Streaming-App-Backend</b></code></li>
     <li>Import the project's root folder in any JAVA's IDE.</li>
     <li>Sync all maven projects/Update maven.</li>
     <li>Change tomcat ports (if conflicts in your PC) from application.properties file of all microservices.</li>
@@ -26,7 +21,7 @@ Download Docker Desktop from <a href="https://www.docker.com/products/docker-des
     <li>Download and install Docker Desktop.</li>
     <li>Open it.</li>
     <li>Open Powershell.</li>
-    <li>Run this command : <code><b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management</b></code></li>
+    <li>Run this command : <code><b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq</b></code></li>
     <li>Start the docker container.</li>
 </ul>
 
