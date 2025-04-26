@@ -59,10 +59,7 @@ public class DashboardService {
             List<TLayoutMenu> menu = tLayoutMenuRepository.findAll();
             String json_menu = objectMapper.writeValueAsString(menu);
 
-            if (Boolean.FALSE.equals(Redis.hasKey(environment.getDashboardMenuKey()))){
-                Redis.opsForValue().set(environment.getDashboardMenuKey(), json_menu);
-            }
-
+            Redis.opsForValue().set(environment.getDashboardMenuKey(), json_menu);
             return menu;
         } catch (Exception e) {
             log(user.getT_mst_user_id(),"getLayoutMenu()",e.getMessage());
