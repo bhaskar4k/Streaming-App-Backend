@@ -17,6 +17,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,8 @@ public class LoginSignUpService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private StringRedisTemplate Redis;
 
     private EncryptionDecryption encryptionDecryption;
     private Environment environment;
@@ -79,6 +82,9 @@ public class LoginSignUpService {
         try {
             boolean mightContain = BloomFilter.mightContain(email);
             if(!mightContain) return 0;
+
+            Boolean existsInRedis = Redis.hasKey(email);
+            if (Boolean.TRUE.equals(existsInRedis)) return 1;
 
             sql_string = "SELECT * FROM t_mst_user WHERE email = :value1";
             params = List.of(email);

@@ -38,7 +38,6 @@ public class BloomFilter<T> implements Serializable {
         } finally {
             lock.writeLock().unlock();
             this.filterSize++;
-            System.out.println(this.filterSize + ((this.filterSize <= 1) ? " Item" : " Items") + " Have Been Seeded");
         }
     }
 
