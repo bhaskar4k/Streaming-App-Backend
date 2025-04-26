@@ -111,6 +111,9 @@ public class LoginSignUpService {
             TMstUser user_entity = new TMstUser(new_user.getFirst_name(),new_user.getLast_name(),new_user.getEmail(),new_user.getPassword());
             tmstUserRepository.save(user_entity);
 
+            BloomFilter.add(new_user.getEmail());
+            Redis.opsForValue().set(new_user.getEmail(), new_user.getEmail());
+
             return CommonReturn.success("Sign-Up is successful. Please Login now.",true);
         } catch (Exception e) {
             log("saveUser()",e.getMessage());
