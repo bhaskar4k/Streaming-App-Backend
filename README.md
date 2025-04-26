@@ -20,7 +20,7 @@ Download Docker Desktop from <a href="https://www.docker.com/products/docker-des
 <ul>
     <li>Download and install Docker Desktop.</li>
     <li>Open it.</li>
-    <li>Open Powershell.</li>
+    <li>Open Powershell in docker.</li>
     <li>Setup RabbitMQ: <code><b>docker run -d --hostname rmq --name rabbit-server -p 15672:15672 -p 5672:5672 rabbitmq</b></code></li>
     <li>Setup Redis : <code><b>docker run --name redis-server -p 6379:6379 -d redis</b></code></li>
     <li>Start both the docker containers.</li>
