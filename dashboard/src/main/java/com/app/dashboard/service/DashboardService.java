@@ -9,10 +9,13 @@ import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
 import com.app.dashboard.repository.TLayoutMenuRepository;
 import com.app.dashboard.repository.TLogExceptionsRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,9 +31,13 @@ public class DashboardService {
     @Autowired
     private TLayoutMenuRepository tLayoutMenuRepository;
     private DbWorker dbWorker;
+    @Autowired
+    private StringRedisTemplate Redis;
 
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private String sql_string;
     List<Object> params;
@@ -44,7 +51,19 @@ public class DashboardService {
 
     public List<TLayoutMenu> getLayoutMenu(JwtUserDetails user){
         try {
-            return tLayoutMenuRepository.findAll();
+            String json = Redis.opsForValue().get("menu");
+            if (json != null) {
+                return objectMapper.readValue(json, new TypeReference<List<TLayoutMenu>>() {});
+            }
+
+            List<TLayoutMenu> menu = tLayoutMenuRepository.findAll();
+            String json_menu = objectMapper.writeValueAsString(menu);
+
+            if (Boolean.FALSE.equals(Redis.hasKey("menu"))){
+                Redis.opsForValue().set("menu", json_menu);
+            }
+
+            return menu;
         } catch (Exception e) {
             log(user.getT_mst_user_id(),"getLayoutMenu()",e.getMessage());
             return null;
