@@ -1,4 +1,4 @@
-<h1 style="text-align: center; margin: 0; background-color: #e6e6e6; border-radius: 10px; padding: 20px;">Streaming-App</h1>
+<h1 style="text-align: center; margin: 0; background-color: #e6e6e6; border-radius: 10px; padding: 20px;">Streaming-App-Backend</h1>
 
 
 <h3 style="border-bottom: 2px solid black;">Versions</h3>
