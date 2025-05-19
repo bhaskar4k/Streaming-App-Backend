@@ -61,7 +61,7 @@ public class DashboardService {
 
             List<Layout> cur = new ArrayList<>();
             for (TLayoutMenu tLayoutMenu : menu) {
-                Layout child = new Layout((long) tLayoutMenu.getId(), tLayoutMenu.getRoute_name(), tLayoutMenu.getMenu_name(), tLayoutMenu.getMenu_name_id(), tLayoutMenu.getMenu_icon(), tLayoutMenu.getParent_id(), tLayoutMenu.getSequence());
+                Layout child = new Layout((long) tLayoutMenu.getId(), tLayoutMenu.getRoute_name(), tLayoutMenu.getMenu_name(), tLayoutMenu.getMenu_name_id(), tLayoutMenu.getMenu_icon(), tLayoutMenu.getParent_id(), tLayoutMenu.getSequence(), false);
 
                 if (tLayoutMenu.getParent_id() == 0) {
                     cur.add(child);
@@ -69,7 +69,7 @@ public class DashboardService {
                     List<Layout> childMenus = new ArrayList<>();
                     for (TLayoutMenu subMenu : menu){
                         if(tLayoutMenu.getId() == subMenu.getParent_id()){
-                            childMenus.add(new Layout((long) subMenu.getId(), subMenu.getRoute_name(), subMenu.getMenu_name(), subMenu.getMenu_name_id(), subMenu.getMenu_icon(), subMenu.getParent_id(), subMenu.getSequence()));
+                            childMenus.add(new Layout((long) subMenu.getId(), subMenu.getRoute_name(), subMenu.getMenu_name(), subMenu.getMenu_name_id(), subMenu.getMenu_icon(), subMenu.getParent_id(), subMenu.getSequence(), false));
                         }
                     }
                     child.setChild(childMenus);

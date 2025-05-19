@@ -10,13 +10,14 @@ public class Layout {
     private String menu_icon;
     private int parent_id;
     private int sequence;
+    private Boolean is_expanded;
     private List<Layout> child;
 
     public Layout(){
 
     }
 
-    public Layout(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence) {
+    public Layout(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence, Boolean is_expanded) {
         this.id = id;
         this.route_name = route_name;
         this.menu_name = menu_name;
@@ -24,17 +25,7 @@ public class Layout {
         this.menu_icon = menu_icon;
         this.parent_id = parent_id;
         this.sequence = sequence;
-    }
-
-    public Layout(Long id, String route_name, String menu_name, String menu_name_id, String menu_icon, int parent_id, int sequence, List<Layout> child) {
-        this.id = id;
-        this.route_name = route_name;
-        this.menu_name = menu_name;
-        this.menu_name_id = menu_name_id;
-        this.menu_icon = menu_icon;
-        this.parent_id = parent_id;
-        this.sequence = sequence;
-        this.child = child;
+        this.is_expanded = is_expanded;
     }
 
     public Long getId() {
@@ -99,5 +90,13 @@ public class Layout {
 
     public void setChild(List<Layout> child) {
         this.child = child;
+    }
+
+    public Boolean getIs_expanded() {
+        return is_expanded;
+    }
+
+    public void setIs_expanded(Boolean is_expanded) {
+        this.is_expanded = is_expanded;
     }
 }
