@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Environment {
-    private List<String> allowedOrigins = Arrays.asList("http://localhost:5173");
+    private List<String> allowedOrigins = Arrays.asList("http://localhost:5173", "http://localhost:4200");
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
 
 //    Desktop
