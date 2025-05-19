@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/streaming")
@@ -50,25 +49,29 @@ public class StreamingController {
         }
     }
 
-    @GetMapping("/video_file/{guid}")
-    public ResponseEntity<Resource> video_file(@PathVariable("guid") String guid) {
+    @GetMapping("/video_file/{guid}/{filename}")
+    public ResponseEntity<Resource> getVideoFile(@PathVariable String guid, @PathVariable String filename) {
         try {
-            String VIDEO_PATH = "E:\\Project\\Streaming-App-Resized-Video\\" + guid + "\\1080p\\1.mp4";
-            File videoFile = new File(VIDEO_PATH);
-            Path path = videoFile.toPath();
-            UrlResource video = new UrlResource(path.toUri());
+            String fullPath = "D:\\Streaming-App-Data\\Streaming-App-Resized-Video\\" + guid + "\\1080p\\" + filename;
+            File file = new File(fullPath);
 
-            long fileLength = videoFile.length();
+            if (!file.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UrlResource resource = new UrlResource(file.toURI());
 
             return ResponseEntity.ok()
-                    .contentType(MediaTypeFactory.getMediaType(videoFile.getName()).orElse(MediaType.APPLICATION_OCTET_STREAM))
-                    .contentLength(fileLength)
-                    .body(video);
-        } catch (Exception e){
-            log("video_file()",e.getMessage());
-            return ResponseEntity.badRequest().body(null);
+                    .contentType(MediaTypeFactory.getMediaType(file.getName())
+                            .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                    .contentLength(file.length())
+                    .body(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     private void log(String function_name, String exception_msg) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
