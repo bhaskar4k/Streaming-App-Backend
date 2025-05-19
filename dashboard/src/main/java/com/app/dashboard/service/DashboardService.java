@@ -7,6 +7,7 @@ import com.app.dashboard.entity.TLayoutMenu;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
+import com.app.dashboard.model.Layout;
 import com.app.dashboard.repository.TLayoutMenuRepository;
 import com.app.dashboard.repository.TLogExceptionsRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,18 +50,37 @@ public class DashboardService {
     }
 
 
-    public List<TLayoutMenu> getLayoutMenu(JwtUserDetails user){
+    public List<Layout> getLayoutMenu(JwtUserDetails user){
         try {
             String json = Redis.opsForValue().get(environment.getDashboardMenuKey());
             if (json != null) {
-                return objectMapper.readValue(json, new TypeReference<List<TLayoutMenu>>() {});
+                return objectMapper.readValue(json, new TypeReference<List<Layout>>() {});
             }
 
             List<TLayoutMenu> menu = tLayoutMenuRepository.findAll();
-            String json_menu = objectMapper.writeValueAsString(menu);
 
+            List<Layout> cur = new ArrayList<>();
+            for (TLayoutMenu tLayoutMenu : menu) {
+                Layout child = new Layout((long) tLayoutMenu.getId(), tLayoutMenu.getRoute_name(), tLayoutMenu.getMenu_name(), tLayoutMenu.getMenu_name_id(), tLayoutMenu.getMenu_icon(), tLayoutMenu.getParent_id(), tLayoutMenu.getSequence());
+
+                if (tLayoutMenu.getParent_id() == 0) {
+                    cur.add(child);
+                } else if (tLayoutMenu.getParent_id() == -1) {
+                    List<Layout> childMenus = new ArrayList<>();
+                    for (TLayoutMenu subMenu : menu){
+                        if(tLayoutMenu.getId() == subMenu.getParent_id()){
+                            childMenus.add(new Layout((long) subMenu.getId(), subMenu.getRoute_name(), subMenu.getMenu_name(), subMenu.getMenu_name_id(), subMenu.getMenu_icon(), subMenu.getParent_id(), subMenu.getSequence()));
+                        }
+                    }
+                    child.setChild(childMenus);
+                    cur.add(child);
+                }
+            }
+
+            String json_menu = objectMapper.writeValueAsString(cur);
             Redis.opsForValue().set(environment.getDashboardMenuKey(), json_menu);
-            return menu;
+
+            return cur;
         } catch (Exception e) {
             log(user.getT_mst_user_id(),"getLayoutMenu()",e.getMessage());
             return null;

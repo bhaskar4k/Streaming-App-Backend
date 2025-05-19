@@ -5,6 +5,7 @@ import com.app.dashboard.entity.TLayoutMenu;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
+import com.app.dashboard.model.Layout;
 import com.app.dashboard.service.AuthService;
 import com.app.dashboard.service.DashboardService;
 import com.app.dashboard.service.LogExceptionsService;
@@ -32,10 +33,10 @@ public class DashboardController {
     }
 
     @GetMapping("/menu")
-    public CommonReturn<List<TLayoutMenu>> get_layout_menu(){
+    public CommonReturn<List<Layout>> get_layout_menu(){
         try {
             JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
-            List<TLayoutMenu> menus = dashboardService.getLayoutMenu(post_validated_request);
+            List<Layout> menus = dashboardService.getLayoutMenu(post_validated_request);
 
             if(menus!=null){
                 return CommonReturn.success("Layout menu has fetched successfully for the user", menus);
