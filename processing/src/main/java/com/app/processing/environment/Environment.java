@@ -29,14 +29,14 @@ public class Environment {
     private String ffmpegPath = "C:/ffmpeg/bin/ffmpeg.exe";
 
     // Desktop
-//    private String pythonScriptPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Backend" + File.separator +
-//            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
-//            "com" + File.separator + "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
+    private String pythonScriptPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Backend" + File.separator +
+            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator +
+            "com" + File.separator + "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
     // Laptop
-    private String pythonScriptPath = "D:" + File.separator + "Streaming-App" + File.separator + "Streaming-App-Backend" + File.separator +
-            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator +
-            "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
+//    private String pythonScriptPath = "D:" + File.separator + "Streaming-App" + File.separator + "Streaming-App-Backend" + File.separator +
+//            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator +
+//            "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
 
     public List<String> getAllowedOrigins() {
