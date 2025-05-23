@@ -168,7 +168,7 @@ public class ManageVideoService {
 
                 if (file.exists()) {
                     byte[] fileContent = Files.readAllBytes(file.toPath());
-                    base64EncodedImage = Base64.getEncoder().encodeToString(fileContent);
+                    base64EncodedImage = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(fileContent);
                 }
 
                 ManageVideoDetails video = new ManageVideoDetails(id, guid, videoTitle, videoDescription, isPublic, thumbnailUploaded, base64EncodedImage, transDatetime, processingStatus);
