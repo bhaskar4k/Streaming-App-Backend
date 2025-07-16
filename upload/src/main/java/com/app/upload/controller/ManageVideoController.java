@@ -101,6 +101,19 @@ public class ManageVideoController {
         }
     }
 
+    @GetMapping("/get_a_single_video_info/{guid:.+}")
+    public CommonReturn<ManageVideoDetails> get_a_single_video_info(@PathVariable String guid){
+        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+
+        try {
+            ManageVideoDetails data = manageVideoService.do_get_a_single_video_info(post_validated_request, guid);
+
+            return CommonReturn.success("Video details have been fetched.", data);
+        } catch (Exception e) {
+            log("get_a_single_video_info()",e.getMessage());
+            return CommonReturn.error(400,"Internal Server Error.");
+        }
+    }
 
     private void log(String function_name, String exception_msg){
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
