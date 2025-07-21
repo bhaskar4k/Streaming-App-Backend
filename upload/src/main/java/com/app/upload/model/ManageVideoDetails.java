@@ -9,6 +9,7 @@ public class ManageVideoDetails {
     private String guid;
     private String video_title;
     private String video_description;
+    private String tags;
     private int is_public;
     private int thumbnail_uploaded;
     private String base64EncodedImage;
@@ -24,6 +25,19 @@ public class ManageVideoDetails {
         this.guid = guid;
         this.video_title = video_title;
         this.video_description = video_description;
+        this.is_public = is_public;
+        this.thumbnail_uploaded = thumbnail_uploaded;
+        this.base64EncodedImage = base64EncodedImage;
+        this.trans_datetime = trans_datetime;
+        this.processing_status = processing_status;
+    }
+
+    public ManageVideoDetails(Long t_video_info, String guid, String video_title, String video_description, String tags, int is_public, int thumbnail_uploaded, String base64EncodedImage, LocalDateTime trans_datetime, int processing_status) {
+        this.t_video_info_id = t_video_info;
+        this.guid = guid;
+        this.video_title = video_title;
+        this.video_description = video_description;
+        this.tags = tags;
         this.is_public = is_public;
         this.thumbnail_uploaded = thumbnail_uploaded;
         this.base64EncodedImage = base64EncodedImage;
@@ -61,6 +75,14 @@ public class ManageVideoDetails {
 
     public void setVideo_description(String video_description) {
         this.video_description = video_description;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public int getIs_public() {
