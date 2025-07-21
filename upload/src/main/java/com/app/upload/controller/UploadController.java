@@ -56,6 +56,7 @@ public class UploadController {
     public CommonReturn<Boolean> upload_video_info(@RequestParam(value = "title", required = false) String title,
                                                     @RequestParam(value = "description", required = false) String description,
                                                     @RequestParam(value = "is_public") int is_public,
+                                                    @RequestParam(value = "tags") String tags,
                                                     @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
                                                     @RequestParam("video_info") String video_info_json) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
@@ -65,7 +66,7 @@ public class UploadController {
             objectMapper.findAndRegisterModules();
             TVideoInfo video_info = objectMapper.readValue(video_info_json, TVideoInfo.class);
 
-            return uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
+            return uploadService.saveVideoMetadata(video_info, title, description, tags, is_public, thumbnail, post_validated_request);
         } catch (Exception e) {
             log("upload()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");
@@ -78,6 +79,7 @@ public class UploadController {
                                                    @RequestParam(value = "guid") String guid,
                                                    @RequestParam(value = "title", required = false) String title,
                                                    @RequestParam(value = "description", required = false) String description,
+                                                   @RequestParam(value = "tags") String tags,
                                                    @RequestParam(value = "is_public") int is_public,
                                                    @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
@@ -87,7 +89,7 @@ public class UploadController {
             objectMapper.findAndRegisterModules();
             TVideoInfo video_info = new TVideoInfo(t_video_info_id, guid);
 
-            return uploadService.saveVideoMetadata(video_info, title, description, is_public, thumbnail, post_validated_request);
+            return uploadService.saveVideoMetadata(video_info, title, description, tags, is_public, thumbnail, post_validated_request);
         } catch (Exception e) {
             log("upload()",e.getMessage());
             return CommonReturn.error(400,"Internal Server Error.");

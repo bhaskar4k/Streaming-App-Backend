@@ -137,9 +137,9 @@ public class UploadService {
     }
 
     @Transactional
-    public CommonReturn<Boolean> saveVideoMetadata(TVideoInfo video_info, String title, String description, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
+    public CommonReturn<Boolean> saveVideoMetadata(TVideoInfo video_info, String title, String description, String tags, int is_public, MultipartFile thumbnail, JwtUserDetails post_validated_request){
         try {
-            TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.NO.getValue());
+            TVideoMetadata tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, tags, is_public, UIEnum.YesNo.NO.getValue());
 
             if (thumbnail != null && !thumbnail.isEmpty()) {
                 String THUMBNAIL_FILE_DIR = environment.getOriginalThumbnailPath() + util.getUserSpecifiedFolderForThumbnail(video_info.getGuid());
@@ -156,7 +156,7 @@ public class UploadService {
 
                 if(thumbnail_saved){
                     tempUploadedThumbnailFile.delete();
-                    tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, is_public, UIEnum.YesNo.YES.getValue());
+                    tVideoMetadata = new TVideoMetadata(video_info.getId(), title, description, tags, is_public, UIEnum.YesNo.YES.getValue());
                 }
             } else {
                 if (alreadyHasThumbnail(video_info.getId(),post_validated_request)){
@@ -164,7 +164,7 @@ public class UploadService {
                 }
             }
 
-            updateVideoMetadata(video_info.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
+            updateVideoMetadata(video_info.getId(), tVideoMetadata.getVideo_title(), tVideoMetadata.getVideo_description(), tVideoMetadata.getTags(), tVideoMetadata.getIs_public(), tVideoMetadata.getThumbnail_uploaded(), post_validated_request);
 
             return CommonReturn.success("Video metadata has been updated successfully.",true);
         } catch (Exception e) {
@@ -188,10 +188,10 @@ public class UploadService {
     }
 
     @Transactional
-    private int updateVideoMetadata(Long t_video_info_id, String title, String description, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
+    private int updateVideoMetadata(Long t_video_info_id, String title, String description, String tags, int is_public, int thumbnail_uploaded, JwtUserDetails post_validated_request) {
         try {
-            sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4 WHERE t_video_info_id = :value5";
-            params = List.of(title, description, is_public, thumbnail_uploaded, t_video_info_id);
+            sql_string = "UPDATE t_video_metadata SET video_title = :value1, video_description = :value2, is_public = :value3, thumbnail_uploaded = :value4, tags = :value5 WHERE t_video_info_id = :value6";
+            params = List.of(title, description, is_public, thumbnail_uploaded, tags, t_video_info_id);
 
             return dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
         } catch (Exception e) {

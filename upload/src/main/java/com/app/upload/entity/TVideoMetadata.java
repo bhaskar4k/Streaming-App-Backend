@@ -17,6 +17,8 @@ public class TVideoMetadata {
     private String video_title;
     @Column(length = 1000000000)
     private String video_description;
+    @Column(length = 600)
+    public String tags;
     private int is_public;
     private int thumbnail_uploaded;
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -31,10 +33,11 @@ public class TVideoMetadata {
         this.thumbnail_uploaded = thumbnail_uploaded;
     }
 
-    public TVideoMetadata(Long t_video_info_id, String video_title, String video_description, int is_public, int thumbnail_uploaded) {
+    public TVideoMetadata(Long t_video_info_id, String video_title, String video_description, String tags, int is_public, int thumbnail_uploaded) {
         this.t_video_info_id = t_video_info_id;
         this.video_title = video_title;
         this.video_description = video_description;
+        this.tags = tags;
         this.is_public = is_public;
         this.thumbnail_uploaded = thumbnail_uploaded;
     }
@@ -69,6 +72,14 @@ public class TVideoMetadata {
 
     public void setVideo_description(String video_description) {
         this.video_description = video_description;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public int getIs_public() {
