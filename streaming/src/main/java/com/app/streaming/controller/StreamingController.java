@@ -34,12 +34,11 @@ public class StreamingController {
     @Autowired
     private StreamingService streamingService;
 
-    @PostMapping("/get_video_information")
-    public CommonReturn<VideoInformation> get_video_information(@RequestBody Map<String, String> requestBody){
+    @GetMapping("/get_video_information_for_streaming/{guid}")
+    public CommonReturn<VideoInformation> get_video_information(@PathVariable String guid){
         JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
 
         try{
-            String guid = requestBody.get("guid");
             VideoInformation info = streamingService.do_get_video_information(guid, post_validated_request);
 
             return CommonReturn.success("Video information fetched", info);
