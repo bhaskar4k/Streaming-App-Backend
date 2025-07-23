@@ -4,6 +4,7 @@ import com.app.authentication.common.CommonReturn;
 import com.app.authentication.entity.TLogExceptions;
 import com.app.authentication.environment.Environment;
 import com.app.authentication.model.JwtUserDetails;
+import com.app.authentication.service.AuthService;
 import com.app.authentication.service.LogExceptionsService;
 import com.fasterxml.jackson.databind.ObjectMapper;  // Jackson library for serialization
 import io.jsonwebtoken.*;
@@ -145,25 +146,26 @@ public class Jwt {
             if (StringUtils.hasText(token)) {
                 try {
                     if(isTokenExpired(token)){
-                        String expiredSubject = getSubjectFromExpiredToken(token);
-                        JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
-                        emitLogoutMessageIntoWebsocket(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
+                        //String expiredSubject = getSubjectFromExpiredToken(token);
+                        //JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
+                        //emitLogoutMessageIntoWebsocket(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
                         is_authenticated = false;
-                    }
-                    if (validateToken(token)) {
-                        String subject = extractSubject(token);
+                    } else {
+                        if (validateToken(token)) {
+                            String subject = extractSubject(token);
 
-                        if (StringUtils.hasText(subject)) {
-                            JwtUserDetails extractedUserObject = objectMapper.readValue(subject, JwtUserDetails.class);
+                            if (StringUtils.hasText(subject)) {
+                                JwtUserDetails extractedUserObject = objectMapper.readValue(subject, JwtUserDetails.class);
 
-                            if (extractedUserObject == null) {
+                                if (extractedUserObject == null) {
+                                    is_authenticated = false;
+                                }
+                            } else {
                                 is_authenticated = false;
                             }
                         } else {
                             is_authenticated = false;
                         }
-                    } else {
-                        is_authenticated = false;
                     }
                 } catch (Exception e) {
                     is_authenticated = false;

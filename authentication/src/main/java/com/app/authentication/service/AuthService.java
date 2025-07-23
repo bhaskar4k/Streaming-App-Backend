@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Random;
 
 @Service
 @Component
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, readOnly = false)
 public class AuthService {
     @Autowired
     private TLoginRepository tLoginRepository;
@@ -126,7 +128,10 @@ public class AuthService {
 
     public Boolean isJwtAuthenticated(String token){
         try {
-            return jwt.isAuthenticated(token);
+            Boolean authenticated = jwt.isAuthenticated(token);
+
+            if(!authenticated) doLogoutForUnauthorizedRequest(token);
+            return authenticated;
         } catch (Exception e) {
             log("isJwtAuthenticated()",e.getMessage());
             return null;
@@ -154,17 +159,36 @@ public class AuthService {
     }
 
     @Transactional
+    public void doLogoutForUnauthorizedRequest(String token){
+        try {
+            String expiredSubject = Jwt.getSubjectFromExpiredToken(token);
+            JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
+
+            params = List.of(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
+
+            sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +
+                    " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
+
+            dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
+        } catch (Exception e) {
+            log("doLogoutForUnauthorizedRequest()",e.getMessage());
+        }
+    }
+
+    @Transactional
     public Boolean do_logout(){
         try {
             JwtUserDetails details = getAuthenticatedUserFromContext();
             params = List.of(details.getT_mst_user_id(),details.getDevice_count());
+
             sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +
-                         " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
+                         " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
+
             int updated = dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
 
             if(updated==1) return true;
         } catch (Exception e) {
-            log("getAuthenticatedUserFromContext()",e.getMessage());
+            log("do_logout()",e.getMessage());
             return false;
         }
 
