@@ -11,8 +11,8 @@ public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173", "http://localhost:4200");
     private Long maximumLoginDevice = 2L;
     private String secretKey = "yg45eg-g56yw4r-hj45g-fy6awe-g54fw";
-//    private Long jwtExpireTime = (1000L * 60L * 60L * 10L); //10 hours
-    private Long jwtExpireTime = (1000L * 30L); //10 hours
+    private Long jwtExpireTime = (1000L * 60L * 60L * 10L); //10 hours
+    //private Long jwtExpireTime = (1000L * 30L); //30 seconds
 
     public String getPrivateKey1() {
         return this.privateKey1;
