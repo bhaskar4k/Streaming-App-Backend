@@ -13,6 +13,14 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Python
+/__pycache__
+./__pycache__
+__pycache__/
+/virtual-environment
+./virtual-environment
+virtual-environment/
+
 # IDEs and editors
 .idea
 .idea/
