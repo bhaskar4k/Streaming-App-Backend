@@ -2,6 +2,8 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List
 
+from entity.TestEntity import Test
+
 router = APIRouter()
 
 class Test(BaseModel):

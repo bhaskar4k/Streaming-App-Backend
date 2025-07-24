@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from controller import test
+from controller import TestController
 
 app = FastAPI()
 
 # Register router
-app.include_router(test.router)
+app.include_router(TestController.router)
