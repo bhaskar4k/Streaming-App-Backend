@@ -2,6 +2,7 @@ package com.app.streaming.controller;
 
 import com.app.streaming.common.CommonReturn;
 import com.app.streaming.entity.TLogExceptions;
+import com.app.streaming.environment.Environment;
 import com.app.streaming.model.JwtUserDetails;
 import com.app.streaming.model.VideoInformation;
 import com.app.streaming.service.AuthService;
@@ -20,7 +21,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,11 @@ public class StreamingController {
     private AuthService authService;
     @Autowired
     private StreamingService streamingService;
+    private Environment environment;
+
+    public StreamingController(){
+        this.environment = new Environment();
+    }
 
     @GetMapping("/get_video_information_for_streaming/{guid}")
     public CommonReturn<VideoInformation> get_video_information(@PathVariable String guid){
@@ -48,25 +56,21 @@ public class StreamingController {
         }
     }
 
-    @GetMapping("/video_file/{guid}/{filename}")
-    public ResponseEntity<Resource> getVideoFile(@PathVariable String guid, @PathVariable String filename) {
+    @GetMapping("/get_video_file_chunks_in_batch/{guid}/{index}")
+    public ResponseEntity<List<byte[]>> get_video_file_chunks_in_batch(@PathVariable String guid, @PathVariable int index) {
         try {
-            String fullPath = "D:\\Streaming-App-Data\\Streaming-App-Resized-Video\\" + guid + "\\1080p\\" + filename;
-            File file = new File(fullPath);
+            List<byte[]> chunks = new ArrayList<>();
 
-            if (!file.exists()) {
-                return ResponseEntity.notFound().build();
+            for (int i = index; i < index + 3; i++) {
+                Path path = Paths.get(environment.getEncodedVideoPath(), guid, "1440p", i + ".mp4");
+                if (Files.exists(path)) {
+                    chunks.add(Files.readAllBytes(path));
+                }
             }
 
-            UrlResource resource = new UrlResource(file.toURI());
-
-            return ResponseEntity.ok()
-                    .contentType(MediaTypeFactory.getMediaType(file.getName())
-                            .orElse(MediaType.APPLICATION_OCTET_STREAM))
-                    .contentLength(file.length())
-                    .body(resource);
+            return ResponseEntity.ok().body(chunks);
         } catch (Exception e) {
-            e.printStackTrace();
+            log("get_video_file_chunks_in_batch()",e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
