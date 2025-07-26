@@ -57,20 +57,82 @@ public class StreamingController {
     }
 
     @GetMapping("/get_video_file_chunks_in_batch/{guid}/{index}")
-    public ResponseEntity<List<byte[]>> get_video_file_chunks_in_batch(@PathVariable String guid, @PathVariable int index) {
+    public ResponseEntity<byte[]> get_video_file_chunks_in_batch(@PathVariable String guid, @PathVariable int index) {
         try {
-            List<byte[]> chunks = new ArrayList<>();
+            Path videoDir = Paths.get(environment.getEncodedVideoPath(), guid, "1440p");
 
+            // Collect input file names
+            List<String> inputFiles = new ArrayList<>();
             for (int i = index; i < index + 3; i++) {
-                Path path = Paths.get(environment.getEncodedVideoPath(), guid, "1440p", i + ".mp4");
-                if (Files.exists(path)) {
-                    chunks.add(Files.readAllBytes(path));
+                Path chunk = videoDir.resolve(i + ".mp4");
+                if (Files.exists(chunk)) {
+                    inputFiles.add(i + ".mp4");
                 }
             }
 
-            return ResponseEntity.ok().body(chunks);
+            if (inputFiles.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            // Build FFmpeg command
+            List<String> cmd = new ArrayList<>();
+            cmd.add(environment.getFfmpegPath());
+            for (String file : inputFiles) {
+                cmd.add("-i");
+                cmd.add(file);
+            }
+
+            StringBuilder filter = new StringBuilder();
+            for (int i = 0; i < inputFiles.size(); i++) {
+                filter.append("[").append(i).append(":v:0][").append(i).append(":a:0]");
+            }
+            filter.append("concat=n=").append(inputFiles.size()).append(":v=1:a=1[outv][outa]");
+
+            cmd.add("-filter_complex");
+            cmd.add(filter.toString());
+            cmd.add("-map");
+            cmd.add("[outv]");
+            cmd.add("-map");
+            cmd.add("[outa]");
+            cmd.add("-f");
+            cmd.add("mp4");
+            cmd.add("-movflags");
+            cmd.add("+faststart");
+            cmd.add("merged_output.mp4");
+
+            ProcessBuilder pb = new ProcessBuilder(cmd);
+            pb.directory(videoDir.toFile());
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            // Optional: log FFmpeg output
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println("FFmpeg: " + line);
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            Path outputPath = videoDir.resolve("merged_output.mp4");
+            if (!Files.exists(outputPath)) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            byte[] fileBytes = Files.readAllBytes(outputPath);
+            Files.deleteIfExists(outputPath); // cleanup
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"merged.mp4\"")
+                    .body(fileBytes);
+
         } catch (Exception e) {
-            log("get_video_file_chunks_in_batch()",e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
