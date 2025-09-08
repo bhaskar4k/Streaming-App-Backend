@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:5173", "http://localhost:4200");
+    private String middlewareOrigin = "http://localhost:8096";
     private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
 
     public List<String> getAllowedOrigins() {
@@ -15,5 +16,9 @@ public class Environment {
 
     public String getAuthServiceUrl() {
         return authServiceUrl;
+    }
+
+    public String getMiddlewareOrigin() {
+        return middlewareOrigin;
     }
 }

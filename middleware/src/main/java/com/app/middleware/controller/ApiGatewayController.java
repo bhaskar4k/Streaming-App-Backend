@@ -1,5 +1,6 @@
 package com.app.middleware.controller;
 
+import com.app.middleware.environment.Environment;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,9 +22,11 @@ import java.util.Map;
 public class ApiGatewayController {
 
     private final WebClient webClient;
+    private Environment environment;
 
     public ApiGatewayController(WebClient webClient) {
         this.webClient = webClient;
+        this.environment = new Environment();
     }
 
     @RequestMapping("/{serviceName}/**")
@@ -51,7 +54,7 @@ public class ApiGatewayController {
             forwardHeaders.putAll(originalHeaders);
             forwardHeaders.remove(HttpHeaders.HOST);
             forwardHeaders.remove(HttpHeaders.CONTENT_LENGTH);
-            forwardHeaders.set(HttpHeaders.ORIGIN, "http://localhost:8096");
+            forwardHeaders.set(HttpHeaders.ORIGIN, environment.getMiddlewareOrigin());
 
             if (!forwardHeaders.containsKey(HttpHeaders.CONTENT_TYPE)) {
                 forwardHeaders.setContentType(MediaType.APPLICATION_JSON);

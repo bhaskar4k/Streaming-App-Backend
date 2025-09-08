@@ -51,6 +51,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             }
 
             boolean is_authenticated = true;
+            JwtUserDetails userDetails = null;
 
             if (StringUtils.hasText(token)) {
                 try {
@@ -58,9 +59,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                     if(post_validated_request.getStatus()!=200){
                         is_authenticated = false;
                     } else {
-                        JwtAuthenticationToken authentication = new JwtAuthenticationToken(post_validated_request.getData(), token, null);
+                        userDetails = post_validated_request.getData();
+                        JwtAuthenticationToken authentication = new JwtAuthenticationToken(userDetails, token, null);
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
+                        request.setAttribute("JwtDetails", userDetails);
                     }
                 } catch (Exception e) {
                     is_authenticated = false;

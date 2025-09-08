@@ -59,10 +59,13 @@ public class SecurityConfig {
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                     throws ServletException, IOException {
 
-                String originHeader = request.getHeader("Origin");
-                String allowedOrigin = environment.getAllowedOrigins().get(0); // Assuming only one allowed origin
+                String originHeader = request.getHeader("Origin");  // fallback for browser calls
+                if (originHeader == null) {
+                    originHeader = request.getHeader("X-Client-Origin");  // custom fallback
+                }
 
-                // Check if the request is an HTTP request and if the origin is correct
+                String allowedOrigin = environment.getAllowedOrigins().get(0);
+
                 if (originHeader == null || !originHeader.equals(allowedOrigin)) {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.getWriter().write("Forbidden: Invalid Origin.");

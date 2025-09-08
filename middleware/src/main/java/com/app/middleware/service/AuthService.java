@@ -4,6 +4,7 @@ import com.app.middleware.common.CommonReturn;
 import com.app.middleware.environment.Environment;
 import com.app.middleware.model.JwtUserDetails;
 import com.app.middleware.model.TokenRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -24,14 +25,18 @@ public class AuthService {
 
     public CommonReturn<JwtUserDetails> validateToken(String token) {
         String AUTH_SERVICE_URL = environment.getAuthServiceUrl();
+        String MIDDLEWARE_ORIGIN = environment.getMiddlewareOrigin();
 
         RestTemplate restTemplate = new RestTemplate();
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            TokenRequest request = new TokenRequest(token);
-            HttpEntity<TokenRequest> entity = new HttpEntity<>(request, headers);
+            headers.set(HttpHeaders.ORIGIN, MIDDLEWARE_ORIGIN);
+            headers.set("X-Client-Origin", MIDDLEWARE_ORIGIN);
+
+            TokenRequest new_request = new TokenRequest(token);
+            HttpEntity<TokenRequest> entity = new HttpEntity<>(new_request, headers);
 
             ResponseEntity<CommonReturn<JwtUserDetails>> response = restTemplate.exchange(
                     AUTH_SERVICE_URL,
@@ -49,6 +54,7 @@ public class AuthService {
 
             return CommonReturn.error(401,"Invalid Or Expired Or Unauthorized JWT Token.");
         } catch (Exception e) {
+            System.out.println(e);
             return CommonReturn.error(400,"Internal Server Error.");
         }
     }
