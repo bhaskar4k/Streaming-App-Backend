@@ -1,6 +1,6 @@
-package com.app.authentication.security;
+package com.app.streaming.security;
 
-import com.app.authentication.environment.Environment;
+import com.app.streaming.environment.Environment;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,14 +16,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
     private final Environment environment;
+    private final List<String> EXCLUDED_URLS;
 
     public SecurityConfig() {
         this.environment = new Environment();
+        this.EXCLUDED_URLS = environment.getUnauthenticatedEndpoints();
     }
 
     @Bean
@@ -58,6 +61,10 @@ public class SecurityConfig {
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                     throws ServletException, IOException {
+                if (isExcludedUrl(request.getRequestURI())) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
 
                 String originHeader = request.getHeader("Origin");
                 String allowedOrigin = environment.getAllowedOrigins().get(0); // Assuming only one allowed origin
@@ -72,5 +79,9 @@ public class SecurityConfig {
                 filterChain.doFilter(request, response);
             }
         };
+    }
+
+    private boolean isExcludedUrl(String requestUri) {
+        return EXCLUDED_URLS.stream().anyMatch(requestUri::startsWith);
     }
 }

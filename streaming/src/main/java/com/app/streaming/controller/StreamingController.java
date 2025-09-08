@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/streaming")
-public class StreamingController {
+public class StreamingController extends BaseController {
     @Autowired
     private LogExceptionsService logExceptionsService;
     @Autowired
@@ -30,8 +30,7 @@ public class StreamingController {
 
     @GetMapping("/get_video_information_for_streaming/{guid}")
     public CommonReturn<VideoInformation> get_video_information(@PathVariable String guid){
-//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
-        JwtUserDetails post_validated_request = null;
+        JwtUserDetails post_validated_request = getJwtUserDetails();
 
         try{
             VideoInformation info = streamingService.do_get_video_information(guid, post_validated_request);

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Environment {
+    private List<String> allowedOrigins = Arrays.asList("http://localhost:8096");
+    private List<String> unauthenticatedEndpoints = Arrays.asList();
 //    Desktop
     private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
     private String encodedVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Resized-Video";
@@ -52,5 +54,13 @@ public class Environment {
 
     public Map<String, Integer> getResolutionHeightMap() {
         return resolutionHeightMap;
+    }
+
+    public List<String> getAllowedOrigins() {
+        return allowedOrigins;
+    }
+
+    public List<String> getUnauthenticatedEndpoints() {
+        return unauthenticatedEndpoints;
     }
 }
