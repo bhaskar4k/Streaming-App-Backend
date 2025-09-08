@@ -1,7 +1,10 @@
 package com.app.middleware.controller;
 
 import com.app.middleware.environment.Environment;
+import com.app.middleware.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -23,6 +26,9 @@ public class ApiGatewayController {
 
     private final WebClient webClient;
     private Environment environment;
+
+    @Autowired
+    private AuthService authService;
 
     public ApiGatewayController(WebClient webClient) {
         this.webClient = webClient;
@@ -55,6 +61,11 @@ public class ApiGatewayController {
             forwardHeaders.remove(HttpHeaders.HOST);
             forwardHeaders.remove(HttpHeaders.CONTENT_LENGTH);
             forwardHeaders.set(HttpHeaders.ORIGIN, environment.getMiddlewareOrigin());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jwtDetailsJson = objectMapper.writeValueAsString(authService.getAuthenticatedUserFromContext());
+
+            forwardHeaders.set("JwtDetails", jwtDetailsJson);
 
             if (!forwardHeaders.containsKey(HttpHeaders.CONTENT_TYPE)) {
                 forwardHeaders.setContentType(MediaType.APPLICATION_JSON);

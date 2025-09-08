@@ -32,7 +32,7 @@ public class DashboardController extends BaseController {
     @GetMapping("/menu")
     public CommonReturn<List<Layout>> get_layout_menu(){
         try {
-            JwtUserDetails post_validated_request = getAuthenticatedUser();
+            JwtUserDetails post_validated_request = getJwtUserDetails();
             List<Layout> menus = dashboardService.getLayoutMenu(post_validated_request);
 
             if(menus!=null){

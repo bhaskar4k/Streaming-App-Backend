@@ -176,9 +176,8 @@ public class AuthService {
     }
 
     @Transactional
-    public Boolean do_logout(){
+    public Boolean do_logout(JwtUserDetails details){
         try {
-            JwtUserDetails details = getAuthenticatedUserFromContext();
             params = List.of(details.getT_mst_user_id(),details.getDevice_count());
 
             sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +

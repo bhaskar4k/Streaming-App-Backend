@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/authentication")
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
     @Autowired
     private LoginSignUpService loginSignUpService;
     @Autowired
@@ -56,10 +56,13 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public CommonReturn<Boolean> logout() {
         try {
-            Boolean res = authService.do_logout();
+            JwtUserDetails details = getJwtUserDetails();
+            Boolean res = authService.do_logout(details);
+
             if(res){
                 return CommonReturn.success("Successfully logged out.", true);
             }
+
             return CommonReturn.error(400,"Internal Server Error.");
         } catch (Exception e) {
             log("logout()",e.getMessage());

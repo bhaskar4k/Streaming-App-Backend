@@ -1,6 +1,6 @@
-package com.app.dashboard.controller;
+package com.app.authentication.controller;
 
-import com.app.dashboard.model.JwtUserDetails;
+import com.app.authentication.model.JwtUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
