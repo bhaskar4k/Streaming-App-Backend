@@ -5,7 +5,11 @@ import java.util.List;
 
 public class ApiEndpointInfo {
     private List<String> unauthenticatedEndpoints = Arrays.asList(
-            "/upload/update_video_processing_status"
+            "/api/authentication/do_signup",
+            "/api/authentication/do_login",
+            "/api/authentication/verify_request",
+            "/api/authentication-websocket",
+            "/api/upload/update_video_processing_status"
     );
 
     public List<String> getUnauthenticatedEndpoints() {
