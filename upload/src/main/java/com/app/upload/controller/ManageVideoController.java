@@ -4,7 +4,6 @@ import com.app.upload.common.CommonReturn;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.ManageVideoDetails;
-import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.ManageVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import java.util.Map;
 @RequestMapping("/manage_video")
 public class ManageVideoController {
     @Autowired
-    public AuthService authService;
-    @Autowired
     private LogExceptionsService logExceptionsService;
     @Autowired
     private ManageVideoService manageVideoService;
@@ -31,7 +28,8 @@ public class ManageVideoController {
 
     @GetMapping("/get_uploaded_video_list")
     public CommonReturn<List<ManageVideoDetails>> get_uploaded_video_list(){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             List<ManageVideoDetails> details = manageVideoService.do_get_uploaded_video_list(post_validated_request);
@@ -45,7 +43,8 @@ public class ManageVideoController {
 
     @GetMapping("/download_video/{guid:.+}")
     public ResponseEntity<Resource> download_video(@PathVariable String guid){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             return manageVideoService.do_download_video(guid,post_validated_request);
@@ -57,7 +56,8 @@ public class ManageVideoController {
 
     @PostMapping("/delete_video")
     public CommonReturn<Boolean> delete_video(@RequestBody Map<String, Long> requestBody){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             Long t_video_info_id = requestBody.get("t_video_info_id");
@@ -73,7 +73,8 @@ public class ManageVideoController {
 
     @GetMapping("/get_deleted_video_list")
     public CommonReturn<List<ManageVideoDetails>> get_deleted_video_list(){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             List<ManageVideoDetails> details = manageVideoService.do_get_deleted_video_list(post_validated_request);
@@ -87,7 +88,8 @@ public class ManageVideoController {
 
     @PostMapping("/restore_video")
     public CommonReturn<Boolean> restore_video(@RequestBody Map<String, Long> requestBody){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             Long t_video_info_id = requestBody.get("t_video_info_id");
@@ -103,7 +105,8 @@ public class ManageVideoController {
 
     @GetMapping("/get_a_single_video_info/{guid:.+}")
     public CommonReturn<ManageVideoDetails> get_a_single_video_info(@PathVariable String guid){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             ManageVideoDetails data = manageVideoService.do_get_a_single_video_info(post_validated_request, guid);

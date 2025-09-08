@@ -5,35 +5,21 @@ import com.app.streaming.entity.TLogExceptions;
 import com.app.streaming.environment.Environment;
 import com.app.streaming.model.JwtUserDetails;
 import com.app.streaming.model.VideoInformation;
-import com.app.streaming.service.AuthService;
 import com.app.streaming.service.LogExceptionsService;
 import com.app.streaming.service.StreamingService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/streaming")
 public class StreamingController {
     @Autowired
     private LogExceptionsService logExceptionsService;
-    @Autowired
-    private AuthService authService;
     @Autowired
     private StreamingService streamingService;
     private Environment environment;
@@ -44,7 +30,8 @@ public class StreamingController {
 
     @GetMapping("/get_video_information_for_streaming/{guid}")
     public CommonReturn<VideoInformation> get_video_information(@PathVariable String guid){
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try{
             VideoInformation info = streamingService.do_get_video_information(guid, post_validated_request);

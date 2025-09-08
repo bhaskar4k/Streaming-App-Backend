@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Environment {
-    private List<String> allowedOrigins = Arrays.asList("http://localhost:5173", "http://localhost:4200");
-    private String authServiceUrl = "http://localhost:8090/authentication/verify_request";
-
 //    Desktop
     private String originalVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Source-Video";
     private String encodedVideoPath = "E:" + File.separator + "Project" + File.separator + "Streaming-App-Resized-Video";
@@ -29,11 +26,6 @@ public class Environment {
             "1440p", 1440, "2160p", 2160, "4320p", 4320
     );
 
-
-    public List<String> getAllowedOrigins() {
-        return allowedOrigins;
-    }
-
     public String getOriginalVideoPath() {
         return originalVideoPath;
     }
@@ -48,10 +40,6 @@ public class Environment {
 
     public String getFfprobePath() {
         return ffprobePath;
-    }
-
-    public String getAuthServiceUrl() {
-        return authServiceUrl;
     }
 
     public String getFfmpegPath() {

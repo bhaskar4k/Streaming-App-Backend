@@ -2,11 +2,16 @@ package com.app.middleware.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+
 
 import java.util.Collections;
 import java.util.Map;
@@ -15,38 +20,89 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiGatewayController {
 
+    private final WebClient webClient;
+
+    public ApiGatewayController(WebClient webClient) {
+        this.webClient = webClient;
+    }
+
     @RequestMapping("/{serviceName}/**")
-    public String routeRequest(
+    public ResponseEntity<byte[]> routeRequest(
             @PathVariable String serviceName,
             HttpServletRequest request,
-            @RequestBody(required = false) String body
+            @RequestBody(required = false) byte[] body
     ) {
-        // Extract remaining URI path
-        String forwardUri = extractForwardUri(request, serviceName);
+        try {
+            String forwardUri = extractForwardUri(request, serviceName);
+            String targetUrl = getServiceUrl(serviceName) + "/" + serviceName + forwardUri;
 
-        // Build target service URL
-        String targetUrl = getServiceUrl(serviceName) + "/" + forwardUri;
+            HttpMethod method = HttpMethod.valueOf(request.getMethod());
 
-        return targetUrl;
+            // Copy original request headers (frontend headers)
+            HttpHeaders originalHeaders = new HttpHeaders();
+            Collections.list(request.getHeaderNames())
+                    .forEach(headerName -> {
+                        Collections.list(request.getHeaders(headerName))
+                                .forEach(headerValue -> originalHeaders.add(headerName, headerValue));
+                    });
+
+            // Prepare headers for middleware -> microservice
+            HttpHeaders forwardHeaders = new HttpHeaders();
+            forwardHeaders.putAll(originalHeaders);
+            forwardHeaders.remove(HttpHeaders.HOST);
+            forwardHeaders.remove(HttpHeaders.CONTENT_LENGTH);
+            forwardHeaders.set(HttpHeaders.ORIGIN, "http://localhost:8096");
+
+            if (!forwardHeaders.containsKey(HttpHeaders.CONTENT_TYPE)) {
+                forwardHeaders.setContentType(MediaType.APPLICATION_JSON);
+            }
+
+            WebClient.RequestBodySpec spec = webClient
+                    .method(method)
+                    .uri(targetUrl)
+                    .headers(httpHeaders -> httpHeaders.addAll(forwardHeaders));
+
+            WebClient.ResponseSpec responseSpec = (body != null && body.length > 0) ?
+                    spec.body(BodyInserters.fromValue(body)).retrieve() :
+                    spec.retrieve();
+
+            // Inter microservice API call
+            ResponseEntity<byte[]> responseEntity = responseSpec.toEntity(byte[].class).block();
+
+            return ResponseEntity
+                    .status(responseEntity.getStatusCode())
+                    .body(responseEntity.getBody());
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body(("Error forwarding request: " + ex.getMessage()).getBytes());
+        }
+    }
+
+    private HttpHeaders filterResponseHeaders(HttpHeaders originalHeaders) {
+        HttpHeaders filtered = new HttpHeaders();
+        originalHeaders.forEach((key, values) -> {
+            if (!key.equalsIgnoreCase(HttpHeaders.TRANSFER_ENCODING) &&
+                    !key.equalsIgnoreCase(HttpHeaders.CONTENT_LENGTH)) {
+                filtered.put(key, values);
+            }
+        });
+        return filtered;
     }
 
     private String extractForwardUri(HttpServletRequest request, String serviceName) {
-        String originalUri = request.getRequestURI();  // e.g., /api/student/getAll
-        return serviceName + originalUri.substring(("/api/" + serviceName).length());  // e.g., /getAll
+        String originalUri = request.getRequestURI();  // e.g., /api/authentication/do_login
+        return originalUri.substring(("/api/" + serviceName).length());  // e.g., /do_login
     }
 
     private String getServiceUrl(String serviceName) {
-        // Use a config or hardcoded mapping
         Map<String, String> serviceMap = Map.of(
-                "student", "http://localhost:8081",
-                "order", "http://localhost:8082",
-                "payment", "http://localhost:8083"
+                "authentication", "http://localhost:8090",
+                "dashboard", "http://localhost:8091",
+                "streaming", "http://localhost:8092",
+                "upload", "http://localhost:8093"
         );
         return serviceMap.get(serviceName);
-    }
-
-    private void copyHeaders(HttpServletRequest request, HttpHeaders headers) {
-        Collections.list(request.getHeaderNames())
-                .forEach(headerName -> headers.add(headerName, request.getHeader(headerName)));
     }
 }

@@ -9,7 +9,8 @@ public class ApiEndpointInfo {
             "/api/authentication/do_login",
             "/api/authentication/verify_request",
             "/api/authentication-websocket",
-            "/api/upload/update_video_processing_status"
+            "/api/upload/update_video_processing_status",
+            "/api/streaming/video_file/*/*"
     );
 
     public List<String> getUnauthenticatedEndpoints() {

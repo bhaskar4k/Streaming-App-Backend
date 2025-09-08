@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Environment {
-    private List<String> allowedOrigins = Arrays.asList("http://localhost:5173", "http://localhost:4200");
     private String rabbitMQConsumerURL = "http://localhost:8095/consumer/pull";
     private String updateVideoProcessingStatusURL = "http://localhost:8093/upload/update_video_processing_status";
 
@@ -38,10 +37,6 @@ public class Environment {
 //            "processing" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator +
 //            "app" + File.separator + "processing" + File.separator + "python" + File.separator + "VideoSplitter.py";
 
-
-    public List<String> getAllowedOrigins() {
-        return allowedOrigins;
-    }
 
     public String getOriginalVideoPath() {
         return originalVideoPath;

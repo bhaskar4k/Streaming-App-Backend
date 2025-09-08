@@ -1,12 +1,10 @@
 package com.app.dashboard.controller;
 
 import com.app.authentication.common.CommonReturn;
-import com.app.dashboard.entity.TLayoutMenu;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
 import com.app.dashboard.model.Layout;
-import com.app.dashboard.service.AuthService;
 import com.app.dashboard.service.DashboardService;
 import com.app.dashboard.service.LogExceptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
-    @Autowired
-    public AuthService authService;
     @Autowired
     private LogExceptionsService logExceptionsService;
     @Autowired
@@ -35,7 +31,8 @@ public class DashboardController {
     @GetMapping("/menu")
     public CommonReturn<List<Layout>> get_layout_menu(){
         try {
-            JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//            JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+            JwtUserDetails post_validated_request = null;
             List<Layout> menus = dashboardService.getLayoutMenu(post_validated_request);
 
             if(menus!=null){

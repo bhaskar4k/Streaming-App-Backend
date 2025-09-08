@@ -6,7 +6,6 @@ import com.app.upload.entity.TVideoInfo;
 import com.app.upload.environment.Environment;
 import com.app.upload.model.JwtUserDetails;
 import com.app.upload.model.ProcesingStatusInputModel;
-import com.app.upload.service.AuthService;
 import com.app.upload.service.LogExceptionsService;
 import com.app.upload.service.ManageVideoService;
 import com.app.upload.service.UploadService;
@@ -19,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/upload")
 public class UploadController {
-    @Autowired
-    public AuthService authService;
     @Autowired
     private UploadService uploadService;
     @Autowired
@@ -35,7 +32,8 @@ public class UploadController {
 
     @PostMapping("/upload_video")
     public CommonReturn<TVideoInfo> upload(@RequestPart("video") MultipartFile file) {
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             TVideoInfo video_info = uploadService.saveVideo(file,post_validated_request);
@@ -59,7 +57,8 @@ public class UploadController {
                                                     @RequestParam(value = "tags") String tags,
                                                     @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
                                                     @RequestParam("video_info") String video_info_json) {
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -82,7 +81,8 @@ public class UploadController {
                                                    @RequestParam(value = "tags") String tags,
                                                    @RequestParam(value = "is_public") int is_public,
                                                    @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
-        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+//        JwtUserDetails post_validated_request = authService.getAuthenticatedUserFromContext();
+        JwtUserDetails post_validated_request = null;
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
