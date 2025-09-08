@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Environment {
+    private List<String> allowedOrigins = Arrays.asList("http://localhost:8096");
+
     private String rabbitMQPublishURL = "http://localhost:8095/publish/put_in_queue";
 
 //    Desktop
@@ -53,5 +55,9 @@ public class Environment {
 
     public Map<String, Integer> getResolutionHeightMap() {
         return resolutionHeightMap;
+    }
+
+    public List<String> getAllowedOrigins() {
+        return allowedOrigins;
     }
 }

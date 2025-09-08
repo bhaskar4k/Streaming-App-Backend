@@ -115,7 +115,8 @@ public class ApiGatewayController {
                 "authentication", "http://localhost:8090",
                 "dashboard", "http://localhost:8091",
                 "streaming", "http://localhost:8092",
-                "upload", "http://localhost:8093"
+                "upload", "http://localhost:8093",
+                "manage_video", "http://localhost:8093"
         );
         return serviceMap.get(serviceName);
     }
