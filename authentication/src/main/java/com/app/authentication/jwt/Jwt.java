@@ -25,8 +25,6 @@ import java.util.function.Function;
 
 @Component
 public class Jwt {
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
     private static Environment environment = new Environment();
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -130,15 +128,6 @@ public class Jwt {
         return null;
     }
 
-    public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
-        try {
-            String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_number);
-            messagingTemplate.convertAndSend("/topic/logout"+device_endpoint, CommonReturn.success("Session expired. Logging out....", "logout_"+device_endpoint));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public Boolean isAuthenticated(String token){
         try {
             boolean is_authenticated = true;
@@ -146,9 +135,6 @@ public class Jwt {
             if (StringUtils.hasText(token)) {
                 try {
                     if(isTokenExpired(token)){
-                        //String expiredSubject = getSubjectFromExpiredToken(token);
-                        //JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
-                        //emitLogoutMessageIntoWebsocket(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
                         is_authenticated = false;
                     } else {
                         if (validateToken(token)) {

@@ -40,8 +40,6 @@ public class AuthService {
     private LogExceptionsService logExceptionsService;
     @Autowired
     private Jwt jwt;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -58,16 +56,6 @@ public class AuthService {
         this.encryptionDecryption=new EncryptionDecryption();
         this.environment=new Environment();
         this.dbWorker=new DbWorker();
-    }
-
-    public void emitLogoutMessageIntoWebsocket(Long t_mst_user_id, Long device_number) {
-        try {
-            String device_endpoint = environment.getDeviceEndpoint(t_mst_user_id,device_number);
-            messagingTemplate.convertAndSend("/topic/logout"+device_endpoint, CommonReturn.success("Your account has been logged-in from another device. Logging out....", "logout_"+device_endpoint));
-        } catch (Exception e) {
-            log("emitLogoutMessageIntoWebsocket()",e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @Transactional
@@ -89,7 +77,6 @@ public class AuthService {
                 if(updated == 0) return null;
 
                 loggedin_device_number = removed_device_number;
-                emitLogoutMessageIntoWebsocket(validated_user.getId(), removed_device_number);
             }else{
                 for(Long cur_device_no=1L; cur_device_no<=environment.getMaximumLoginDevice(); cur_device_no++){
                     sql_string = "select count(id) as count from t_login where t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();;
