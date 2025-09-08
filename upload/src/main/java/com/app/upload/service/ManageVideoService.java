@@ -1,6 +1,6 @@
 package com.app.upload.service;
 
-import com.app.authentication.common.DbWorker;
+import com.app.upload.common.DbWorker;
 import com.app.upload.common.Util;
 import com.app.upload.entity.TLogExceptions;
 import com.app.upload.enums.UIEnum;

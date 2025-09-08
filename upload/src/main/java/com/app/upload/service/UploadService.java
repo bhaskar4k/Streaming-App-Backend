@@ -1,7 +1,6 @@
 package com.app.upload.service;
 
-import com.app.authentication.common.DbWorker;
-import com.app.authentication.entity.TMstUser;
+import com.app.upload.common.DbWorker;
 import com.app.upload.common.CommonReturn;
 import com.app.upload.common.Util;
 import com.app.upload.common.VideoUtil;
