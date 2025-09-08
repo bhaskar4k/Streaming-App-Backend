@@ -7,7 +7,9 @@ import java.util.Map;
 
 public class Environment {
     private List<String> allowedOrigins = Arrays.asList("http://localhost:8096");
-
+    private List<String> unauthenticatedEndpoints = Arrays.asList(
+            "/upload/update_video_processing_status"
+    );
     private String rabbitMQPublishURL = "http://localhost:8095/publish/put_in_queue";
 
 //    Desktop
@@ -59,5 +61,9 @@ public class Environment {
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
+    }
+
+    public List<String> getUnauthenticatedEndpoints() {
+        return this.unauthenticatedEndpoints;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 public class Environment {
     private String dashboardMenuKey = "menu";
     private List<String> allowedOrigins = Arrays.asList("http://localhost:8096");
+    private List<String> unauthenticatedEndpoints = Arrays.asList();
 
     public String getDashboardMenuKey() {
         return dashboardMenuKey;
@@ -15,5 +16,9 @@ public class Environment {
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
+    }
+
+    public List<String> getUnauthenticatedEndpoints() {
+        return this.unauthenticatedEndpoints;
     }
 }
