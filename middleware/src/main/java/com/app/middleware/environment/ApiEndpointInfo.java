@@ -7,7 +7,6 @@ public class ApiEndpointInfo {
     private List<String> unauthenticatedEndpoints = Arrays.asList(
             "/api/authentication/do_signup",
             "/api/authentication/do_login",
-            "/api/authentication/verify_request",
             "/api/streaming/video_file/*/*"
     );
 

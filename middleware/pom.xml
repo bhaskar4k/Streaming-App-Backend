@@ -103,6 +103,11 @@
 			<artifactId>cookie-manager</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.5</version> <!-- Use a recent, compatible version -->
+		</dependency>
 	</dependencies>
 
 	<build>

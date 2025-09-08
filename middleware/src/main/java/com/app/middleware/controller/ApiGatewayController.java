@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 
@@ -38,50 +40,46 @@ public class ApiGatewayController {
     @RequestMapping("/{serviceName}/**")
     public ResponseEntity<byte[]> routeRequest(
             @PathVariable String serviceName,
-            HttpServletRequest request,
-            @RequestBody(required = false) byte[] body
+            HttpServletRequest request
     ) {
         try {
             String forwardUri = extractForwardUri(request, serviceName);
             String targetUrl = getServiceUrl(serviceName) + "/" + serviceName + forwardUri;
-
             HttpMethod method = HttpMethod.valueOf(request.getMethod());
 
-            // Copy original request headers (frontend headers)
-            HttpHeaders originalHeaders = new HttpHeaders();
+            // Copy original headers
+            HttpHeaders forwardHeaders = new HttpHeaders();
             Collections.list(request.getHeaderNames())
                     .forEach(headerName -> {
                         Collections.list(request.getHeaders(headerName))
-                                .forEach(headerValue -> originalHeaders.add(headerName, headerValue));
+                                .forEach(headerValue -> forwardHeaders.add(headerName, headerValue));
                     });
-
-            // Prepare headers for middleware -> microservice
-            HttpHeaders forwardHeaders = new HttpHeaders();
-            forwardHeaders.putAll(originalHeaders);
             forwardHeaders.remove(HttpHeaders.HOST);
             forwardHeaders.remove(HttpHeaders.CONTENT_LENGTH);
             forwardHeaders.set(HttpHeaders.ORIGIN, environment.getMiddlewareOrigin());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String jwtDetailsJson = objectMapper.writeValueAsString(authService.getAuthenticatedUserFromContext());
-
             forwardHeaders.set("JwtDetails", jwtDetailsJson);
 
-            if (!forwardHeaders.containsKey(HttpHeaders.CONTENT_TYPE)) {
-                forwardHeaders.setContentType(MediaType.APPLICATION_JSON);
-            }
+            InputStream inputStream = request.getInputStream();
 
             WebClient.RequestBodySpec spec = webClient
                     .method(method)
                     .uri(targetUrl)
                     .headers(httpHeaders -> httpHeaders.addAll(forwardHeaders));
 
-            WebClient.ResponseSpec responseSpec = (body != null && body.length > 0) ?
-                    spec.body(BodyInserters.fromValue(body)).retrieve() :
-                    spec.retrieve();
+            Mono<ResponseEntity<byte[]>> responseMono = spec
+                    .body(BodyInserters.fromDataBuffers(
+                            org.springframework.core.io.buffer.DataBufferUtils.readInputStream(
+                                    () -> inputStream,
+                                    new org.springframework.core.io.buffer.DefaultDataBufferFactory(),
+                                    4096)))
+                    .retrieve()
+                    .toEntity(byte[].class);
 
-            // Inter microservice API call
-            ResponseEntity<byte[]> responseEntity = responseSpec.toEntity(byte[].class).block();
+            // Block to get the response synchronously
+            ResponseEntity<byte[]> responseEntity = responseMono.block();
 
             return ResponseEntity
                     .status(responseEntity.getStatusCode())
@@ -94,20 +92,9 @@ public class ApiGatewayController {
         }
     }
 
-    private HttpHeaders filterResponseHeaders(HttpHeaders originalHeaders) {
-        HttpHeaders filtered = new HttpHeaders();
-        originalHeaders.forEach((key, values) -> {
-            if (!key.equalsIgnoreCase(HttpHeaders.TRANSFER_ENCODING) &&
-                    !key.equalsIgnoreCase(HttpHeaders.CONTENT_LENGTH)) {
-                filtered.put(key, values);
-            }
-        });
-        return filtered;
-    }
-
     private String extractForwardUri(HttpServletRequest request, String serviceName) {
-        String originalUri = request.getRequestURI();  // e.g., /api/authentication/do_login
-        return originalUri.substring(("/api/" + serviceName).length());  // e.g., /do_login
+        String originalUri = request.getRequestURI();
+        return originalUri.substring(("/api/" + serviceName).length());
     }
 
     private String getServiceUrl(String serviceName) {
