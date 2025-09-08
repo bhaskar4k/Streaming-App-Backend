@@ -1,6 +1,6 @@
 package com.app.dashboard.controller;
 
-import com.app.authentication.common.CommonReturn;
+import com.app.dashboard.common.CommonReturn;
 import com.app.dashboard.entity.TLogExceptions;
 import com.app.dashboard.environment.Environment;
 import com.app.dashboard.model.JwtUserDetails;
