@@ -14,6 +14,7 @@ import com.app.authentication.repository.TLoginRepository;
 import com.app.authentication.security.EncryptionDecryption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -26,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
+
+import static com.app.authentication.AuthenticationApplication.BloomFilter;
 
 @Service
 @Component
@@ -126,11 +129,36 @@ public class AuthService {
         }
     }
 
+    public int isLoginActiveInDB(String token) {
+        try {
+            String expiredSubject = Jwt.getSubjectFromExpiredToken(token);
+            JwtUserDetails details = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
+
+            sql_string = "SELECT * FROM t_login WHERE t_mst_user_id = :value1 and device_count = :value2 and jwt_token = :value3 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
+            params = List.of(details.getT_mst_user_id(), details.getDevice_count(), token);
+
+            return ((TLogin)dbWorker.getQuery(sql_string, entityManager, params, TLogin.class).getSingleResult() != null) ? 1 : 0;
+        } catch (NoResultException e) {
+            return 0;
+        } catch (Exception e) {
+            log("alreadyRegistered()",e.getMessage());
+            return 2;
+        }
+    }
+
     public Boolean isJwtAuthenticated(String token){
         try {
             Boolean authenticated = jwt.isAuthenticated(token);
 
             if(!authenticated) doLogoutForUnauthorizedRequest(token);
+
+            int LoggedInDB = isLoginActiveInDB(token);
+
+            if (LoggedInDB != 1) {
+                authenticated = false;
+                doLogoutForUnauthorizedRequest(token);
+            }
+
             return authenticated;
         } catch (Exception e) {
             log("isJwtAuthenticated()",e.getMessage());
@@ -164,10 +192,10 @@ public class AuthService {
             String expiredSubject = Jwt.getSubjectFromExpiredToken(token);
             JwtUserDetails expiredExtractedUserObject = objectMapper.readValue(expiredSubject, JwtUserDetails.class);
 
-            params = List.of(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count());
+            params = List.of(expiredExtractedUserObject.getT_mst_user_id(), expiredExtractedUserObject.getDevice_count(), token);
 
             sql_string = "UPDATE t_login set is_active = " + UIEnum.ActivityStatus.IN_ACTIVE.getValue() +
-                    " WHERE t_mst_user_id = :value1 and device_count = :value2 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
+                    " WHERE t_mst_user_id = :value1 and device_count = :value2 and jwt_token = :value3 and is_active = " + UIEnum.ActivityStatus.ACTIVE.getValue();
 
             dbWorker.getQuery(sql_string, entityManager, params, null).executeUpdate();
         } catch (Exception e) {

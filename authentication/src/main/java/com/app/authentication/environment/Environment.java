@@ -13,7 +13,7 @@ public class Environment {
     private Long maximumLoginDevice = 2L;
     private String secretKey = "yg45eg-g56yw4r-hj45g-fy6awe-g54fw";
     private Long jwtExpireTime = (1000L * 60L * 60L * 10L); //10 hours
-    //private Long jwtExpireTime = (1000L * 30L); //30 seconds
+//    private Long jwtExpireTime = (1000L * 30L); //30 seconds
 
     public String getPrivateKey1() {
         return this.privateKey1;
